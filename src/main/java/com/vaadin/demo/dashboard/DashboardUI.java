@@ -1,11 +1,8 @@
 package com.vaadin.demo.dashboard;
 
-import java.util.Locale;
-
 import com.google.common.eventbus.Subscribe;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
-import com.vaadin.annotations.Widgetset;
 import com.vaadin.demo.dashboard.data.DataProvider;
 import com.vaadin.demo.dashboard.data.dummy.DummyDataProvider;
 import com.vaadin.demo.dashboard.domain.User;
@@ -26,8 +23,10 @@ import com.vaadin.ui.UI;
 import com.vaadin.ui.Window;
 import com.vaadin.ui.themes.ValoTheme;
 
+import java.util.Locale;
+
 @Theme("dashboard")
-@Widgetset("com.vaadin.demo.dashboard.DashboardWidgetSet")
+//@Widgetset("com.vaadin.demo.dashboard.DashboardWidgetSet")
 @Title("QuickTickets Dashboard")
 @SuppressWarnings("serial")
 public final class DashboardUI extends UI {

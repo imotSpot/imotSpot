@@ -1,13 +1,8 @@
 package com.vaadin.demo.dashboard.view.reports;
 
-import java.text.SimpleDateFormat;
-import java.util.Collection;
-import java.util.Iterator;
-
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.demo.dashboard.component.InlineTextEditor;
-import com.vaadin.demo.dashboard.component.TopSixTheatersChart;
 import com.vaadin.demo.dashboard.component.TopTenMoviesTable;
 import com.vaadin.demo.dashboard.component.TransactionsListing;
 import com.vaadin.demo.dashboard.domain.Transaction;
@@ -23,17 +18,13 @@ import com.vaadin.event.dd.acceptcriteria.AcceptCriterion;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.shared.ui.dd.VerticalDropLocation;
 import com.vaadin.shared.ui.label.ContentMode;
-import com.vaadin.ui.AbstractComponent;
-import com.vaadin.ui.Alignment;
-import com.vaadin.ui.Component;
-import com.vaadin.ui.CustomComponent;
-import com.vaadin.ui.DragAndDropWrapper;
+import com.vaadin.ui.*;
 import com.vaadin.ui.DragAndDropWrapper.DragStartMode;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.TextField;
-import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
+
+import java.text.SimpleDateFormat;
+import java.util.Collection;
+import java.util.Iterator;
 
 @SuppressWarnings({ "serial", "unchecked" })
 public final class ReportEditor extends VerticalLayout {
@@ -185,8 +176,8 @@ public final class ReportEditor extends VerticalLayout {
                                 : null);
             } else if (type == PaletteItemType.TABLE) {
                 result = new TopTenMoviesTable();
-            } else if (type == PaletteItemType.CHART) {
-                result = new TopSixTheatersChart();
+//            } else if (type == PaletteItemType.CHART) {
+//                result = new TopSixTheatersChart();
             } else if (type == PaletteItemType.TRANSACTIONS) {
                 result = new TransactionsListing(
                         (Collection<Transaction>) prefillData);

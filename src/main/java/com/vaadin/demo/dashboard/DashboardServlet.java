@@ -1,10 +1,14 @@
 package com.vaadin.demo.dashboard;
 
-import javax.servlet.ServletException;
-
+import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.server.VaadinServlet;
 
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+
 @SuppressWarnings("serial")
+@WebServlet(urlPatterns = "/*")
+@VaadinServletConfiguration(ui = DashboardUI.class, productionMode = false)
 public class DashboardServlet extends VaadinServlet {
 
     @Override
