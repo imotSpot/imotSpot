@@ -1,18 +1,11 @@
 package com.vaadin.demo.dashboard.view;
 
-import java.util.Collection;
-
 import com.google.common.eventbus.Subscribe;
 import com.vaadin.demo.dashboard.DashboardUI;
 import com.vaadin.demo.dashboard.component.ProfilePreferencesWindow;
 import com.vaadin.demo.dashboard.domain.Transaction;
 import com.vaadin.demo.dashboard.domain.User;
-import com.vaadin.demo.dashboard.event.DashboardEvent.NotificationsCountUpdatedEvent;
-import com.vaadin.demo.dashboard.event.DashboardEvent.PostViewChangeEvent;
-import com.vaadin.demo.dashboard.event.DashboardEvent.ProfileUpdatedEvent;
-import com.vaadin.demo.dashboard.event.DashboardEvent.ReportsCountUpdatedEvent;
-import com.vaadin.demo.dashboard.event.DashboardEvent.TransactionReportEvent;
-import com.vaadin.demo.dashboard.event.DashboardEvent.UserLoggedOutEvent;
+import com.vaadin.demo.dashboard.event.DashboardEvent.*;
 import com.vaadin.demo.dashboard.event.DashboardEventBus;
 import com.vaadin.event.dd.DragAndDropEvent;
 import com.vaadin.event.dd.DropHandler;
@@ -21,24 +14,16 @@ import com.vaadin.server.FontAwesome;
 import com.vaadin.server.ThemeResource;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.shared.ui.label.ContentMode;
+import com.vaadin.ui.*;
 import com.vaadin.ui.AbstractSelect.AcceptItem;
-import com.vaadin.ui.Alignment;
-import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
-import com.vaadin.ui.Component;
-import com.vaadin.ui.CssLayout;
-import com.vaadin.ui.CustomComponent;
-import com.vaadin.ui.DragAndDropWrapper;
 import com.vaadin.ui.DragAndDropWrapper.DragStartMode;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.MenuBar.Command;
 import com.vaadin.ui.MenuBar.MenuItem;
-import com.vaadin.ui.Table;
-import com.vaadin.ui.UI;
 import com.vaadin.ui.themes.ValoTheme;
+
+import java.util.Collection;
 
 /**
  * A responsive menu component providing user information and the controls for
@@ -85,7 +70,7 @@ public final class DashboardMenu extends CustomComponent {
     }
 
     private Component buildTitle() {
-        Label logo = new Label("QuickTickets <strong>Dashboard</strong>",
+        Label logo = new Label("Property <strong>Spot</strong>",
                 ContentMode.HTML);
         logo.setSizeUndefined();
         HorizontalLayout logoWrapper = new HorizontalLayout(logo);
