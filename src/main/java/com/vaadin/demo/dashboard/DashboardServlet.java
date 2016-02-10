@@ -8,7 +8,7 @@ import javax.servlet.annotation.WebServlet;
 
 @SuppressWarnings("serial")
 @WebServlet(urlPatterns = "/*")
-@VaadinServletConfiguration(ui = DashboardUI.class, productionMode = false)
+@VaadinServletConfiguration(ui = DashboardUI.class, productionMode = false, widgetset = "com.vaadin.demo.dashboard.GoogleMapWidgetSet")
 public class DashboardServlet extends VaadinServlet {
 
     @Override

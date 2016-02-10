@@ -14,6 +14,8 @@ import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.server.Responsive;
+import com.vaadin.tapio.googlemaps.GoogleMap;
+import com.vaadin.tapio.googlemaps.client.LatLon;
 import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
@@ -79,7 +81,7 @@ public final class DashboardView extends Panel implements View,
         header.addStyleName("viewheader");
         header.setSpacing(true);
 
-        titleLabel = new Label("Google Map");
+        titleLabel = new Label("Map");
         titleLabel.setId(TITLE_ID);
         titleLabel.setSizeUndefined();
         titleLabel.addStyleName(ValoTheme.LABEL_H1);
@@ -130,6 +132,13 @@ public final class DashboardView extends Panel implements View,
         dashboardPanels.addStyleName("dashboard-panels");
         Responsive.makeResponsive(dashboardPanels);
 
+
+        GoogleMap googleMap = new GoogleMap(new LatLon(42.697702770146975, 23.32174301147461), 15.0, "");
+        googleMap.setSizeFull();
+        googleMap.setImmediate(true);
+        googleMap.setMinZoom(4.0);
+
+        dashboardPanels.addComponent(googleMap);
 //        dashboardPanels.addComponent(buildTopGrossingMovies());
 //        dashboardPanels.addComponent(buildNotes());
 //        dashboardPanels.addComponent(buildTop10TitlesByRevenue());
