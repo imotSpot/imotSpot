@@ -11,10 +11,10 @@
 	</context-param>
 	<servlet>
 		<servlet-name>QuickTicketsDashboard</servlet-name>
-		<servlet-class>com.vaadin.demo.dashboard.DashboardServlet</servlet-class>
+		<servlet-class>com.imotspot.dashboard.DashboardServlet</servlet-class>
 		<init-param>
 			<param-name>UI</param-name>
-			<param-value>com.vaadin.demo.dashboard.DashboardUI</param-value>
+			<param-value>com.imotspot.dashboard.DashboardUI</param-value>
 		</init-param>
 	</servlet>
 	<servlet-mapping>
