@@ -2,10 +2,9 @@ package com.imotspot.dashboard.view;
 
 import com.imotspot.dashboard.event.DashboardEvent.UserLoginRequestedEvent;
 import com.imotspot.dashboard.event.DashboardEventBus;
+import com.imotspot.dashboard.utility.auth.GoogleSignIn;
 import com.vaadin.event.ShortcutAction.KeyCode;
-import com.vaadin.server.FontAwesome;
-import com.vaadin.server.Page;
-import com.vaadin.server.Responsive;
+import com.vaadin.server.*;
 import com.vaadin.shared.Position;
 import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
@@ -21,16 +20,6 @@ public class LoginView extends VerticalLayout {
         Component loginForm = buildLoginForm();
         addComponent(loginForm);
         setComponentAlignment(loginForm, Alignment.MIDDLE_CENTER);
-
-        Notification notification = new Notification(
-                "Welcome to Dashboard Demo");
-        notification
-                .setDescription("<span>This application is not real, it only demonstrates an application built with the <a href=\"https://vaadin.com\">Vaadin framework</a>.</span> <span>No username or password is required, just click the <b>Sign In</b> button to continue.</span>");
-        notification.setHtmlContentAllowed(true);
-        notification.setStyleName("tray dark small closable login-help");
-        notification.setPosition(Position.BOTTOM_CENTER);
-        notification.setDelayMsec(20000);
-        notification.show(Page.getCurrent());
     }
 
     private Component buildLoginForm() {
@@ -64,7 +53,41 @@ public class LoginView extends VerticalLayout {
         signin.setClickShortcut(KeyCode.ENTER);
         signin.focus();
 
-        fields.addComponents(username, password, signin);
+        BrowserWindowOpener opener = new BrowserWindowOpener(new GoogleSignIn().signIn());
+        opener.setFeatures("height=400,width=400,resizable,position=center");
+        opener.setWindowName("_blank");
+
+        final Button signWithGooglePlus = new Button("Google +");
+        signWithGooglePlus.addStyleName(ValoTheme.BUTTON_PRIMARY);
+//        signWithGooglePlus.setIcon(new ThemeResource("img/signin_button.png"));
+
+        opener.extend(signWithGooglePlus);
+
+        signWithGooglePlus.addClickListener(new ClickListener() {
+            @Override
+            public void buttonClick(ClickEvent clickEvent) {
+//                String url = new GoogleSignIn().signIn();
+//
+//                Notification notification = new Notification(url);
+//                notification.setPosition(Position.BOTTOM_CENTER);
+//                notification.setDelayMsec(20000);
+//                notification.show(Page.getCurrent());
+            }
+        });
+
+        final Button signWithFacebook = new Button("Facebook");
+        signWithFacebook.addStyleName(ValoTheme.BUTTON_PRIMARY);
+        signWithFacebook.addClickListener(new ClickListener() {
+            @Override
+            public void buttonClick(ClickEvent clickEvent) {
+                Notification notification = new Notification("Click facebook+ btn");
+                notification.setPosition(Position.BOTTOM_CENTER);
+                notification.setDelayMsec(20000);
+                notification.show(Page.getCurrent());
+            }
+        });
+
+        fields.addComponents(username, password, signin, signWithFacebook, signWithGooglePlus);
         fields.setComponentAlignment(signin, Alignment.BOTTOM_LEFT);
 
         signin.addClickListener(new ClickListener() {
