@@ -205,9 +205,9 @@
 			<version>1.15</version>
 		</dependency>
 		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-jdk14</artifactId>
-			<version>1.6.4</version>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>RELEASE</version>
 		</dependency>
 		<dependency>
 			<groupId>com.google.guava</groupId>
@@ -215,10 +215,31 @@
 			<version>19.0</version>
 		</dependency>
 		<dependency>
+			<groupId>org.jyaml</groupId>
+			<artifactId>jyaml</artifactId>
+			<version>RELEASE</version>
+		</dependency>
+		<dependency>
 			<groupId>com.vaadin.tapio</groupId>
 			<artifactId>googlemaps</artifactId>
 			<version>0.6.2</version>
 		</dependency>
+		<dependency>
+			<groupId>com.orientechnologies</groupId>
+			<artifactId>orientdb-graphdb</artifactId>
+			<version>2.1.11</version>
+		</dependency>
+		<dependency>
+			<groupId>org.freemarker</groupId>
+			<artifactId>freemarker</artifactId>
+			<version>2.3.23</version>
+		</dependency>
+		<!--<dependency>-->
+		<!--orientdb studio as jar-->
+		<!--<groupId>org.webjars</groupId>-->
+		<!--<artifactId>orientdb-studio</artifactId>-->
+		<!--<version>2.1.0</version>-->
+		<!--</dependency>-->
 		<!--<dependency>-->
 		<!--<groupId>com.google.gwt.google-apis</groupId>-->
 		<!--<artifactId>gwt-ajaxloader</artifactId>-->
