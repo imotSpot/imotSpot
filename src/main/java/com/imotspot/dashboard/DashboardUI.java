@@ -27,7 +27,7 @@ import java.util.Locale;
 
 @Theme("dashboard")
 //@Widgetset("com.vaadin.demo.dashboard.DashboardWidgetSet")
-@Title("QuickTickets Dashboard")
+@Title("Imot Spot Dashboard")
 @SuppressWarnings("serial")
 public final class DashboardUI extends UI {
 
