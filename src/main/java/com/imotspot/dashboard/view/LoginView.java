@@ -31,8 +31,49 @@ public class LoginView extends VerticalLayout {
 
         loginPanel.addComponent(buildLabels());
         loginPanel.addComponent(buildFields());
+        loginPanel.addComponent(buildThirdPartyButtons());
         loginPanel.addComponent(new CheckBox("Remember me", true));
         return loginPanel;
+    }
+
+    private Component buildThirdPartyButtons() {
+        HorizontalLayout fieldsSecondRow = new HorizontalLayout();
+        fieldsSecondRow.setSpacing(true);
+        fieldsSecondRow.addStyleName("fields");
+
+        BrowserWindowOpener opener = new BrowserWindowOpener(new GoogleSignIn().getSignInUrl());
+        opener.setFeatures("height=400,width=400,resizable,position=center");
+        opener.setWindowName("_self");
+
+        final Button signWithGooglePlus = new Button("Google +");
+        signWithGooglePlus.addStyleName(ValoTheme.BUTTON_PRIMARY);
+        final Button signWithFacebook = new Button("Facebook");
+        signWithFacebook.addStyleName(ValoTheme.BUTTON_PRIMARY);
+
+//        signWithGooglePlus.setIcon(new ThemeResource("img/signin_button.png"));
+
+        opener.extend(signWithGooglePlus);
+
+        signWithGooglePlus.addClickListener(new ClickListener() {
+            @Override
+            public void buttonClick(ClickEvent clickEvent) {
+            }
+        });
+
+        signWithFacebook.addClickListener(new ClickListener() {
+            @Override
+            public void buttonClick(ClickEvent clickEvent) {
+                Notification notification = new Notification("Click facebook btn");
+                notification.setPosition(Position.BOTTOM_CENTER);
+                notification.setDelayMsec(20000);
+                notification.show(Page.getCurrent());
+            }
+        });
+
+        fieldsSecondRow.addComponents(signWithFacebook, signWithGooglePlus);
+        fieldsSecondRow.setComponentAlignment(signWithGooglePlus, Alignment.MIDDLE_RIGHT);
+
+        return fieldsSecondRow;
     }
 
     private Component buildFields() {
@@ -53,41 +94,7 @@ public class LoginView extends VerticalLayout {
         signin.setClickShortcut(KeyCode.ENTER);
         signin.focus();
 
-        BrowserWindowOpener opener = new BrowserWindowOpener(new GoogleSignIn().signIn());
-        opener.setFeatures("height=400,width=400,resizable,position=center");
-        opener.setWindowName("_blank");
-
-        final Button signWithGooglePlus = new Button("Google +");
-        signWithGooglePlus.addStyleName(ValoTheme.BUTTON_PRIMARY);
-//        signWithGooglePlus.setIcon(new ThemeResource("img/signin_button.png"));
-
-        opener.extend(signWithGooglePlus);
-
-        signWithGooglePlus.addClickListener(new ClickListener() {
-            @Override
-            public void buttonClick(ClickEvent clickEvent) {
-//                String url = new GoogleSignIn().signIn();
-//
-//                Notification notification = new Notification(url);
-//                notification.setPosition(Position.BOTTOM_CENTER);
-//                notification.setDelayMsec(20000);
-//                notification.show(Page.getCurrent());
-            }
-        });
-
-        final Button signWithFacebook = new Button("Facebook");
-        signWithFacebook.addStyleName(ValoTheme.BUTTON_PRIMARY);
-        signWithFacebook.addClickListener(new ClickListener() {
-            @Override
-            public void buttonClick(ClickEvent clickEvent) {
-                Notification notification = new Notification("Click facebook+ btn");
-                notification.setPosition(Position.BOTTOM_CENTER);
-                notification.setDelayMsec(20000);
-                notification.show(Page.getCurrent());
-            }
-        });
-
-        fields.addComponents(username, password, signin, signWithFacebook, signWithGooglePlus);
+        fields.addComponents(username, password, signin);
         fields.setComponentAlignment(signin, Alignment.BOTTOM_LEFT);
 
         signin.addClickListener(new ClickListener() {
@@ -97,6 +104,7 @@ public class LoginView extends VerticalLayout {
                         .getValue(), password.getValue()));
             }
         });
+
         return fields;
     }
 
@@ -110,12 +118,11 @@ public class LoginView extends VerticalLayout {
         welcome.addStyleName(ValoTheme.LABEL_COLORED);
         labels.addComponent(welcome);
 
-        Label title = new Label("Property Spot");
+        Label title = new Label("Imot Spot");
         title.setSizeUndefined();
         title.addStyleName(ValoTheme.LABEL_H3);
         title.addStyleName(ValoTheme.LABEL_LIGHT);
         labels.addComponent(title);
         return labels;
     }
-
 }

@@ -1,8 +1,9 @@
 package com.imotspot.dashboard.utility.auth;
 
 import com.google.gson.Gson;
+import com.imotspot.dashboard.event.DashboardEvent;
+import com.imotspot.dashboard.event.DashboardEventBus;
 import com.vaadin.server.*;
-import com.vaadin.ui.Link;
 import com.vaadin.ui.Notification;
 import org.scribe.builder.ServiceBuilder;
 import org.scribe.model.*;
@@ -16,29 +17,16 @@ import java.io.IOException;
  */
 public class GoogleSignIn implements RequestHandler {
 
-    private Link gplusLoginButton;
+    // todo hide credentials
+    private final String GOOGLE_API_KEY = "630229759772-2100fc6154umojo7dlq3j1rajj1qt98m.apps.googleusercontent.com";
+    private final String GOOGLE_API_SECRET = "NUq8VPbsaw8CcFMsn_ptzqxb";
 
-    OAuthService service;
-    String redirectUrl;
+    private OAuthService service;
+    private String redirectUrl;
 
     public GoogleSignIn() {
         // todo fix exception for redirect link
-        redirectUrl = Page.getCurrent().getLocation().toString();
-//        super("Login");
 //        redirectUrl = Page.getCurrent().getLocation().toString();
-//        service = createService();
-//        String url = service.getAuthorizationUrl(null);
-//
-////        gplusLoginButton = new Link("Login with Google", new ExternalResource(url));
-////        gplusLoginButton.addStyleName(ValoTheme.LINK_LARGE);
-//
-//        VaadinSession.getCurrent().addRequestHandler(this);
-
-//        setContent(new MVerticalLayout(gplusLoginButton).alignAll(
-//                Alignment.MIDDLE_CENTER).withFullHeight());
-//        setModal(true);
-//        setWidth("300px");
-//        setHeight("200px");
     }
 
     public void authDenied(String reason) {
@@ -46,17 +34,24 @@ public class GoogleSignIn implements RequestHandler {
                 Notification.Type.ERROR_MESSAGE);
     }
 
+    public String getSignInUrl() {
+        service = createService();
+        String url = service.getAuthorizationUrl(null);
+        VaadinSession.getCurrent().addRequestHandler(this);
+        return url;
+    }
+
     private OAuthService createService() {
         ServiceBuilder sb = new ServiceBuilder();
         sb.provider(Google2Api.class);
-        sb.apiKey("630229759772-2100fc6154umojo7dlq3j1rajj1qt98m.apps.googleusercontent.com");
-        sb.apiSecret("NUq8VPbsaw8CcFMsn_ptzqxb");
+        sb.apiKey(GOOGLE_API_KEY);
+        sb.apiSecret(GOOGLE_API_SECRET);
         sb.scope("email");
-        String callBackUrl = Page.getCurrent().getLocation().toString();
-        if(callBackUrl.contains("#")) {
-            callBackUrl = callBackUrl.substring(0, callBackUrl.indexOf("#"));
+        redirectUrl = Page.getCurrent().getLocation().toString();
+        if(redirectUrl.contains("#")) {
+            redirectUrl = redirectUrl.substring(0, redirectUrl.indexOf("#"));
         }
-        sb.callback(callBackUrl);
+        sb.callback(redirectUrl);
         return sb.build();
     }
 
@@ -76,9 +71,8 @@ public class GoogleSignIn implements RequestHandler {
             GooglePlusAnswer answer = new Gson().fromJson(resp.getBody(),
                     GooglePlusAnswer.class);
 
-//            userSession.login(answer.emails[0].value, answer.displayName);
-//
-//            close();
+            DashboardEventBus.post(new DashboardEvent.UserLoginRequestedEvent(answer.emails[0].value, answer.displayName));
+
             VaadinSession.getCurrent().removeRequestHandler(this);
 
             ((VaadinServletResponse) response).getHttpServletResponse().
@@ -88,24 +82,4 @@ public class GoogleSignIn implements RequestHandler {
 
         return false;
     }
-
-    public String signIn() {
-        service = createService();
-        String url = service.getAuthorizationUrl(null);
-
-//        gplusLoginButton = new Link("Login with Google", new ExternalResource(url));
-//        gplusLoginButton.addStyleName(ValoTheme.LINK_LARGE);
-
-        VaadinSession.getCurrent().addRequestHandler(this);
-        return url;
-    }
-//
-//    @Inject
-//    @ConfigProperty(name = "imotspot.gpluskey")
-//    private String gpluskey;
-//
-//    @Inject
-//    @ConfigProperty(name = "imotspot.gplussecret")
-//    private String gplussecret;
-
 }
