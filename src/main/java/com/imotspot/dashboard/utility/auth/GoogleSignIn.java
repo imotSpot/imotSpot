@@ -1,21 +1,18 @@
 package com.imotspot.dashboard.utility.auth;
 
-import com.google.gson.Gson;
-import com.imotspot.dashboard.event.DashboardEvent;
-import com.imotspot.dashboard.event.DashboardEventBus;
-import com.vaadin.server.*;
+import com.vaadin.server.Page;
 import com.vaadin.ui.Notification;
 import org.scribe.builder.ServiceBuilder;
-import org.scribe.model.*;
+import org.scribe.model.OAuthRequest;
+import org.scribe.model.Token;
+import org.scribe.model.Verifier;
 import org.scribe.oauth.OAuthService;
-
-import java.io.IOException;
 
 /**
  *
  * @author Matti Tahvonen
  */
-public class GoogleSignIn implements RequestHandler {
+public class GoogleSignIn {
 
     // todo hide credentials
     private final String GOOGLE_API_KEY = "630229759772-2100fc6154umojo7dlq3j1rajj1qt98m.apps.googleusercontent.com";
@@ -37,7 +34,6 @@ public class GoogleSignIn implements RequestHandler {
     public String getSignInUrl() {
         service = createService();
         String url = service.getAuthorizationUrl(null);
-        VaadinSession.getCurrent().addRequestHandler(this);
         return url;
     }
 
@@ -47,6 +43,7 @@ public class GoogleSignIn implements RequestHandler {
         sb.apiKey(GOOGLE_API_KEY);
         sb.apiSecret(GOOGLE_API_SECRET);
         sb.scope("email");
+//        redirectUrl = Page.getCurrent().getLocation().toString()+"dashboard/";
         redirectUrl = Page.getCurrent().getLocation().toString();
         if(redirectUrl.contains("#")) {
             redirectUrl = redirectUrl.substring(0, redirectUrl.indexOf("#"));
@@ -54,32 +51,40 @@ public class GoogleSignIn implements RequestHandler {
         sb.callback(redirectUrl);
         return sb.build();
     }
+//
+//    @Override
+//    public boolean handleRequest(VaadinSession session, VaadinRequest request,
+//            VaadinResponse response) throws IOException {
+//        if (request.getParameter("code") != null) {
+//            String code = request.getParameter("code");
+//            Verifier v = new Verifier(code);
+//            Token t = service.getAccessToken(null, v);
+//
+//            OAuthRequest r = new OAuthRequest(Verb.GET,
+//                    "https://www.googleapis.com/plus/v1/people/me");
+//            service.signRequest(t, r);
+//            Response resp = r.send();
+//
+//            GooglePlusAnswer answer = new Gson().fromJson(resp.getBody(),
+//                    GooglePlusAnswer.class);
+//
+//            DashboardEventBus.post(new DashboardEvent.UserLoginRequestedEvent(answer.emails[0].value, answer.displayName));
+//
+//            VaadinSession.getCurrent().removeRequestHandler(this);
+//
+//            ((VaadinServletResponse) response).getHttpServletResponse().
+//                    sendRedirect(Page.getCurrent().getLocation().toString()+"dashboard/");
+//            return true;
+//        }
+//
+//        return false;
+//    }
 
-    @Override
-    public boolean handleRequest(VaadinSession session, VaadinRequest request,
-            VaadinResponse response) throws IOException {
-        if (request.getParameter("code") != null) {
-            String code = request.getParameter("code");
-            Verifier v = new Verifier(code);
-            Token t = service.getAccessToken(null, v);
+    public Token getAccessToken(Token t, Verifier v) {
+        return service.getAccessToken(t, v);
+    }
 
-            OAuthRequest r = new OAuthRequest(Verb.GET,
-                    "https://www.googleapis.com/plus/v1/people/me");
-            service.signRequest(t, r);
-            Response resp = r.send();
-
-            GooglePlusAnswer answer = new Gson().fromJson(resp.getBody(),
-                    GooglePlusAnswer.class);
-
-            DashboardEventBus.post(new DashboardEvent.UserLoginRequestedEvent(answer.emails[0].value, answer.displayName));
-
-            VaadinSession.getCurrent().removeRequestHandler(this);
-
-            ((VaadinServletResponse) response).getHttpServletResponse().
-                    sendRedirect(redirectUrl);
-            return true;
-        }
-
-        return false;
+    public void signRequest(Token t, OAuthRequest r) {
+        service.signRequest(t, r);
     }
 }

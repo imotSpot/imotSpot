@@ -123,7 +123,7 @@
 									<goal>start</goal>
 								</goals>
 								<configuration>
-									<scanIntervalSeconds>0</scanIntervalSeconds>
+									<scanIntervalSeconds>1</scanIntervalSeconds>
 									<stopKey>STOP</stopKey>
 									<stopPort>8866</stopPort>
 								</configuration>

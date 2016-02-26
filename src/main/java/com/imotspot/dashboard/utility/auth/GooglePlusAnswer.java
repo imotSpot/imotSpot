@@ -12,7 +12,7 @@ package com.imotspot.dashboard.utility.auth;
  */
 public class GooglePlusAnswer {
 
-    GooglePlusEmail[] emails;
-    String displayName;
+    public GooglePlusEmail[] emails;
+    public String displayName;
     
 }

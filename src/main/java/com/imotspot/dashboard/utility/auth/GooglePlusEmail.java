@@ -11,8 +11,8 @@ package com.imotspot.dashboard.utility.auth;
  * @author mstahv
  */
 public class GooglePlusEmail {
-    
-    String value;
-    String type;
+
+    public String value;
+    public String type;
     
 }

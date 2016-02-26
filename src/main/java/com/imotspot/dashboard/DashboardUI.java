@@ -1,8 +1,6 @@
 package com.imotspot.dashboard;
 
 import com.google.common.eventbus.Subscribe;
-import com.vaadin.annotations.Theme;
-import com.vaadin.annotations.Title;
 import com.imotspot.dashboard.data.DataProvider;
 import com.imotspot.dashboard.data.dummy.DummyDataProvider;
 import com.imotspot.dashboard.domain.User;
@@ -11,8 +9,9 @@ import com.imotspot.dashboard.event.DashboardEvent.CloseOpenWindowsEvent;
 import com.imotspot.dashboard.event.DashboardEvent.UserLoggedOutEvent;
 import com.imotspot.dashboard.event.DashboardEvent.UserLoginRequestedEvent;
 import com.imotspot.dashboard.event.DashboardEventBus;
-import com.imotspot.dashboard.view.LoginView;
 import com.imotspot.dashboard.view.MainView;
+import com.vaadin.annotations.Theme;
+import com.vaadin.annotations.Title;
 import com.vaadin.server.Page;
 import com.vaadin.server.Page.BrowserWindowResizeEvent;
 import com.vaadin.server.Page.BrowserWindowResizeListener;
@@ -70,15 +69,20 @@ public final class DashboardUI extends UI {
     private void updateContent() {
         User user = (User) VaadinSession.getCurrent().getAttribute(
                 User.class.getName());
-        if (user != null && "admin".equals(user.getRole())) {
-            // Authenticated user
+        if (user == null) {
+            user = new User();
+            user.setFirstName("guest");
+            user.setLastName("");
+            user.setRole("guest");
+            VaadinSession.getCurrent().setAttribute(User.class.getName(), user);
+        }
             setContent(new MainView());
             removeStyleName("loginview");
             getNavigator().navigateTo(getNavigator().getState());
-        } else {
-            setContent(new LoginView());
-            addStyleName("loginview");
-        }
+//        } else {
+//            setContent(new LoginView());
+//            addStyleName("loginview");
+//        }
     }
 
     @Subscribe

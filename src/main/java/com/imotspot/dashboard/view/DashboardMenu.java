@@ -91,25 +91,36 @@ public final class DashboardMenu extends CustomComponent {
         settingsItem = settings.addItem("", new ThemeResource(
                 "img/profile-pic-300px.jpg"), null);
         updateUserName(null);
-        settingsItem.addItem("Edit Profile", new Command() {
-            @Override
-            public void menuSelected(final MenuItem selectedItem) {
-                ProfilePreferencesWindow.open(user, false);
-            }
-        });
-        settingsItem.addItem("Preferences", new Command() {
-            @Override
-            public void menuSelected(final MenuItem selectedItem) {
-                ProfilePreferencesWindow.open(user, true);
-            }
-        });
-        settingsItem.addSeparator();
-        settingsItem.addItem("Sign Out", new Command() {
-            @Override
-            public void menuSelected(final MenuItem selectedItem) {
-                DashboardEventBus.post(new DashboardEvent.UserLoggedOutEvent());
-            }
-        });
+        if (user.getRole().equals("guest")) {
+
+            settingsItem.addItem("Sign In", new Command() {
+                @Override
+                public void menuSelected(final MenuItem selectedItem) {
+                    getUI().addWindow(new LoginView());
+                }
+            });
+        } else {
+            settingsItem.addItem("Edit Profile", new Command() {
+                @Override
+                public void menuSelected(final MenuItem selectedItem) {
+                    ProfilePreferencesWindow.open(user, false);
+                }
+            });
+            settingsItem.addItem("Preferences", new Command() {
+                @Override
+                public void menuSelected(final MenuItem selectedItem) {
+                    ProfilePreferencesWindow.open(user, true);
+                }
+            });
+            settingsItem.addSeparator();
+
+            settingsItem.addItem("Sign Out", new Command() {
+                @Override
+                public void menuSelected(final MenuItem selectedItem) {
+                    DashboardEventBus.post(new DashboardEvent.UserLoggedOutEvent());
+                }
+            });
+        }
         return settings;
     }
 
