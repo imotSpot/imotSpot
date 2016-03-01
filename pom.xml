@@ -327,7 +327,11 @@
 			<artifactId>google-api-services-plus</artifactId>
 			<version>v1-rev217-1.20.0</version>
 		</dependency>
-
+		<dependency>
+			<groupId>org.vaadin.addon</groupId>
+			<artifactId>oauthpopup</artifactId>
+			<version>0.0.4</version>
+		</dependency>
 	</dependencies>
 
 	<build>
