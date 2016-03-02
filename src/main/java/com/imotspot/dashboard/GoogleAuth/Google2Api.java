@@ -1,4 +1,4 @@
-package com.imotspot.dashboard.utility.auth;
+package com.imotspot.dashboard.GoogleAuth;
 
 import org.scribe.builder.api.DefaultApi20;
 import org.scribe.exceptions.OAuthException;
