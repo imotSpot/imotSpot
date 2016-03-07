@@ -98,6 +98,16 @@ public final class DashboardMenu extends CustomComponent {
                 public void menuSelected(final MenuItem selectedItem) {
                     LoginView loginWindow = new LoginView();
                     loginWindow.setSizeUndefined();
+                    loginWindow.addCloseListener(new Window.CloseListener() {
+                        @Override
+                        public void windowClose(Window.CloseEvent closeEvent) {
+//                            loginWindow.closeWindow();
+                            closeEvent.getWindow().getParent();
+                            closeEvent.getWindow().close();
+//                            getUI().removeWindow(loginWindow);
+                            UI.getCurrent().getPage().reload();
+                        }
+                    });
                     getUI().addWindow(loginWindow);
                 }
             });

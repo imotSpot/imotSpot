@@ -57,9 +57,6 @@ public class LoginView extends Window implements RequestHandler {
         setCaption("Login");
         setModal(true);
         setClosable(true);
-//        setResizable(true);
-//        setWidth(592.0f, Unit.PIXELS);
-//        setSizeFull();
 
         Component loginForm = buildLoginForm();
 //        setWidthUndefined();
@@ -250,7 +247,7 @@ public class LoginView extends Window implements RequestHandler {
             user.setLastName("Raev");
             user.setRole("user");
             VaadinSession.getCurrent().setAttribute(User.class.getName(), user);
-            redirectUrl = Page.getCurrent().getLocation().toString();
+//            redirectUrl = Page.getCurrent().getLocation().toString();
             closeWindow();
         }
 
@@ -293,9 +290,12 @@ public class LoginView extends Window implements RequestHandler {
     }
 
     public void closeWindow(){
+        super.close();
 //        getUI().;
-        getUI().getPage().reload();
-
-        close();
+//        getUI().getWindows().remove(this);
+//        getUI().getPage().reload();
+//        UI.getCurrent().getNavigator().navigateTo("dashboard");
+//        UI.getCurrent().getPage().reload();
+//        close();
     }
 }
