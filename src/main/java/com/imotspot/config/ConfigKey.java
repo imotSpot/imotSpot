@@ -2,10 +2,15 @@ package com.imotspot.config;
 
 public enum ConfigKey {
     embeddedDB(true),
-    databaseBaseDir("../orientdb-community-2.1.11"),
+    databaseName("imotSpot"),
+    databasePoolMinSize(1),
+    databasePoolMaxSize(10),
+    databaseBaseDir("../orientdb-community-2.1.12/"),
     databasesDirName("databases"),
     databasesWebStudioDirName("www"),
-    databaseConfigFileName("orientdb/orientdb-embed-config.xml");
+    databaseConfigFileName("orientdb/orientdb-embed-config.xml"),
+    databaseUsername("admin"),
+    databasePassword("admin");
 
     private Object value;
 

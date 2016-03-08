@@ -67,27 +67,39 @@ public class Configuration {
     }
 
     public Object getConfig(ConfigKey key) {
-        return config.get(key.name());
+        Object value = config.get(key.name());
+        if (value == null) {
+            return key.value();
+        }
+        return value;
     }
 
     public String getConfigAsString(ConfigKey key) {
-        return (String) config.get(key.name());
+        return (String) getConfig(key);
     }
 
     public Integer getConfigAsInteger(ConfigKey key) {
-        return (Integer) config.get(key.name());
+        Object value = getConfig(key);
+        if (value instanceof Integer) {
+            return (Integer) value;
+        }
+        return Integer.valueOf(value.toString());
     }
 
     public Double getConfigAsDouble(ConfigKey key) {
-        Object value = config.get(key.name());
+        Object value = getConfig(key);
         if (value instanceof Double) {
-            return (Double) config.get(key.name());
+            return (Double) value;
         }
         return Double.valueOf(value.toString());
     }
 
     public Boolean getConfigAsBoolean(ConfigKey key) {
-        return (Boolean) config.get(key.name());
+        Object value = getConfig(key);
+        if (value instanceof Boolean) {
+            return (Boolean) value;
+        }
+        return Boolean.valueOf(value.toString());
     }
 
     public Map<String, Object> asMap() {
