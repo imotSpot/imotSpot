@@ -5,6 +5,7 @@ import com.imotspot.dashboard.DashboardUI;
 import com.imotspot.dashboard.data.DataProvider;
 import com.imotspot.dashboard.event.DashboardEventBus;
 import com.imotspot.database.OrientDBServer;
+import com.imotspot.database.model.ODBVertex;
 import dagger.Component;
 
 import javax.inject.Singleton;
@@ -13,6 +14,10 @@ import javax.inject.Singleton;
 @Component(modules = AppModule.class)
 public interface AppComponent {
     AppComponent appComponent = DaggerAppComponent.builder().appModule(new AppModule()).build();
+
+    static AppComponent daggerInjector() {
+        return appComponent;
+    }
 
     OrientDBServer dbServer();
 
@@ -24,7 +29,5 @@ public interface AppComponent {
 
     void inject(DashboardServlet dashboardServlet);
 
-    static AppComponent daggerInjector() {
-        return appComponent;
-    }
+    void inject(ODBVertex odbVertex);
 }

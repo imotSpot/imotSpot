@@ -1,47 +1,24 @@
 package com.imotspot.dashboard.data.dummy;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.net.URL;
-import java.nio.charset.Charset;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
-import com.google.common.collect.Collections2;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Multimap;
-import com.google.common.collect.MultimapBuilder;
+import com.google.common.collect.*;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.imotspot.dashboard.data.DataProvider;
-import com.imotspot.dashboard.domain.DashboardNotification;
-import com.imotspot.dashboard.domain.Movie;
-import com.imotspot.dashboard.domain.MovieRevenue;
-import com.imotspot.dashboard.domain.Transaction;
-import com.imotspot.dashboard.domain.User;
+import com.imotspot.dashboard.domain.*;
+import com.imotspot.database.model.UserVertex;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.util.CurrentInstance;
+
+import java.io.*;
+import java.net.URL;
+import java.nio.charset.Charset;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * A dummy implementation for the backend API.
@@ -396,6 +373,7 @@ public class DummyDataProvider implements DataProvider {
         user.setLocation(DummyDataGenerator.randomWord(5, true));
         user.setBio("Quis aute iure reprehenderit in voluptate velit esse."
                 + "Cras mattis iudicium purus sit amet fermentum.");
+        new UserVertex(user).save();
         return user;
     }
 
