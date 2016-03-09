@@ -1,6 +1,9 @@
 package com.imotspot.dagger;
 
 import com.imotspot.config.Configuration;
+import com.imotspot.dashboard.data.DataProvider;
+import com.imotspot.dashboard.data.dummy.DummyDataProvider;
+import com.imotspot.dashboard.event.DashboardEventBus;
 import com.imotspot.database.OrientDBServer;
 import dagger.Module;
 import dagger.Provides;
@@ -20,5 +23,16 @@ public class AppModule {
     @Singleton
     OrientDBServer provideDBServer(Configuration configuration) {
         return new OrientDBServer(configuration);
+    }
+
+    @Provides
+    DashboardEventBus provideEventBus() {
+        return new DashboardEventBus();
+    }
+
+    @Provides
+    @Singleton
+    DataProvider provideDummyDataProvider() {
+        return new DummyDataProvider();
     }
 }

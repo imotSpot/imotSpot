@@ -2,8 +2,7 @@ package com.imotspot.database;
 
 import com.imotspot.config.ConfigKey;
 import com.imotspot.config.Configuration;
-import com.imotspot.dagger.AppModule;
-import com.imotspot.dagger.DaggerAppComponent;
+import com.imotspot.dagger.AppComponent;
 import com.imotspot.template.FileDocument;
 import com.imotspot.template.FileTemplate;
 import com.orientechnologies.common.concur.ONeedRetryException;
@@ -12,6 +11,7 @@ import com.orientechnologies.orient.server.OServerMain;
 import com.tinkerpop.blueprints.Vertex;
 import com.tinkerpop.blueprints.impls.orient.OrientGraph;
 import com.tinkerpop.blueprints.impls.orient.OrientGraphFactory;
+import com.tinkerpop.blueprints.impls.orient.OrientGraphNoTx;
 
 import javax.inject.Inject;
 
@@ -28,7 +28,7 @@ public class OrientDBServer {
     }
 
     public static void main(String[] args) throws Exception {
-        OrientDBServer orientDB = DaggerAppComponent.builder().appModule(new AppModule()).build().dbServer();
+        OrientDBServer orientDB = AppComponent.daggerInjector().dbServer();
 
         orientDB.start();
 
@@ -84,6 +84,13 @@ public class OrientDBServer {
             getGraphFactory();
         }
         return factory.getTx();
+    }
+
+    public OrientGraphNoTx getGraphNoTx() {
+        if (factory == null) {
+            getGraphFactory();
+        }
+        return factory.getNoTx();
     }
 
     public void doInTXWithRetry(DBOperation operation) {

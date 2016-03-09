@@ -1,8 +1,8 @@
 package com.imotspot.dashboard;
 
 import com.google.common.eventbus.Subscribe;
+import com.imotspot.dagger.AppComponent;
 import com.imotspot.dashboard.data.DataProvider;
-import com.imotspot.dashboard.data.dummy.DummyDataProvider;
 import com.imotspot.dashboard.domain.User;
 import com.imotspot.dashboard.event.DashboardEvent.BrowserResizeEvent;
 import com.imotspot.dashboard.event.DashboardEvent.CloseOpenWindowsEvent;
@@ -22,6 +22,7 @@ import com.vaadin.ui.UI;
 import com.vaadin.ui.Window;
 import com.vaadin.ui.themes.ValoTheme;
 
+import javax.inject.Inject;
 import java.util.Locale;
 
 @Theme("dashboard")
@@ -36,8 +37,18 @@ public final class DashboardUI extends UI {
      * injection; and not in the UI but somewhere closer to where they're
      * actually accessed.
      */
-    private final DataProvider dataProvider = new DummyDataProvider();
-    private final DashboardEventBus dashboardEventbus = new DashboardEventBus();
+    private final DataProvider dataProvider;
+    private final DashboardEventBus dashboardEventbus;
+
+    public DashboardUI() {
+        this(AppComponent.daggerInjector().dashboardEventBus(), AppComponent.daggerInjector().dataProvider());
+    }
+
+    @Inject
+    public DashboardUI(DashboardEventBus dashboardEventbus, DataProvider dataProvider) {
+        this.dashboardEventbus = dashboardEventbus;
+        this.dataProvider = dataProvider;
+    }
 
     @Override
     protected void init(final VaadinRequest request) {

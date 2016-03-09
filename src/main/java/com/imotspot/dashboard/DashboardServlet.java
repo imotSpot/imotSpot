@@ -1,11 +1,11 @@
 package com.imotspot.dashboard;
 
-import com.imotspot.dagger.AppModule;
-import com.imotspot.dagger.DaggerAppComponent;
+import com.imotspot.dagger.AppComponent;
 import com.imotspot.database.OrientDBServer;
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.server.VaadinServlet;
 
+import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 
@@ -14,19 +14,20 @@ import javax.servlet.annotation.WebServlet;
 @VaadinServletConfiguration(ui = DashboardUI.class, productionMode = false, widgetset = "com.imotspot.dashboard.GoogleMapWidgetSet")
 public class DashboardServlet extends VaadinServlet {
 
-    private OrientDBServer dbServer;
+    @Inject
+    public OrientDBServer dbServer;
 
     @Override
     protected final void servletInitialized() throws ServletException {
         super.servletInitialized();
 
+        AppComponent.daggerInjector().inject(this);
         startDatabase();
 
         getService().addSessionInitListener(new DashboardSessionInitListener());
     }
 
     private void startDatabase() throws ServletException {
-        dbServer = DaggerAppComponent.builder().appModule(new AppModule()).build().dbServer();
         try {
             dbServer.start();
         } catch (Exception e) {
