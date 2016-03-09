@@ -31,11 +31,16 @@ public class FileDocument {
     private File searchFile() throws URISyntaxException {
         url = ClassLoader.getSystemResource(filename);
 
-        if (url == null) {
-            new File(filename);
+        if (url != null) {
+            return new File(url.toURI());
         }
 
-        return new File(url.toURI());
+        File file = new File(filename);
+        if (file == null || !file.exists()) {
+            return new File("src/main/resources/" + filename);
+        }
+
+        return new File(filename);
     }
 
 

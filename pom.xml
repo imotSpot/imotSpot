@@ -44,11 +44,6 @@
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
-			<dependency>
-				<groupId>org.springframework.social</groupId>
-				<artifactId>spring-social-facebook</artifactId>
-				<version>2.0.3.RELEASE</version>
-			</dependency>
 		</dependencies>
 	</dependencyManagement>
 
@@ -114,38 +109,6 @@
 						</executions>
 					</plugin>
 
-					<plugin>
-						<groupId>org.eclipse.jetty</groupId>
-						<artifactId>jetty-maven-plugin</artifactId>
-						<version>9.2.3.v20140905</version>
-						<executions>
-							<!-- start and stop jetty (running our app) when running integration 
-								tests -->
-							<execution>
-								<id>start-jetty</id>
-								<phase>pre-integration-test</phase>
-								<goals>
-									<goal>start</goal>
-								</goals>
-								<configuration>
-									<scanIntervalSeconds>1</scanIntervalSeconds>
-									<stopKey>STOP</stopKey>
-									<stopPort>8866</stopPort>
-								</configuration>
-							</execution>
-							<execution>
-								<id>stop-jetty</id>
-								<phase>post-integration-test</phase>
-								<goals>
-									<goal>stop</goal>
-								</goals>
-								<configuration>
-									<stopKey>STOP</stopKey>
-									<stopPort>8866</stopPort>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
 				</plugins>
 			</build>
 		</profile>
@@ -347,10 +310,26 @@
 			<artifactId>dagger-compiler</artifactId>
 			<version>2.0</version>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.social</groupId>
+			<artifactId>spring-social-facebook</artifactId>
+			<version>2.0.3.RELEASE</version>
+		</dependency>
 	</dependencies>
 
 	<build>
 		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.5</version>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+					<!-- Prevents an endPosTable exception during compilation -->
+					<useIncrementalCompilation>false</useIncrementalCompilation>
+				</configuration>
+			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -362,15 +341,6 @@
 						<optional>true</optional>
 					</dependency>
 				</dependencies>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.5</version>
-				<configuration>
-					<source>1.8</source>
-					<target>1.8</target>
-				</configuration>
 			</plugin>
 			<plugin>
 				<artifactId>maven-clean-plugin</artifactId>
@@ -436,6 +406,33 @@
 				<groupId>org.eclipse.jetty</groupId>
 				<artifactId>jetty-maven-plugin</artifactId>
 				<version>9.2.3.v20140905</version>
+				<executions>
+					<!-- start and stop jetty (running our app) when running integration
+                        tests -->
+					<execution>
+						<id>start-jetty</id>
+						<phase>pre-integration-test</phase>
+						<goals>
+							<goal>start</goal>
+						</goals>
+						<configuration>
+							<scanIntervalSeconds>1</scanIntervalSeconds>
+							<stopKey>STOP</stopKey>
+							<stopPort>8866</stopPort>
+						</configuration>
+					</execution>
+					<execution>
+						<id>stop-jetty</id>
+						<phase>post-integration-test</phase>
+						<goals>
+							<goal>stop</goal>
+						</goals>
+						<configuration>
+							<stopKey>STOP</stopKey>
+							<stopPort>8866</stopPort>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
