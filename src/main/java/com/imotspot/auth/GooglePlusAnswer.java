@@ -14,5 +14,6 @@ public class GooglePlusAnswer {
 
     public GooglePlusEmail[] emails;
     public String displayName;
-    
+    public String name;
+    public long id;
 }

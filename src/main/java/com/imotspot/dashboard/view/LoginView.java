@@ -171,7 +171,7 @@ public class LoginView extends Window implements RequestHandler {
 
     private FacebookLink addFacebookButton() {
         ApiInfo api = FACEBOOK_API;
-        FacebookLink link = new FacebookLink(FacebookApi.class, api.apiKey, api.apiSecret);
+        FacebookLink link = new FacebookLink(FacebookApi.class, api.apiKey, api.apiSecret, api.exampleGetRequest);
         addButton(api, link);
 
         return link;

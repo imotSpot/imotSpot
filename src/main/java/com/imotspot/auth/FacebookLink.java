@@ -7,7 +7,6 @@ import com.vaadin.ui.Link;
 import org.scribe.builder.api.Api;
 import org.vaadin.addon.oauthpopup.OAuthCallbackInjecter;
 import org.vaadin.addon.oauthpopup.OAuthListener;
-import org.vaadin.addon.oauthpopup.OAuthPopupOpener;
 
 /**
  * A button that opens a OAuth authorization url in a separate browser window,
@@ -33,12 +32,12 @@ import org.vaadin.addon.oauthpopup.OAuthPopupOpener;
 public class FacebookLink extends CustomComponent {
 
 
-    private final OAuthPopupOpener opener;
+    private final FacebookPopupOpener opener;
 
     private Link link;
 
-    public FacebookLink(Class<? extends Api> apiClass, String key, String secret) {
-        this.opener = new OAuthPopupOpener(apiClass, key, secret);
+    public FacebookLink(Class<? extends Api> apiClass, String key, String secret, String getRequestLink) {
+        this.opener = new FacebookPopupOpener(apiClass, key, secret, getRequestLink);
         link = new Link();
         link.setIcon(new ClassResource("/com/imotspot/auth/social-facebook-box-blue-icon.png"));
         opener.extend(link);
