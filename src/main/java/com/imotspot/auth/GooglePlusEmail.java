@@ -4,15 +4,15 @@
  * and open the template in the editor.
  */
 
-package com.imotspot.dashboard.GoogleAuth;
+package com.imotspot.auth;
 
 /**
  *
  * @author mstahv
  */
-public class GooglePlusAnswer {
+public class GooglePlusEmail {
 
-    public GooglePlusEmail[] emails;
-    public String displayName;
+    public String value;
+    public String type;
     
 }

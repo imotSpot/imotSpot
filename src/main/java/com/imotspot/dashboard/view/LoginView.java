@@ -1,9 +1,10 @@
 package com.imotspot.dashboard.view;
 
 import com.google.gson.Gson;
-import com.imotspot.dashboard.GoogleAuth.ApiInfo;
-import com.imotspot.dashboard.GoogleAuth.GooglePlusAnswer;
-import com.imotspot.dashboard.GoogleAuth.GoogleSignIn;
+import com.imotspot.auth.ApiInfo;
+import com.imotspot.auth.FacebookLink;
+import com.imotspot.auth.GooglePlusAnswer;
+import com.imotspot.auth.GoogleSignIn;
 import com.imotspot.dashboard.domain.User;
 import com.imotspot.dashboard.event.DashboardEvent.UserLoginRequestedEvent;
 import com.imotspot.dashboard.event.DashboardEventBus;
@@ -16,10 +17,7 @@ import com.vaadin.ui.themes.ValoTheme;
 import org.scribe.builder.api.FacebookApi;
 import org.scribe.model.*;
 import org.vaadin.addon.oauthpopup.OAuthListener;
-import org.vaadin.addon.oauthpopup.OAuthPopupButton;
-import org.vaadin.addon.oauthpopup.buttons.FacebookButton;
 import org.vaadin.addon.oauthpopup.buttons.GitHubApi;
-import org.vaadin.addon.oauthpopup.buttons.GitHubButton;
 import org.vaadin.addon.oauthpopup.buttons.GooglePlusApi;
 
 import java.io.IOException;
@@ -51,99 +49,50 @@ public class LoginView extends Window implements RequestHandler {
             GooglePlusApi.class,
             GOOGLE_API_KEY,
             GOOGLE_API_SECRET,
-            "https://api.google.com/user");
+            "https://www.googleapis.com/plus/v1/people/me");
 
     public LoginView() {
         setCaption("Login");
         setModal(true);
         setClosable(true);
-//        setResizable(true);
-//        setWidth(592.0f, Unit.PIXELS);
-//        setSizeFull();
+        center();
+
+        setWidth(30, Unit.PERCENTAGE);
 
         Component loginForm = buildLoginForm();
-//        setWidthUndefined();
-//        setHeightUndefined();
         setContent(loginForm);
 
-//        setWidth(loginForm.getWidth()*3, Unit.PIXELS);
-//        setHeight(loginForm.getHeight()*3, Unit.PIXELS);
-//
-//        addComponent(loginForm);
-//        setComponentAlignment(loginForm, Alignment.MIDDLE_CENTER);
         redirectUrl = Page.getCurrent().getLocation().toString();
     }
 
-    private Component buildLoginForm() {
-        VerticalLayout loginForm = new VerticalLayout();
+    private Panel buildLoginForm() {
 
-        HorizontalLayout firstRow = new HorizontalLayout();
-        firstRow.setSizeUndefined();
-        firstRow.setSpacing(true);
-        Responsive.makeResponsive(firstRow);
-//        firstRow.addStyleName("panelwelcome");
-        firstRow.addComponents(buildLabels(), buildFields());
+        Panel scrollPanel = new Panel();
 
-        HorizontalLayout secondRow = new HorizontalLayout();
-        secondRow.setSizeUndefined();
-        secondRow.setSpacing(true);
-        Responsive.makeResponsive(secondRow);
-//        secondRow.addStyleName("panelwelcome");
-        secondRow.addComponents(buildThirdPartyButtons(), new CheckBox("Remember me", true));
+        final CssLayout loginPanel = new CssLayout();
+        final VerticalLayout loginInnerPanel = new VerticalLayout();
+        loginInnerPanel.setSpacing(true);
+//        loginInnerPanel.setSizeFull();
+        loginPanel.setSizeFull();
 
-        loginForm.addComponents(firstRow, secondRow);
-        loginForm.setComponentAlignment(firstRow, Alignment.MIDDLE_CENTER);
-        loginForm.setComponentAlignment(secondRow, Alignment.MIDDLE_CENTER);
+        Responsive.makeResponsive(loginPanel);
+        loginPanel.addStyleName("login-panel");
 
-        return loginForm;
-    }
-
-    private Component buildThirdPartyButtons() {
-        HorizontalLayout fieldsSecondRow = new HorizontalLayout();
-        fieldsSecondRow.setSpacing(true);
-        fieldsSecondRow.addStyleName("fields");
-
-        addGoogleButton(fieldsSecondRow);
-        addFacebookButton(fieldsSecondRow);
-        addGitHubButton(fieldsSecondRow);
-
-//        final Button signWithGooglePlus = new Button("");
-//        signWithGooglePlus.addStyleName(ValoTheme.BUTTON_LINK);
-//        final Button signWithFacebook = new Button("Facebook");
-//        signWithFacebook.addStyleName(ValoTheme.BUTTON_PRIMARY);
-
-//        VaadinSession.getCurrent().addRequestHandler(this);
-
-//        signWithGooglePlus.setIcon(new ThemeResource("img/signin_button.png"));
-
-//        opener.extend(signWithGooglePlus);
-
-//        signWithGooglePlus.addClickListener(new ClickListener() {
-//            @Override
-//            public void buttonClick(ClickEvent clickEvent) {
-//            }
-//        });
-
-//        signWithFacebook.addClickListener(new ClickListener() {
-//            @Override
-//            public void buttonClick(ClickEvent clickEvent) {
-//                Notification notification = new Notification("Click facebook btn");
-//                notification.setPosition(Position.BOTTOM_CENTER);
-//                notification.setDelayMsec(20000);
-//                notification.show(Page.getCurrent());
-//            }
-//        });
-
-//        fieldsSecondRow.addComponent(signWithGooglePlus);
-//        fieldsSecondRow.setComponentAlignment(signWithGooglePlus, Alignment.MIDDLE_RIGHT);
-
-        return fieldsSecondRow;
+        Responsive.makeResponsive(loginInnerPanel);
+        loginInnerPanel.addComponent(buildLabels());
+        loginInnerPanel.addComponent(buildFields());
+        loginInnerPanel.addComponent(buildThirdPartyButtons());
+        loginInnerPanel.addComponent(new CheckBox("Remember me", true));
+        loginPanel.addComponent(loginInnerPanel);
+        scrollPanel.setContent(loginPanel);
+        return scrollPanel;
     }
 
     private Component buildFields() {
         HorizontalLayout fields = new HorizontalLayout();
         fields.setSpacing(true);
         fields.addStyleName("fields");
+        fields.setSizeUndefined();
 
         final TextField username = new TextField("Username");
         username.setIcon(FontAwesome.USER);
@@ -177,7 +126,6 @@ public class LoginView extends Window implements RequestHandler {
         labels.addStyleName("labels");
 
         Label welcome = new Label("Welcome");
-//        welcome.setWidth(400.00f, Unit.PIXELS);
         welcome.addStyleName(ValoTheme.LABEL_H4);
         welcome.addStyleName(ValoTheme.LABEL_COLORED);
         labels.addComponent(welcome);
@@ -190,68 +138,84 @@ public class LoginView extends Window implements RequestHandler {
         return labels;
     }
 
-    private void addGoogleButton(Layout layout) {
+    private Component buildThirdPartyButtons() {
+        HorizontalLayout fieldsSecondRow = new HorizontalLayout();
+        fieldsSecondRow.setSpacing(true);
+        fieldsSecondRow.addStyleName("fields");
+        fieldsSecondRow.setSizeUndefined();
+
+        Link google = addGoogleButton();
+//        OAuthPopupButton github = addGitHubButton();
+        FacebookLink facebook = addFacebookButton();
+
+        fieldsSecondRow.addComponents(new Label("Login with: "), google, facebook);
+        fieldsSecondRow.setComponentAlignment(facebook, Alignment.BOTTOM_LEFT);
+
+        return fieldsSecondRow;
+    }
+
+    private Link addGoogleButton() {
 
         Link signWithGooglePlus = new Link("", new ExternalResource(googleService.getSignInUrl()));
-        signWithGooglePlus.setIcon(new ExternalResource("https://www.gliffy.com/go/icons/icn-google-30x30.png"));
+        signWithGooglePlus.setIcon(new ClassResource("/com/imotspot/auth/social-google-box-icon.png"));
         VaadinSession.getCurrent().addRequestHandler(this);
-        layout.addComponent(signWithGooglePlus);
+//        layout.addComponent(signWithGooglePlus);
+        return signWithGooglePlus;
 
 //        ApiInfo api = GOOGLE_API;
 //        OAuthPopupButton button = new GooglePlusButton(api.apiKey, api.apiSecret);
-//        addButton(api, button, layout);
+//        addButton(api, button);
+//
+//        return button;
     }
 
-    private void addFacebookButton(Layout layout) {
+    private FacebookLink addFacebookButton() {
         ApiInfo api = FACEBOOK_API;
-        OAuthPopupButton button = new FacebookButton(api.apiKey, api.apiSecret);
-        addButton(api, button, layout);
+        FacebookLink link = new FacebookLink(FacebookApi.class, api.apiKey, api.apiSecret);
+        addButton(api, link);
+
+        return link;
     }
 
-    private void addGitHubButton(Layout layout) {
-        ApiInfo api = GITHUB_API;
-        OAuthPopupButton button = new GitHubButton(api.apiKey, api.apiSecret);
-        addButton(api, button, layout);
-    }
+//    private OAuthPopupButton addGitHubButton() {
+//        ApiInfo api = GITHUB_API;
+//        OAuthPopupButton button = new GitHubButton(api.apiKey, api.apiSecret);
+//        addButton(api, button);
+//
+//        return button;
+//    }
 
-    private void addButton(final ApiInfo service, OAuthPopupButton button, Layout layout) {
+    private void addButton(final ApiInfo service, FacebookLink link) {
 
         // In most browsers "resizable" makes the popup
         // open in a new window, not in a tab.
         // You can also set size with eg. "resizable,width=400,height=300"
-        button.setPopupWindowFeatures("resizable,width=500,height=400");
+        link.setPopupWindowFeatures("resizable,width=500,height=400");
 
-        HorizontalLayout hola = new HorizontalLayout();
-        hola.setSpacing(true);
-        hola.addComponent(button);
+        link.addOAuthListener(new Listener(service));
+        link.addStyleName(ValoTheme.BUTTON_PRIMARY);
 
-        layout.addComponent(hola);
-
-        button.addOAuthListener(new Listener(service, hola));
     }
 
     private class Listener implements OAuthListener {
 
         private final ApiInfo service;
-        private final HorizontalLayout hola;
 
-        private Listener(ApiInfo service, HorizontalLayout hola) {
+        private Listener(ApiInfo service) {
             this.service = service;
-            this.hola = hola;
         }
 
         @Override
         public void authSuccessful(final String accessToken,
                                    final String accessTokenSecret, String oauthRawResponse) {
-
-            Notification.show("Authorized.");
             User user = new User();
             user.setFirstName("Angel");
             user.setLastName("Raev");
             user.setRole("user");
             VaadinSession.getCurrent().setAttribute(User.class.getName(), user);
             redirectUrl = Page.getCurrent().getLocation().toString();
-            closeWindow();
+
+            Page.getCurrent().reload();
         }
 
         @Override
@@ -292,10 +256,4 @@ public class LoginView extends Window implements RequestHandler {
         return false;
     }
 
-    public void closeWindow(){
-//        getUI().;
-        getUI().getPage().reload();
-
-        close();
-    }
 }

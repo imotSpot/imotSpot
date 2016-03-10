@@ -1,4 +1,4 @@
-package com.imotspot.dashboard.GoogleAuth;
+package com.imotspot.auth;
 
 import com.vaadin.server.Page;
 import com.vaadin.ui.Notification;

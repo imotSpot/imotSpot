@@ -96,9 +96,7 @@ public final class DashboardMenu extends CustomComponent {
             settingsItem.addItem("Sign In", new Command() {
                 @Override
                 public void menuSelected(final MenuItem selectedItem) {
-                    LoginView loginWindow = new LoginView();
-                    loginWindow.setSizeUndefined();
-                    getUI().addWindow(loginWindow);
+                    getUI().addWindow(new LoginView());
                 }
             });
         } else {
