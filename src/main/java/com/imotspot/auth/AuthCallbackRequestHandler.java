@@ -2,10 +2,7 @@ package com.imotspot.auth;
 
 import com.google.gson.Gson;
 import com.imotspot.dashboard.domain.User;
-import com.vaadin.server.RequestHandler;
-import com.vaadin.server.VaadinRequest;
-import com.vaadin.server.VaadinResponse;
-import com.vaadin.server.VaadinSession;
+import com.vaadin.server.*;
 import org.scribe.model.*;
 
 import java.io.IOException;
@@ -69,8 +66,8 @@ public class AuthCallbackRequestHandler implements RequestHandler {
                 VaadinSession.getCurrent().setAttribute(User.class.getName(), user);
                 VaadinSession.getCurrent().removeRequestHandler(this);
 
-//                ((VaadinServletResponse) response).getHttpServletResponse().
-//                        sendRedirect(redirectUrl);
+                ((VaadinServletResponse) response).getHttpServletResponse().
+                        sendRedirect(data.getRedirectUrl());
 
                 return true;
             }

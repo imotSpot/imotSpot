@@ -17,9 +17,9 @@ public class FacebookPopupOpener extends BrowserWindowOpener {
 
     private OAuthListener dataListener;
 
-    public FacebookPopupOpener(Class<? extends Api> apiClass, String key, String secret, String getRequestLink) {
+    public FacebookPopupOpener(Class<? extends Api> apiClass, String key, String secret, String getRequestLink, String redirectUrl) {
         super(FacebookPopupUI.class);
-        this.data = new AuthData(apiClass, key, secret, getRequestLink);
+        this.data = new AuthData(apiClass, key, secret, getRequestLink, redirectUrl);
         setCallbackToDefault();
     }
 

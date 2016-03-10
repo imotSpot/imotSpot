@@ -28,6 +28,7 @@ public class AuthData {
     private final String apiKey;
     private final String apiSecret;
     private final String getRequestLink;
+    private final String redirectUrl;
 
     private String callback;
     private String scope;
@@ -36,17 +37,23 @@ public class AuthData {
     private List<String> errorParameterNames;
 
     private Token accessToken;
+    private Token requestToken;
 
     private OAuthService service;
 
     private OAuthCallbackInjecter injecter = OAuthCallbackInjecter.QUERY_INJECTER;
 
-    public AuthData(Class<? extends Api> apiClass, String apiKey, String apiSecret, String getRequestLink) {
+    public AuthData(ApiInfo api, String redirectUrl) {
+        this(api.scribeApi, api.apiKey, api.apiSecret, api.exampleGetRequest, redirectUrl);
+    }
+
+    public AuthData(Class<? extends Api> apiClass, String apiKey, String apiSecret, String getRequestLink, String redirectUrl) {
         this.id = nextId();
         this.apiClass = apiClass;
         this.apiKey = apiKey;
         this.apiSecret = apiSecret;
         this.getRequestLink = getRequestLink;
+        this.redirectUrl = redirectUrl;
         setVerifierParameterNameToDefault();
         setDefaultErrorParameterNames();
     }
@@ -81,6 +88,10 @@ public class AuthData {
 
     public String getRequestLink() {
         return getRequestLink;
+    }
+
+    public String getRedirectUrl() {
+        return redirectUrl;
     }
 
     public boolean isOauth2() {
@@ -167,6 +178,10 @@ public class AuthData {
         return accessToken;
     }
 
+    synchronized public Token getRequestToken() {
+        return requestToken;
+    }
+
     public void signRequest(Token t, OAuthRequest r) {
         service.signRequest(t, r);
     }
@@ -225,5 +240,10 @@ public class AuthData {
         return getService().getAuthorizationUrl(requestToken);
     }
 
+
+    public synchronized String getSignInUrl() {
+        requestToken = createNewRequestToken();
+        return getAuthorizationUrl(requestToken);
+    }
 
 }

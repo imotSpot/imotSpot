@@ -1,10 +1,7 @@
 package com.imotspot.dashboard.view;
 
 import com.google.gson.Gson;
-import com.imotspot.auth.ApiInfo;
-import com.imotspot.auth.FacebookLink;
-import com.imotspot.auth.GooglePlusAnswer;
-import com.imotspot.auth.GoogleSignIn;
+import com.imotspot.auth.*;
 import com.imotspot.dashboard.domain.User;
 import com.imotspot.dashboard.event.DashboardEvent.UserLoginRequestedEvent;
 import com.imotspot.dashboard.event.DashboardEventBus;
@@ -58,11 +55,11 @@ public class LoginView extends Window implements RequestHandler {
         center();
 
         setWidth(30, Unit.PERCENTAGE);
+        redirectUrl = Page.getCurrent().getLocation().toString();
 
         Component loginForm = buildLoginForm();
         setContent(loginForm);
 
-        redirectUrl = Page.getCurrent().getLocation().toString();
     }
 
     private Panel buildLoginForm() {
@@ -146,7 +143,15 @@ public class LoginView extends Window implements RequestHandler {
 
         Link google = addGoogleButton();
 //        OAuthPopupButton github = addGitHubButton();
-        FacebookLink facebook = addFacebookButton();
+//        FacebookLink facebook = addFacebookButton();
+
+        AuthData data = new AuthData(FACEBOOK_API, redirectUrl);
+
+        data.setCallback(redirectUrl);
+        Link facebook = new Link("", new ExternalResource(data.getSignInUrl()));
+        facebook.setIcon(new ClassResource("/com/imotspot/auth/social-facebook-box-blue-icon.png"));
+        VaadinSession.getCurrent().addRequestHandler(new AuthCallbackRequestHandler(data.getRequestToken(), data));
+
 
         fieldsSecondRow.addComponents(new Label("Login with: "), google, facebook);
         fieldsSecondRow.setComponentAlignment(facebook, Alignment.BOTTOM_LEFT);
@@ -170,8 +175,16 @@ public class LoginView extends Window implements RequestHandler {
     }
 
     private FacebookLink addFacebookButton() {
+
+
+//        AuthData data = new AuthData(FACEBOOK_API, redirectUrl);
+//        Link link = new Link("", new ExternalResource(data.getSignInUrl()));
+//        link.setIcon(new ClassResource("/com/imotspot/auth/social-facebook-box-blue-icon.png"));
+//        VaadinSession.getCurrent().addRequestHandler(this);
+//        layout.addComponent(signWithGooglePlus);
+
         ApiInfo api = FACEBOOK_API;
-        FacebookLink link = new FacebookLink(FacebookApi.class, api.apiKey, api.apiSecret, api.exampleGetRequest);
+        FacebookLink link = new FacebookLink(FacebookApi.class, api.apiKey, api.apiSecret, api.exampleGetRequest, redirectUrl);
         addButton(api, link);
 
         return link;

@@ -36,8 +36,8 @@ public class FacebookLink extends CustomComponent {
 
     private Link link;
 
-    public FacebookLink(Class<? extends Api> apiClass, String key, String secret, String getRequestLink) {
-        this.opener = new FacebookPopupOpener(apiClass, key, secret, getRequestLink);
+    public FacebookLink(Class<? extends Api> apiClass, String key, String secret, String getRequestLink, String redirectUrl) {
+        this.opener = new FacebookPopupOpener(apiClass, key, secret, getRequestLink, redirectUrl);
         link = new Link();
         link.setIcon(new ClassResource("/com/imotspot/auth/social-facebook-box-blue-icon.png"));
         opener.extend(link);
