@@ -1,8 +1,6 @@
 package com.imotspot.dashboard.view;
 
-import com.google.gson.Gson;
 import com.imotspot.auth.*;
-import com.imotspot.dashboard.domain.User;
 import com.imotspot.dashboard.event.DashboardEvent.UserLoginRequestedEvent;
 import com.imotspot.dashboard.event.DashboardEventBus;
 import com.vaadin.event.ShortcutAction.KeyCode;
@@ -12,17 +10,13 @@ import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.themes.ValoTheme;
 import org.scribe.builder.api.FacebookApi;
-import org.scribe.model.*;
 import org.vaadin.addon.oauthpopup.OAuthListener;
 import org.vaadin.addon.oauthpopup.buttons.GitHubApi;
 import org.vaadin.addon.oauthpopup.buttons.GooglePlusApi;
 
-import java.io.IOException;
-
 @SuppressWarnings("serial")
-public class LoginView extends Window implements RequestHandler {
+public class LoginView extends Window {
 
-    private GoogleSignIn googleService = new GoogleSignIn();
     private String redirectUrl;
     private static final String GOOGLE_API_KEY = "630229759772-2100fc6154umojo7dlq3j1rajj1qt98m.apps.googleusercontent.com";
     private static final String GOOGLE_API_SECRET = "NUq8VPbsaw8CcFMsn_ptzqxb";
@@ -50,11 +44,11 @@ public class LoginView extends Window implements RequestHandler {
 
     public LoginView() {
         setCaption("Login");
-        setModal(true);
+//        setModal(true);
         setClosable(true);
         center();
 
-        setWidth(30, Unit.PERCENTAGE);
+        setWidth(40, Unit.PERCENTAGE);
         redirectUrl = Page.getCurrent().getLocation().toString();
 
         Component loginForm = buildLoginForm();
@@ -141,17 +135,15 @@ public class LoginView extends Window implements RequestHandler {
         fieldsSecondRow.addStyleName("fields");
         fieldsSecondRow.setSizeUndefined();
 
-        Link google = addGoogleButton();
-//        OAuthPopupButton github = addGitHubButton();
-//        FacebookLink facebook = addFacebookButton();
-
         AuthData data = new AuthData(FACEBOOK_API, redirectUrl);
-
         data.setCallback(redirectUrl);
-        Link facebook = new Link("", new ExternalResource(data.getSignInUrl()));
-        facebook.setIcon(new ClassResource("/com/imotspot/auth/social-facebook-box-blue-icon.png"));
-        VaadinSession.getCurrent().addRequestHandler(new AuthCallbackRequestHandler(data.getRequestToken(), data));
+        GoogleSignIn googleService = new GoogleSignIn();
+        AuthCallbackRequestHandler requestHandler = new AuthCallbackRequestHandler(data.getRequestToken(), data, googleService);
+        VaadinSession.getCurrent().addRequestHandler(requestHandler);
 
+        Link google = addGoogleButton(requestHandler);
+//        OAuthPopupButton github = addGitHubButton();
+        Link facebook = addFacebookButton(requestHandler);
 
         fieldsSecondRow.addComponents(new Label("Login with: "), google, facebook);
         fieldsSecondRow.setComponentAlignment(facebook, Alignment.BOTTOM_LEFT);
@@ -159,11 +151,10 @@ public class LoginView extends Window implements RequestHandler {
         return fieldsSecondRow;
     }
 
-    private Link addGoogleButton() {
+    private Link addGoogleButton(AuthCallbackRequestHandler requestHandler) {
 
-        Link signWithGooglePlus = new Link("", new ExternalResource(googleService.getSignInUrl()));
+        Link signWithGooglePlus = new Link("", new ExternalResource(requestHandler.getGoogleService().getSignInUrl()));
         signWithGooglePlus.setIcon(new ClassResource("/com/imotspot/auth/social-google-box-icon.png"));
-        VaadinSession.getCurrent().addRequestHandler(this);
 //        layout.addComponent(signWithGooglePlus);
         return signWithGooglePlus;
 
@@ -174,7 +165,12 @@ public class LoginView extends Window implements RequestHandler {
 //        return button;
     }
 
-    private FacebookLink addFacebookButton() {
+    private Link addFacebookButton(AuthCallbackRequestHandler requestHandler) {
+
+
+        Link link = new Link("", new ExternalResource(requestHandler.getData().getSignInUrl()));
+        link.setIcon(new ClassResource("/com/imotspot/auth/social-facebook-box-blue-icon.png"));
+
 
 
 //        AuthData data = new AuthData(FACEBOOK_API, redirectUrl);
@@ -183,9 +179,9 @@ public class LoginView extends Window implements RequestHandler {
 //        VaadinSession.getCurrent().addRequestHandler(this);
 //        layout.addComponent(signWithGooglePlus);
 
-        ApiInfo api = FACEBOOK_API;
-        FacebookLink link = new FacebookLink(FacebookApi.class, api.apiKey, api.apiSecret, api.exampleGetRequest, redirectUrl);
-        addButton(api, link);
+//        ApiInfo api = FACEBOOK_API;
+//        FacebookLink link = new FacebookLink(FacebookApi.class, api.apiKey, api.apiSecret, api.exampleGetRequest, redirectUrl);
+//        addButton(api, link);
 
         return link;
     }
@@ -221,12 +217,6 @@ public class LoginView extends Window implements RequestHandler {
         @Override
         public void authSuccessful(final String accessToken,
                                    final String accessTokenSecret, String oauthRawResponse) {
-            User user = new User();
-            user.setFirstName("Angel");
-            user.setLastName("Raev");
-            user.setRole("user");
-            VaadinSession.getCurrent().setAttribute(User.class.getName(), user);
-            redirectUrl = Page.getCurrent().getLocation().toString();
 
             Page.getCurrent().reload();
         }
@@ -236,37 +226,4 @@ public class LoginView extends Window implements RequestHandler {
             Notification.show("Auth failed.");
         }
     }
-
-    @Override
-    public boolean handleRequest(VaadinSession session, VaadinRequest request,
-                                 VaadinResponse response) throws IOException {
-
-        if (request.getParameter("code") != null) {
-            String code = request.getParameter("code");
-            Verifier v = new Verifier(code);
-            Token t = googleService.getAccessToken(null, v);
-
-            OAuthRequest r = new OAuthRequest(Verb.GET,
-                    "https://www.googleapis.com/plus/v1/people/me");
-            googleService.signRequest(t, r);
-            Response resp = r.send();
-
-            GooglePlusAnswer answer = new Gson().fromJson(resp.getBody(),
-                    GooglePlusAnswer.class);
-
-            User user = new User();
-            user.setFirstName(answer.emails[0].value.substring(0, answer.emails[0].value.indexOf("@")));
-            user.setLastName("");
-            user.setRole("user");
-            VaadinSession.getCurrent().setAttribute(User.class.getName(), user);
-            VaadinSession.getCurrent().removeRequestHandler(this);
-
-            ((VaadinServletResponse) response).getHttpServletResponse().
-                    sendRedirect(redirectUrl);
-            return true;
-        }
-
-        return false;
-    }
-
 }

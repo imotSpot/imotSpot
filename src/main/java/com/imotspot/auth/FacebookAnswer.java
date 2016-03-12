@@ -6,8 +6,8 @@
 
 package com.imotspot.auth;
 
-public class GooglePlusAnswer {
+public class FacebookAnswer {
 
-    public GooglePlusEmail[] emails;
-    public String displayName;
+    public String name;
+    public long id;
 }

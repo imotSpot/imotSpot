@@ -11,6 +11,7 @@ public class AuthCallbackRequestHandler implements RequestHandler {
 
     private final Token requestToken;
     private final AuthData data;
+    private final GoogleSignIn googleService;
 
     private static final String CLOSE_WINDOW_HTML =
             "<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"utf-8\"/>" +
@@ -18,15 +19,24 @@ public class AuthCallbackRequestHandler implements RequestHandler {
                     "</head><body>" +
                     "</body></html>";
 
+    public AuthData getData() {
+        return data;
+    }
+
+    public GoogleSignIn getGoogleService() {
+        return googleService;
+    }
+
     /**
      * Only handles request that match the data id.
      *
      * @param requestToken may be null (in case of OAuth2)
      * @param data
      */
-    public AuthCallbackRequestHandler(Token requestToken, AuthData data) {
+    public AuthCallbackRequestHandler(Token requestToken, AuthData data, GoogleSignIn googleService) {
         this.requestToken = requestToken;
         this.data = data;
+        this.googleService = googleService;
     }
 
     @Override
@@ -50,17 +60,11 @@ public class AuthCallbackRequestHandler implements RequestHandler {
                 data.signRequest(t, r);
                 Response resp = r.send();
 
-                GooglePlusAnswer answer = new Gson().fromJson(resp.getBody(),
-                        GooglePlusAnswer.class);
-
-                String name = answer.name;
-                if (answer.name == null) {
-                    name = answer.emails[0].value.substring(0, answer.emails[0].value.indexOf("@"));
-                }
+                FacebookAnswer answer = new Gson().fromJson(resp.getBody(),
+                        FacebookAnswer.class);
 
                 User user = new User();
-
-                user.setFirstName(name);
+                user.setFirstName(answer.name);
                 user.setLastName("");
                 user.setRole("user");
                 VaadinSession.getCurrent().setAttribute(User.class.getName(), user);
@@ -68,7 +72,7 @@ public class AuthCallbackRequestHandler implements RequestHandler {
 
                 ((VaadinServletResponse) response).getHttpServletResponse().
                         sendRedirect(data.getRedirectUrl());
-
+                Page.getCurrent().reload();
                 return true;
             }
 
@@ -94,8 +98,32 @@ public class AuthCallbackRequestHandler implements RequestHandler {
 
             data.setDenied(errorMessage);
             finish(session, response);
+        } else if (request.getParameter("code") != null) {
+            String code = request.getParameter("code");
+            Verifier v = new Verifier(code);
+            Token t = googleService.getAccessToken(null, v);
+
+            OAuthRequest r = new OAuthRequest(Verb.GET,
+                    "https://www.googleapis.com/plus/v1/people/me");
+            googleService.signRequest(t, r);
+            Response resp = r.send();
+
+            GooglePlusAnswer answer = new Gson().fromJson(resp.getBody(),
+                    GooglePlusAnswer.class);
+
+            User user = new User();
+            user.setFirstName(answer.emails[0].value.substring(0, answer.emails[0].value.indexOf("@")));
+            user.setLastName("");
+            user.setRole("user");
+            VaadinSession.getCurrent().setAttribute(User.class.getName(), user);
+            VaadinSession.getCurrent().removeRequestHandler(this);
+
+            ((VaadinServletResponse) response).getHttpServletResponse().
+                    sendRedirect(data.getRedirectUrl());
+            Page.getCurrent().reload();
+            return true;
         }
-        return true;
+        return false;
     }
 
     private void finish(VaadinSession session, VaadinResponse response) throws IOException {
