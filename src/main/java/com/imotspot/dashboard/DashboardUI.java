@@ -10,6 +10,7 @@ import com.imotspot.dashboard.event.DashboardEvent.UserLoggedOutEvent;
 import com.imotspot.dashboard.event.DashboardEvent.UserLoginRequestedEvent;
 import com.imotspot.dashboard.event.DashboardEventBus;
 import com.imotspot.dashboard.view.MainView;
+import com.vaadin.annotations.PreserveOnRefresh;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
 import com.vaadin.server.Page;
@@ -25,6 +26,7 @@ import com.vaadin.ui.themes.ValoTheme;
 import javax.inject.Inject;
 import java.util.Locale;
 
+@PreserveOnRefresh
 @Theme("dashboard")
 //@Widgetset("com.vaadin.demo.dashboard.DashboardWidgetSet")
 @Title("Imot Spot Dashboard")
