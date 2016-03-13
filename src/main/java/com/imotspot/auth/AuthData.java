@@ -56,6 +56,8 @@ public class AuthData {
         this.redirectUrl = redirectUrl;
         setVerifierParameterNameToDefault();
         setDefaultErrorParameterNames();
+
+        setCallback(redirectUrl);
     }
 
     public String getId() {

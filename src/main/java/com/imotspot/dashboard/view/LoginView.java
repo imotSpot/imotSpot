@@ -1,6 +1,9 @@
 package com.imotspot.dashboard.view;
 
-import com.imotspot.auth.*;
+import com.imotspot.auth.ApiInfo;
+import com.imotspot.auth.AuthCallbackRequestHandler;
+import com.imotspot.auth.AuthData;
+import com.imotspot.auth.GoogleSignIn;
 import com.imotspot.dashboard.event.DashboardEvent.UserLoginRequestedEvent;
 import com.imotspot.dashboard.event.DashboardEventBus;
 import com.vaadin.event.ShortcutAction.KeyCode;
@@ -10,13 +13,13 @@ import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.themes.ValoTheme;
 import org.scribe.builder.api.FacebookApi;
-import org.vaadin.addon.oauthpopup.OAuthListener;
 import org.vaadin.addon.oauthpopup.buttons.GitHubApi;
 import org.vaadin.addon.oauthpopup.buttons.GooglePlusApi;
 
 @SuppressWarnings("serial")
 public class LoginView extends Window {
 
+    private GoogleSignIn googleService = new GoogleSignIn();
     private String redirectUrl;
     private static final String GOOGLE_API_KEY = "630229759772-2100fc6154umojo7dlq3j1rajj1qt98m.apps.googleusercontent.com";
     private static final String GOOGLE_API_SECRET = "NUq8VPbsaw8CcFMsn_ptzqxb";
@@ -44,7 +47,7 @@ public class LoginView extends Window {
 
     public LoginView() {
         setCaption("Login");
-//        setModal(true);
+        setModal(true);
         setClosable(true);
         center();
 
@@ -136,14 +139,14 @@ public class LoginView extends Window {
         fieldsSecondRow.setSizeUndefined();
 
         AuthData data = new AuthData(FACEBOOK_API, redirectUrl);
-        data.setCallback(redirectUrl);
-        GoogleSignIn googleService = new GoogleSignIn();
-        AuthCallbackRequestHandler requestHandler = new AuthCallbackRequestHandler(data.getRequestToken(), data, googleService);
-        VaadinSession.getCurrent().addRequestHandler(requestHandler);
+        AuthCallbackRequestHandler responseHandler = new AuthCallbackRequestHandler(data, googleService);
+        VaadinSession.getCurrent().addRequestHandler(responseHandler);
 
-        Link google = addGoogleButton(requestHandler);
-//        OAuthPopupButton github = addGitHubButton();
-        Link facebook = addFacebookButton(requestHandler);
+        Link facebook = new Link("", new ExternalResource(data.getSignInUrl()));
+        facebook.setIcon(new ClassResource("/com/imotspot/auth/social-facebook-box-blue-icon.png"));
+
+        Link google = new Link("", new ExternalResource(googleService.getSignInUrl()));
+        google.setIcon(new ClassResource("/com/imotspot/auth/social-google-box-icon.png"));
 
         fieldsSecondRow.addComponents(new Label("Login with: "), google, facebook);
         fieldsSecondRow.setComponentAlignment(facebook, Alignment.BOTTOM_LEFT);
@@ -151,79 +154,4 @@ public class LoginView extends Window {
         return fieldsSecondRow;
     }
 
-    private Link addGoogleButton(AuthCallbackRequestHandler requestHandler) {
-
-        Link signWithGooglePlus = new Link("", new ExternalResource(requestHandler.getGoogleService().getSignInUrl()));
-        signWithGooglePlus.setIcon(new ClassResource("/com/imotspot/auth/social-google-box-icon.png"));
-//        layout.addComponent(signWithGooglePlus);
-        return signWithGooglePlus;
-
-//        ApiInfo api = GOOGLE_API;
-//        OAuthPopupButton button = new GooglePlusButton(api.apiKey, api.apiSecret);
-//        addButton(api, button);
-//
-//        return button;
-    }
-
-    private Link addFacebookButton(AuthCallbackRequestHandler requestHandler) {
-
-
-        Link link = new Link("", new ExternalResource(requestHandler.getData().getSignInUrl()));
-        link.setIcon(new ClassResource("/com/imotspot/auth/social-facebook-box-blue-icon.png"));
-
-
-
-//        AuthData data = new AuthData(FACEBOOK_API, redirectUrl);
-//        Link link = new Link("", new ExternalResource(data.getSignInUrl()));
-//        link.setIcon(new ClassResource("/com/imotspot/auth/social-facebook-box-blue-icon.png"));
-//        VaadinSession.getCurrent().addRequestHandler(this);
-//        layout.addComponent(signWithGooglePlus);
-
-//        ApiInfo api = FACEBOOK_API;
-//        FacebookLink link = new FacebookLink(FacebookApi.class, api.apiKey, api.apiSecret, api.exampleGetRequest, redirectUrl);
-//        addButton(api, link);
-
-        return link;
-    }
-
-//    private OAuthPopupButton addGitHubButton() {
-//        ApiInfo api = GITHUB_API;
-//        OAuthPopupButton button = new GitHubButton(api.apiKey, api.apiSecret);
-//        addButton(api, button);
-//
-//        return button;
-//    }
-
-    private void addButton(final ApiInfo service, FacebookLink link) {
-
-        // In most browsers "resizable" makes the popup
-        // open in a new window, not in a tab.
-        // You can also set size with eg. "resizable,width=400,height=300"
-        link.setPopupWindowFeatures("resizable,width=500,height=400");
-
-        link.addOAuthListener(new Listener(service));
-        link.addStyleName(ValoTheme.BUTTON_PRIMARY);
-
-    }
-
-    private class Listener implements OAuthListener {
-
-        private final ApiInfo service;
-
-        private Listener(ApiInfo service) {
-            this.service = service;
-        }
-
-        @Override
-        public void authSuccessful(final String accessToken,
-                                   final String accessTokenSecret, String oauthRawResponse) {
-
-            Page.getCurrent().reload();
-        }
-
-        @Override
-        public void authDenied(String reason) {
-            Notification.show("Auth failed.");
-        }
-    }
 }

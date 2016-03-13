@@ -30,11 +30,10 @@ public class AuthCallbackRequestHandler implements RequestHandler {
     /**
      * Only handles request that match the data id.
      *
-     * @param requestToken may be null (in case of OAuth2)
      * @param data
      */
-    public AuthCallbackRequestHandler(Token requestToken, AuthData data, GoogleSignIn googleService) {
-        this.requestToken = requestToken;
+    public AuthCallbackRequestHandler(AuthData data, GoogleSignIn googleService) {
+        this.requestToken = data.getRequestToken();
         this.data = data;
         this.googleService = googleService;
     }
@@ -72,7 +71,7 @@ public class AuthCallbackRequestHandler implements RequestHandler {
 
                 ((VaadinServletResponse) response).getHttpServletResponse().
                         sendRedirect(data.getRedirectUrl());
-                Page.getCurrent().reload();
+
                 return true;
             }
 
@@ -120,7 +119,6 @@ public class AuthCallbackRequestHandler implements RequestHandler {
 
             ((VaadinServletResponse) response).getHttpServletResponse().
                     sendRedirect(data.getRedirectUrl());
-            Page.getCurrent().reload();
             return true;
         }
         return false;
