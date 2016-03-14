@@ -11,7 +11,6 @@
   }
 
   .login-panel {
-    @include valo-panel-style;
     padding: round($v-unit-size / 1.5) round($v-unit-size / 1.5);
     min-width: $v-font-size * 13;
     max-width: 90%;

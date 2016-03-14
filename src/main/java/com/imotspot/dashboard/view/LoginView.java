@@ -59,27 +59,18 @@ public class LoginView extends Window {
 
     }
 
-    private Panel buildLoginForm() {
-
-        Panel scrollPanel = new Panel();
-
-        final CssLayout loginPanel = new CssLayout();
+    private VerticalLayout buildLoginForm() {
         final VerticalLayout loginInnerPanel = new VerticalLayout();
-        loginInnerPanel.setSpacing(true);
-//        loginInnerPanel.setSizeFull();
-        loginPanel.setSizeFull();
 
-        Responsive.makeResponsive(loginPanel);
-        loginPanel.addStyleName("login-panel");
+        loginInnerPanel.setSpacing(true);
+        loginInnerPanel.addStyleName("login-panel");
 
         Responsive.makeResponsive(loginInnerPanel);
         loginInnerPanel.addComponent(buildLabels());
         loginInnerPanel.addComponent(buildFields());
         loginInnerPanel.addComponent(buildThirdPartyButtons());
         loginInnerPanel.addComponent(new CheckBox("Remember me", true));
-        loginPanel.addComponent(loginInnerPanel);
-        scrollPanel.setContent(loginPanel);
-        return scrollPanel;
+        return loginInnerPanel;
     }
 
     private Component buildFields() {
@@ -124,11 +115,6 @@ public class LoginView extends Window {
         welcome.addStyleName(ValoTheme.LABEL_COLORED);
         labels.addComponent(welcome);
 
-        Label title = new Label("Imot Spot");
-        title.setSizeUndefined();
-        title.addStyleName(ValoTheme.LABEL_H3);
-        title.addStyleName(ValoTheme.LABEL_LIGHT);
-        labels.addComponent(title);
         return labels;
     }
 
