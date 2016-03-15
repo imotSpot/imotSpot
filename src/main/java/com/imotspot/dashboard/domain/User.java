@@ -1,6 +1,7 @@
 package com.imotspot.dashboard.domain;
 
 public final class User {
+    private String oauthIdentifier;
     private String role;
     private String firstName;
     private String lastName;
@@ -12,6 +13,15 @@ public final class User {
     private Integer newsletterSubscription;
     private String website;
     private String bio;
+    private String picUrl;
+
+    public String getOauthIdentifier() {
+        return oauthIdentifier;
+    }
+
+    public void setOauthIdentifier(String oauthIdentifier) {
+        this.oauthIdentifier = oauthIdentifier;
+    }
 
     public String getEmail() {
         return email;
@@ -99,6 +109,14 @@ public final class User {
 
     public void setLastName(final String lastName) {
         this.lastName = lastName;
+    }
+
+    public String getPicUrl() {
+        return picUrl;
+    }
+
+    public void setPicUrl(String picUrl) {
+        this.picUrl = picUrl;
     }
 
 }

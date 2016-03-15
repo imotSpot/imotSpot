@@ -2,6 +2,7 @@ package com.imotspot.auth;
 
 import com.google.gson.Gson;
 import com.imotspot.dashboard.domain.User;
+import com.imotspot.database.model.UserVertex;
 import com.vaadin.server.*;
 import org.scribe.model.*;
 
@@ -62,13 +63,12 @@ public class AuthCallbackRequestHandler implements RequestHandler {
                 FacebookAnswer answer = new Gson().fromJson(resp.getBody(),
                         FacebookAnswer.class);
 
-                User user = new User();
-                user.setFirstName(answer.name);
-                user.setLastName("");
-                user.setRole("user");
-                VaadinSession.getCurrent().setAttribute(User.class.getName(), user);
-                VaadinSession.getCurrent().removeRequestHandler(this);
+                String name = answer.name;
+                String picUrl = answer.picture.data.url;
+                String oauthId = "facebook" + answer.id;
+                saveUser(oauthId, name, "", picUrl);
 
+                VaadinSession.getCurrent().removeRequestHandler(this);
                 ((VaadinServletResponse) response).getHttpServletResponse().
                         sendRedirect(data.getRedirectUrl());
 
@@ -110,18 +110,29 @@ public class AuthCallbackRequestHandler implements RequestHandler {
             GooglePlusAnswer answer = new Gson().fromJson(resp.getBody(),
                     GooglePlusAnswer.class);
 
-            User user = new User();
-            user.setFirstName(answer.emails[0].value.substring(0, answer.emails[0].value.indexOf("@")));
-            user.setLastName("");
-            user.setRole("user");
-            VaadinSession.getCurrent().setAttribute(User.class.getName(), user);
-            VaadinSession.getCurrent().removeRequestHandler(this);
+            String name = answer.emails[0].value.substring(0, answer.emails[0].value.indexOf("@"));
+            String picUrl = answer.image.url;
+            String oauthId = "google" + answer.id;
+            saveUser(oauthId, name, answer.emails[0].value, picUrl);
 
+            VaadinSession.getCurrent().removeRequestHandler(this);
             ((VaadinServletResponse) response).getHttpServletResponse().
                     sendRedirect(data.getRedirectUrl());
             return true;
         }
         return false;
+    }
+
+    private void saveUser(String oauthId, String name, String email, String picUrl) {
+        User user = new User();
+        user.setOauthIdentifier(oauthId);
+        user.setFirstName(name);
+        user.setPicUrl(picUrl);
+        user.setLastName("");
+        user.setEmail(email);
+        user.setRole("user");
+        new UserVertex(user).save();
+        VaadinSession.getCurrent().setAttribute(User.class.getName(), user);
     }
 
     private void finish(VaadinSession session, VaadinResponse response) throws IOException {

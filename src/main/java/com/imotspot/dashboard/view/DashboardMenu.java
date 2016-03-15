@@ -10,6 +10,7 @@ import com.imotspot.dashboard.event.DashboardEventBus;
 import com.vaadin.event.dd.DragAndDropEvent;
 import com.vaadin.event.dd.DropHandler;
 import com.vaadin.event.dd.acceptcriteria.AcceptCriterion;
+import com.vaadin.server.ExternalResource;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.server.ThemeResource;
 import com.vaadin.server.VaadinSession;
@@ -88,8 +89,14 @@ public final class DashboardMenu extends CustomComponent {
         final MenuBar settings = new MenuBar();
         settings.addStyleName("user-menu");
         final User user = getCurrentUser();
-        settingsItem = settings.addItem("", new ThemeResource(
-                "img/profile-pic-300px.jpg"), null);
+        String pic = user.getPicUrl();
+        if (pic != null) {
+            settingsItem = settings.addItem("", new ExternalResource(
+                    pic), null);
+        } else {
+            settingsItem = settings.addItem("", new ThemeResource(
+                    "img/profile-pic-300px.jpg"), null);
+        }
         updateUserName(null);
         if (user.getRole().equals("guest")) {
 
