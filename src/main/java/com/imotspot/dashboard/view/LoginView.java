@@ -128,11 +128,14 @@ public class LoginView extends Window {
         AuthCallbackRequestHandler responseHandler = new AuthCallbackRequestHandler(data, googleService);
         VaadinSession.getCurrent().addRequestHandler(responseHandler);
 
-        Link facebook = new Link("", new ExternalResource(data.getSignInUrl()));
-        facebook.setIcon(new ClassResource("/com/imotspot/auth/social-facebook-box-blue-icon.png"));
+        Embedded facebook = new Embedded(null, new ClassResource("/com/imotspot/auth/social-facebook-box-blue-icon.png"));
+        facebook.addClickListener(event -> getUI().getPage().setLocation(data.getSignInUrl()));
+        facebook.addStyleName("imageLink");
 
-        Link google = new Link("", new ExternalResource(googleService.getSignInUrl()));
-        google.setIcon(new ClassResource("/com/imotspot/auth/social-google-box-icon.png"));
+
+        Embedded google = new Embedded(null, new ClassResource("/com/imotspot/auth/social-google-box-icon.png"));
+        google.addClickListener(event -> getUI().getPage().setLocation(googleService.getSignInUrl()));
+        google.addStyleName("imageLink");
 
         fieldsSecondRow.addComponents(new Label("Login with: "), google, facebook);
         fieldsSecondRow.setComponentAlignment(facebook, Alignment.BOTTOM_LEFT);
