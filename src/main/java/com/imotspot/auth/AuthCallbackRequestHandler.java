@@ -110,7 +110,7 @@ public class AuthCallbackRequestHandler implements RequestHandler {
             GooglePlusAnswer answer = new Gson().fromJson(resp.getBody(),
                     GooglePlusAnswer.class);
 
-            String name = answer.displayName;
+            String name = answer.displayName != null ? answer.displayName : answer.emails[0].value.substring(0, answer.emails[0].value.indexOf("@"));
             String picUrl = answer.image.url;
             String oauthId = "google" + answer.id;
             saveUser(oauthId, name, answer.emails[0].value, picUrl);
