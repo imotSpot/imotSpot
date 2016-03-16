@@ -1,5 +1,8 @@
 package com.imotspot.dashboard.domain;
 
+import lombok.Data;
+
+@Data
 public final class User {
     private String oauthIdentifier;
     private String role;
@@ -14,109 +17,4 @@ public final class User {
     private String website;
     private String bio;
     private String picUrl;
-
-    public String getOauthIdentifier() {
-        return oauthIdentifier;
-    }
-
-    public void setOauthIdentifier(String oauthIdentifier) {
-        this.oauthIdentifier = oauthIdentifier;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(final String email) {
-        this.email = email;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(final String location) {
-        this.location = location;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(final String phone) {
-        this.phone = phone;
-    }
-
-    public Integer getNewsletterSubscription() {
-        return newsletterSubscription;
-    }
-
-    public void setNewsletterSubscription(final Integer newsletterSubscription) {
-        this.newsletterSubscription = newsletterSubscription;
-    }
-
-    public String getWebsite() {
-        return website;
-    }
-
-    public void setWebsite(final String website) {
-        this.website = website;
-    }
-
-    public String getBio() {
-        return bio;
-    }
-
-    public void setBio(final String bio) {
-        this.bio = bio;
-    }
-
-    public boolean isMale() {
-        return male;
-    }
-
-    public void setMale(final boolean male) {
-        this.male = male;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(final String title) {
-        this.title = title;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(final String role) {
-        this.role = role;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(final String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(final String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getPicUrl() {
-        return picUrl;
-    }
-
-    public void setPicUrl(String picUrl) {
-        this.picUrl = picUrl;
-    }
-
 }
