@@ -31,7 +31,7 @@ public class LoginView extends Window {
             FacebookApi.class,
             FACEBOOK_APP_ID,
             FACEBOOK_APP_SECRET,
-            "https://graph.facebook.com/me?fields=name,email,picture");
+            "https://graph.facebook.com/me?fields=age_range,gender,name,id,link,email,picture,first_name,last_name");
 
     private static final ApiInfo GITHUB_API = new ApiInfo("GitHub",
             GitHubApi.class,
