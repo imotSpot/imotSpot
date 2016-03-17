@@ -27,13 +27,24 @@ public abstract class ODBElement {
     }
 
     public Element saveOrUpdate() {
-        return dbServer.doInTX(new DBOperation() {
+        return dbServer.doInTX(new DBOperation<Element>() {
             @Override
             public Element execute(OrientGraph graph) {
                 return saveOrUpdate(graph);
             }
         });
     }
+
+//    public Element load() {
+//        return dbServer.doInTX(new DBOperation<Element>() {
+//            @Override
+//            public Element execute(OrientGraph graph) {
+//                return load(graph);
+//            }
+//        });
+//    }
+//
+//    abstract protected Element load(OrientGraph graph);
 
     abstract protected Element saveOrUpdate(OrientGraph graph);
 

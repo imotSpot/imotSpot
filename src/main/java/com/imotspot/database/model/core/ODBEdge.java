@@ -35,6 +35,11 @@ public abstract class ODBEdge extends ODBElement {
             }
         }
     }
+//
+//    @Override
+//    protected Element load(OrientGraph graph) {
+//        return save(graph);
+//    }
 
     @Override
     protected Element saveOrUpdate(OrientGraph graph) {

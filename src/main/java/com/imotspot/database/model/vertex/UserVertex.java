@@ -1,12 +1,18 @@
 package com.imotspot.database.model.vertex;
 
 import com.imotspot.dashboard.domain.User;
+import com.imotspot.dashboard.domain.imot.Imot;
 import com.imotspot.database.model.core.ODBVertex;
+import com.imotspot.database.model.edge.ImotEdge;
+import com.tinkerpop.blueprints.Element;
+import com.tinkerpop.blueprints.Vertex;
+import com.tinkerpop.blueprints.impls.orient.OrientGraph;
+import com.tinkerpop.blueprints.impls.orient.OrientVertex;
 
 import java.io.Serializable;
 import java.util.List;
 
-public class UserVertex extends ODBVertex {
+public class UserVertex<E extends User> extends ODBVertex {
 
     private final static String IdentifierFieldName = "oauthIdentifier";
 
@@ -15,6 +21,25 @@ public class UserVertex extends ODBVertex {
     public UserVertex(User user) {
         super();
         this.user = user;
+    }
+
+//    @Override
+//    protected Vertex load(OrientGraph graph) {
+//        Vertex userVertex = super.load(graph);
+//
+//        return userVertex;
+//    }
+
+    @Override
+    public OrientVertex update(OrientGraph graph, Element vertex) {
+        OrientVertex userVertex = super.update(graph, vertex);
+
+        for (Imot imot : user.getImots()) {
+            Vertex imotVertex = (Vertex) new ImotVertex(imot).saveOrUpdate();
+            new ImotEdge(userVertex, imotVertex).saveOrUpdate();
+        }
+
+        return userVertex;
     }
 
     @Override

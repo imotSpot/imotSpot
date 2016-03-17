@@ -3,6 +3,7 @@ package com.imotspot.dashboard.domain;
 import com.imotspot.dashboard.domain.imot.Imot;
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -20,5 +21,10 @@ public final class User {
     private String website;
     private String bio;
     private String picUrl;
-    private List<Imot> imots;
+    private List<Imot> imots = new ArrayList<>();
+
+    public User(String oauthIdentifier) {
+        this.oauthIdentifier = oauthIdentifier;
+    }
+
 }

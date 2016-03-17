@@ -6,7 +6,9 @@ import com.tinkerpop.blueprints.impls.orient.OrientGraph;
 import com.tinkerpop.blueprints.impls.orient.OrientGraphNoTx;
 import com.tinkerpop.blueprints.impls.orient.OrientVertex;
 
-public abstract class ODBVertex extends ODBElement {
+import java.io.Serializable;
+
+public abstract class ODBVertex<E extends Serializable> extends ODBElement {
 
     public ODBVertex() {
         super();
@@ -24,6 +26,11 @@ public abstract class ODBVertex extends ODBElement {
             }
         }
     }
+
+//    @Override
+//    protected Vertex load(OrientGraph graph) {
+//        return getByIdentificator(graph);
+//    }
 
     @Override
     protected Element saveOrUpdate(OrientGraph graph) {
@@ -56,7 +63,9 @@ public abstract class ODBVertex extends ODBElement {
 
     @Override
     public OrientVertex save(OrientGraph graph) {
-        return graph.addVertex("class:" + NAME, propertiesArray());
+        OrientVertex locationVertex = graph.addVertex("class:" + NAME, propertiesArray());
+        update(graph, locationVertex);
+        return locationVertex;
     }
 
     @Override

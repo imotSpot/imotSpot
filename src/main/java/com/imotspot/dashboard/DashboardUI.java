@@ -81,7 +81,7 @@ public final class DashboardUI extends UI {
         User user = (User) VaadinSession.getCurrent().getAttribute(
                 User.class.getName());
         if (user == null) {
-            user = new User();
+            user = new User("");
             user.setFirstName("guest");
             user.setLastName("");
             user.setRole("guest");

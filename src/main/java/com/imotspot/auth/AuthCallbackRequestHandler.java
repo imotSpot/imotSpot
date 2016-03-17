@@ -124,8 +124,7 @@ public class AuthCallbackRequestHandler implements RequestHandler {
     }
 
     private void saveUser(String oauthId, String name, String email, String picUrl) {
-        User user = new User();
-        user.setOauthIdentifier(oauthId);
+        User user = new User(oauthId);
         user.setFirstName(name);
         user.setPicUrl(picUrl);
         user.setLastName("");

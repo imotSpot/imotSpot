@@ -3,22 +3,28 @@ package com.imotspot.database;
 import com.imotspot.config.ConfigKey;
 import com.imotspot.config.Configuration;
 import com.imotspot.dagger.AppComponent;
+import com.imotspot.dashboard.domain.User;
 import com.imotspot.dashboard.domain.imot.*;
-import com.imotspot.database.model.vertex.LocationVertex;
+import com.imotspot.database.model.vertex.UserVertex;
+import com.imotspot.logging.Logger;
+import com.imotspot.logging.LoggerFactory;
 import com.imotspot.template.FileDocument;
 import com.imotspot.template.FileTemplate;
 import com.orientechnologies.common.concur.ONeedRetryException;
 import com.orientechnologies.orient.server.OServer;
 import com.orientechnologies.orient.server.OServerMain;
-import com.tinkerpop.blueprints.Element;
 import com.tinkerpop.blueprints.impls.orient.OrientElement;
 import com.tinkerpop.blueprints.impls.orient.OrientGraph;
 import com.tinkerpop.blueprints.impls.orient.OrientGraphFactory;
 import com.tinkerpop.blueprints.impls.orient.OrientGraphNoTx;
 
 import javax.inject.Inject;
+import java.net.URI;
+import java.util.Calendar;
 
 public class OrientDBServer {
+    private static final Logger logger = LoggerFactory.getLogger(OrientDBServer.class);
+
     protected Configuration config;
     private OServer server;
     private OrientGraphFactory factory;
@@ -39,6 +45,10 @@ public class OrientDBServer {
             @Override
             public OrientElement execute(OrientGraph graph) throws Exception {
 
+                User user = new User("test");
+                user.setFirstName("test");
+                UserVertex userVertex = new UserVertex(user);
+
                 Location location = new Location();
                 location.setAddress("sofia address");
                 location.setCountry(new Country("Bulgaria"));
@@ -49,7 +59,17 @@ public class OrientDBServer {
                 marker.setName("Sofia Bulgaria");
                 location.setMarker(marker);
 
-                new LocationVertex(location).saveOrUpdate();
+                Imot imot = new Imot(location);
+                imot.setOwner(user);
+                imot.setPrice(100);
+                imot.setPublished(Calendar.getInstance().getTime());
+                imot.setYear("1960");
+                imot.setDescription("test real estate imot");
+                imot.setCondition(Condition.USED);
+                imot.setFrontImage(new Picture(new URI("./pic.jpg")));
+
+                user.getImots().add(imot);
+                userVertex.saveOrUpdate();
 
 //                Vertex marko = graph.addVertex("class:Imot", "name", "app in sofia", "price", 290);
 //
@@ -126,13 +146,14 @@ public class OrientDBServer {
         }
     }
 
-    public Element doInTX(DBOperation operation) {
+    public <E extends Object> E doInTX(DBOperation<E> operation) {
         OrientGraph graph = getGraph();
-        Element element = null;
+        E element = null;
         try {
             element = operation.execute(graph);
             graph.commit();
         } catch (Exception e) {
+            logger.error("", e);
             graph.rollback();
         }
         return element;
