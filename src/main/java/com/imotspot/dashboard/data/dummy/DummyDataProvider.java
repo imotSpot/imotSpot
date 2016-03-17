@@ -9,7 +9,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.imotspot.dashboard.data.DataProvider;
 import com.imotspot.dashboard.domain.*;
-import com.imotspot.database.model.UserVertex;
+import com.imotspot.database.model.vertex.UserVertex;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.util.CurrentInstance;
 
@@ -373,7 +373,7 @@ public class DummyDataProvider implements DataProvider {
         user.setLocation(DummyDataGenerator.randomWord(5, true));
         user.setBio("Quis aute iure reprehenderit in voluptate velit esse."
                 + "Cras mattis iudicium purus sit amet fermentum.");
-        new UserVertex(user).save();
+        new UserVertex(user).saveOrUpdate();
         return user;
     }
 

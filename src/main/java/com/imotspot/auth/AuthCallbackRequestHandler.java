@@ -2,7 +2,7 @@ package com.imotspot.auth;
 
 import com.google.gson.Gson;
 import com.imotspot.dashboard.domain.User;
-import com.imotspot.database.model.UserVertex;
+import com.imotspot.database.model.vertex.UserVertex;
 import com.vaadin.server.*;
 import org.scribe.model.*;
 
@@ -131,7 +131,7 @@ public class AuthCallbackRequestHandler implements RequestHandler {
         user.setLastName("");
         user.setEmail(email);
         user.setRole("user");
-        new UserVertex(user).save();
+        new UserVertex(user).saveOrUpdate();
         VaadinSession.getCurrent().setAttribute(User.class.getName(), user);
     }
 

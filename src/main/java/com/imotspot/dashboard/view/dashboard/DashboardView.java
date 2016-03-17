@@ -1,8 +1,8 @@
 package com.imotspot.dashboard.view.dashboard;
 
 import com.google.common.eventbus.Subscribe;
-import com.imotspot.dashboard.domain.DashboardNotification;
 import com.imotspot.dashboard.DashboardUI;
+import com.imotspot.dashboard.domain.DashboardNotification;
 import com.imotspot.dashboard.event.DashboardEvent.CloseOpenWindowsEvent;
 import com.imotspot.dashboard.event.DashboardEvent.NotificationsCountUpdatedEvent;
 import com.imotspot.dashboard.event.DashboardEventBus;
@@ -115,7 +115,7 @@ public final class DashboardView extends Panel implements View,
         result.setIcon(FontAwesome.EDIT);
         result.addStyleName("icon-edit");
         result.addStyleName(ValoTheme.BUTTON_ICON_ONLY);
-        result.setDescription("Edit Dashboard");
+        result.setDescription("Add Imot");
         result.addClickListener(new ClickListener() {
             @Override
             public void buttonClick(final ClickEvent event) {

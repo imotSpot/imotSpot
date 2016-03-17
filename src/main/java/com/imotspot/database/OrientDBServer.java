@@ -3,12 +3,15 @@ package com.imotspot.database;
 import com.imotspot.config.ConfigKey;
 import com.imotspot.config.Configuration;
 import com.imotspot.dagger.AppComponent;
+import com.imotspot.dashboard.domain.imot.*;
+import com.imotspot.database.model.vertex.LocationVertex;
 import com.imotspot.template.FileDocument;
 import com.imotspot.template.FileTemplate;
 import com.orientechnologies.common.concur.ONeedRetryException;
 import com.orientechnologies.orient.server.OServer;
 import com.orientechnologies.orient.server.OServerMain;
-import com.tinkerpop.blueprints.Vertex;
+import com.tinkerpop.blueprints.Element;
+import com.tinkerpop.blueprints.impls.orient.OrientElement;
 import com.tinkerpop.blueprints.impls.orient.OrientGraph;
 import com.tinkerpop.blueprints.impls.orient.OrientGraphFactory;
 import com.tinkerpop.blueprints.impls.orient.OrientGraphNoTx;
@@ -34,12 +37,25 @@ public class OrientDBServer {
 
         orientDB.doInTX(new DBOperation() {
             @Override
-            public void execute(OrientGraph graph) {
+            public OrientElement execute(OrientGraph graph) throws Exception {
 
-                Vertex marko = graph.addVertex("class:Imot", "name", "app in sofia", "price", 290);
+                Location location = new Location();
+                location.setAddress("sofia address");
+                location.setCountry(new Country("Bulgaria"));
+                location.setSity(new Sity("Sofia"));
+                location.setDistrict(new District("Sofiiska"));
+                LocationMarker marker = new LocationMarker(42.695537f, 23.2539071f);
+                marker.setAddress("Sofia Bulgaria");
+                marker.setName("Sofia Bulgaria");
+                location.setMarker(marker);
 
-                Iterable<Vertex> imotVertices = graph.getVertices();
-                System.out.println(imotVertices.iterator().next());
+                new LocationVertex(location).saveOrUpdate();
+
+//                Vertex marko = graph.addVertex("class:Imot", "name", "app in sofia", "price", 290);
+//
+//                Iterable<Vertex> imotVertices = graph.getVertices();
+//                System.out.println(imotVertices.iterator().next());
+                return null;
             }
         });
     }
@@ -93,11 +109,11 @@ public class OrientDBServer {
         return factory.getNoTx();
     }
 
-    public void doInTXWithRetry(DBOperation operation) {
+    public void doInTXWithRetry(DBOperation operation) throws Exception {
         doInTXWithRetry(operation, 3);
     }
 
-    public void doInTXWithRetry(DBOperation operation, int maxRetries) {
+    public void doInTXWithRetry(DBOperation operation, int maxRetries) throws Exception {
         OrientGraph graph = getGraph();
         for (int retry = 0; retry < maxRetries; ++retry) {
             try {
@@ -110,13 +126,15 @@ public class OrientDBServer {
         }
     }
 
-    public void doInTX(DBOperation operation) {
+    public Element doInTX(DBOperation operation) {
         OrientGraph graph = getGraph();
+        Element element = null;
         try {
-            operation.execute(graph);
+            element = operation.execute(graph);
             graph.commit();
         } catch (Exception e) {
             graph.rollback();
         }
+        return element;
     }
 }

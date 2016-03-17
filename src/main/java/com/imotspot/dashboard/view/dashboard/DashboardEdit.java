@@ -1,15 +1,9 @@
 package com.imotspot.dashboard.view.dashboard;
 
 import com.vaadin.event.ShortcutAction.KeyCode;
-import com.vaadin.ui.Alignment;
-import com.vaadin.ui.Button;
+import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
-import com.vaadin.ui.Component;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.TextField;
-import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.Window;
 import com.vaadin.ui.themes.ValoTheme;
 
 /**
@@ -26,9 +20,9 @@ public class DashboardEdit extends Window {
         this.listener = listener;
         setCaption("Edit Dashboard");
         setModal(true);
-        setClosable(false);
-        setResizable(false);
-        setWidth(300.0f, Unit.PIXELS);
+        setClosable(true);
+        setResizable(true);
+//        setWidth(300.0f, Unit.PIXELS);
 
         addStyleName("edit-dashboard");
 
