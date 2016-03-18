@@ -52,7 +52,7 @@ public class OrientDBServer {
                 Location location = new Location();
                 location.setAddress("sofia address");
                 location.setCountry(new Country("Bulgaria"));
-                location.setSity(new Sity("Sofia"));
+                location.setCity(new City("Sofia"));
                 location.setDistrict(new District("Sofiiska"));
                 LocationMarker marker = new LocationMarker(42.695537f, 23.2539071f);
                 marker.setAddress("Sofia Bulgaria");

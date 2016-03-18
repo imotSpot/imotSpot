@@ -8,7 +8,7 @@ import java.io.Serializable;
 public class Location implements Serializable {
     private String address;
     private Country country;
-    private Sity sity;
+    private City city;
     private District district;
     private LocationMarker marker;
 }

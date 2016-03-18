@@ -30,7 +30,7 @@ public class LocationVertex extends ODBVertex {
 
         Vertex countryVertex = (Vertex) new CountryVertex(location.getCountry()).saveOrUpdate();
         Vertex districtVertex = (Vertex) new DistrictVertex(location.getDistrict()).saveOrUpdate();
-        Vertex sityVertex = (Vertex) new SityVertex(location.getSity()).saveOrUpdate();
+        Vertex sityVertex = (Vertex) new CityVertex(location.getCity()).saveOrUpdate();
         Vertex locationMarkerVertex = (Vertex) new LocationMarkerVertex(location.getMarker()).saveOrUpdate();
 
         new CountryEdge(locationVertex, countryVertex).saveOrUpdate();
