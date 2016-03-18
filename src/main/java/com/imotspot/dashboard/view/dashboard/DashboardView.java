@@ -8,6 +8,8 @@ import com.imotspot.dashboard.event.DashboardEventBus;
 import com.imotspot.dashboard.view.property.AddProperty;
 import com.imotspot.dashboard.view.property.AddProperty.DashboardEditListener;
 import com.imotspot.database.model.vertex.UserVertex;
+import com.imotspot.googlemap.Geocoding;
+import com.imotspot.googlemap.GeocodingAnswer;
 import com.imotspot.logging.Logger;
 import com.imotspot.logging.LoggerFactory;
 import com.imotspot.model.DashboardNotification;
@@ -29,6 +31,7 @@ import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.themes.ValoTheme;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.function.Consumer;
@@ -148,6 +151,17 @@ public final class DashboardView extends Panel implements View,
         googleMap.setSizeFull();
         googleMap.setImmediate(true);
         googleMap.setMinZoom(4.0);
+
+        try {
+            GeocodingAnswer res = Geocoding.getJSONByGoogle("Sofia, Bulgaria, Liaskovets 46");
+
+            LatLon coord = new LatLon(res.results[0].geometry.location.lat, res.results[0].geometry.location.lng);
+            googleMap.addMarker(new GoogleMapMarker("Home", coord, false));
+
+//            String address = Geocoding.getJSONFromLatLon(new LatLon(42.697702770146975, 23.32174301147461));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         dashboardPanels.addComponent(googleMap);
 //        dashboardPanels.addComponent(buildTopGrossingMovies());
