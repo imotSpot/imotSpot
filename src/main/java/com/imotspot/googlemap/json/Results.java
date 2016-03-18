@@ -1,4 +1,4 @@
-package com.imotspot.googlemap;
+package com.imotspot.googlemap.json;
 
 public class Results {
     public String formatted_address;
