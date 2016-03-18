@@ -3,10 +3,10 @@ package com.imotspot.dashboard.domain.imot;
 import lombok.Data;
 
 @Data
-public class Sity implements HasName {
+public class City implements HasName {
     private String name;
 
-    public Sity(String sity) {
-        this.name = sity;
+    public City(String city) {
+        this.name = city;
     }
 }
