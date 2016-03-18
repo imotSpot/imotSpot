@@ -1,7 +1,7 @@
 package com.imotspot.database.model.vertex;
 
-import com.imotspot.dashboard.domain.imot.LocationMarker;
 import com.imotspot.database.model.core.ODBVertex;
+import com.imotspot.model.imot.LocationMarker;
 
 import java.io.Serializable;
 import java.util.List;

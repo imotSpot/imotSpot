@@ -1,8 +1,8 @@
 package com.imotspot.auth;
 
 import com.google.gson.Gson;
-import com.imotspot.dashboard.domain.User;
 import com.imotspot.database.model.vertex.UserVertex;
+import com.imotspot.model.User;
 import com.vaadin.server.*;
 import org.scribe.model.*;
 

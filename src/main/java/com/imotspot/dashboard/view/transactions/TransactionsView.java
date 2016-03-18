@@ -1,30 +1,19 @@
 package com.imotspot.dashboard.view.transactions;
 
-import java.text.DateFormat;
-import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.Set;
-
+import com.google.common.eventbus.Subscribe;
 import com.imotspot.dashboard.DashboardUI;
 import com.imotspot.dashboard.component.MovieDetailsWindow;
-import com.imotspot.dashboard.domain.Transaction;
+import com.imotspot.dashboard.event.DashboardEvent.BrowserResizeEvent;
+import com.imotspot.dashboard.event.DashboardEvent.TransactionReportEvent;
+import com.imotspot.dashboard.event.DashboardEventBus;
 import com.imotspot.dashboard.view.DashboardViewType;
-import org.vaadin.maddon.FilterableListContainer;
-
-import com.google.common.eventbus.Subscribe;
+import com.imotspot.model.Transaction;
 import com.vaadin.data.Container.Filter;
 import com.vaadin.data.Container.Filterable;
 import com.vaadin.data.Item;
 import com.vaadin.data.Property;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
-import com.imotspot.dashboard.event.DashboardEvent.BrowserResizeEvent;
-import com.imotspot.dashboard.event.DashboardEvent.TransactionReportEvent;
-import com.imotspot.dashboard.event.DashboardEventBus;
 import com.vaadin.event.Action;
 import com.vaadin.event.Action.Handler;
 import com.vaadin.event.FieldEvents.TextChangeEvent;
@@ -36,20 +25,18 @@ import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.server.Page;
 import com.vaadin.server.Responsive;
-import com.vaadin.ui.Button;
+import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
-import com.vaadin.ui.Component;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.Notification;
-import com.vaadin.ui.Table;
 import com.vaadin.ui.Table.Align;
 import com.vaadin.ui.Table.TableDragMode;
-import com.vaadin.ui.TextField;
-import com.vaadin.ui.UI;
-import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
+import org.vaadin.maddon.FilterableListContainer;
+
+import java.text.DateFormat;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @SuppressWarnings({ "serial", "unchecked" })
 public final class TransactionsView extends VerticalLayout implements View {

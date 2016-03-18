@@ -1,17 +1,12 @@
 package com.imotspot.dashboard.view.schedule;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-
 import com.google.common.eventbus.Subscribe;
 import com.imotspot.dashboard.DashboardUI;
 import com.imotspot.dashboard.component.MovieDetailsWindow;
-import com.imotspot.dashboard.domain.Movie;
-import com.imotspot.dashboard.domain.Transaction;
 import com.imotspot.dashboard.event.DashboardEvent;
 import com.imotspot.dashboard.event.DashboardEventBus;
+import com.imotspot.model.Movie;
+import com.imotspot.model.Transaction;
 import com.vaadin.event.LayoutEvents.LayoutClickEvent;
 import com.vaadin.event.LayoutEvents.LayoutClickListener;
 import com.vaadin.navigator.View;
@@ -20,20 +15,9 @@ import com.vaadin.server.ExternalResource;
 import com.vaadin.server.Page;
 import com.vaadin.server.WebBrowser;
 import com.vaadin.shared.MouseEventDetails.MouseButton;
-import com.vaadin.ui.Alignment;
-import com.vaadin.ui.Button;
+import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
-import com.vaadin.ui.Calendar;
-import com.vaadin.ui.Component;
-import com.vaadin.ui.CssLayout;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Image;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.Notification;
-import com.vaadin.ui.TabSheet;
-import com.vaadin.ui.UI;
-import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.components.calendar.CalendarComponentEvents.EventClick;
 import com.vaadin.ui.components.calendar.CalendarComponentEvents.EventClickHandler;
 import com.vaadin.ui.components.calendar.CalendarComponentEvents.EventResize;
@@ -43,6 +27,11 @@ import com.vaadin.ui.components.calendar.event.CalendarEventProvider;
 import com.vaadin.ui.components.calendar.handler.BasicEventMoveHandler;
 import com.vaadin.ui.components.calendar.handler.BasicEventResizeHandler;
 import com.vaadin.ui.themes.ValoTheme;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
 
 @SuppressWarnings("serial")
 public final class ScheduleView extends CssLayout implements View {

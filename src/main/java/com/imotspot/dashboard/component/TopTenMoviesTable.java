@@ -1,17 +1,17 @@
 package com.imotspot.dashboard.component;
 
+import com.imotspot.dashboard.DashboardUI;
+import com.imotspot.model.MovieRevenue;
+import com.vaadin.data.Property;
+import com.vaadin.data.util.BeanItemContainer;
+import com.vaadin.ui.Table;
+import com.vaadin.ui.themes.ValoTheme;
+
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-
-import com.imotspot.dashboard.DashboardUI;
-import com.imotspot.dashboard.domain.MovieRevenue;
-import com.vaadin.data.Property;
-import com.vaadin.data.util.BeanItemContainer;
-import com.vaadin.ui.Table;
-import com.vaadin.ui.themes.ValoTheme;
 
 @SuppressWarnings("serial")
 public final class TopTenMoviesTable extends Table {

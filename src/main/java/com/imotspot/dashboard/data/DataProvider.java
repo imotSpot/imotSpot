@@ -1,13 +1,9 @@
 package com.imotspot.dashboard.data;
 
+import com.imotspot.model.*;
+
 import java.util.Collection;
 import java.util.Date;
-
-import com.imotspot.dashboard.domain.DashboardNotification;
-import com.imotspot.dashboard.domain.Movie;
-import com.imotspot.dashboard.domain.MovieRevenue;
-import com.imotspot.dashboard.domain.Transaction;
-import com.imotspot.dashboard.domain.User;
 
 /**
  * QuickTickets Dashboard backend API.

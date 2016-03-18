@@ -1,6 +1,6 @@
 package com.imotspot.dashboard.data.dummy;
 
-import com.imotspot.dashboard.domain.DashboardNotification;
+import com.imotspot.model.DashboardNotification;
 
 import java.util.Arrays;
 import java.util.Collection;

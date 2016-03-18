@@ -1,7 +1,7 @@
 package com.imotspot.dashboard.event;
 
-import com.imotspot.dashboard.domain.Transaction;
 import com.imotspot.dashboard.view.DashboardViewType;
+import com.imotspot.model.Transaction;
 
 import java.util.Collection;
 

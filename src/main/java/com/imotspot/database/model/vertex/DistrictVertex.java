@@ -1,7 +1,7 @@
 package com.imotspot.database.model.vertex;
 
-import com.imotspot.dashboard.domain.imot.District;
 import com.imotspot.database.model.core.WithNameVertex;
+import com.imotspot.model.imot.District;
 
 public class DistrictVertex extends WithNameVertex {
 

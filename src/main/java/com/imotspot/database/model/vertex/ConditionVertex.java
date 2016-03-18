@@ -1,7 +1,7 @@
 package com.imotspot.database.model.vertex;
 
-import com.imotspot.dashboard.domain.imot.Condition;
 import com.imotspot.database.model.core.ODBVertex;
+import com.imotspot.model.imot.Condition;
 
 import java.io.Serializable;
 

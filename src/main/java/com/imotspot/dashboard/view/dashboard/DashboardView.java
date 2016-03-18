@@ -2,11 +2,11 @@ package com.imotspot.dashboard.view.dashboard;
 
 import com.google.common.eventbus.Subscribe;
 import com.imotspot.dashboard.DashboardUI;
-import com.imotspot.dashboard.domain.DashboardNotification;
 import com.imotspot.dashboard.event.DashboardEvent.CloseOpenWindowsEvent;
 import com.imotspot.dashboard.event.DashboardEvent.NotificationsCountUpdatedEvent;
 import com.imotspot.dashboard.event.DashboardEventBus;
 import com.imotspot.dashboard.view.dashboard.DashboardEdit.DashboardEditListener;
+import com.imotspot.model.DashboardNotification;
 import com.vaadin.event.LayoutEvents.LayoutClickEvent;
 import com.vaadin.event.LayoutEvents.LayoutClickListener;
 import com.vaadin.event.ShortcutAction.KeyCode;

@@ -1,14 +1,14 @@
 package com.imotspot.dashboard.component;
 
+import com.imotspot.model.Transaction;
+import com.vaadin.shared.ui.label.ContentMode;
+import com.vaadin.ui.CssLayout;
+import com.vaadin.ui.Label;
+
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
-
-import com.imotspot.dashboard.domain.Transaction;
-import com.vaadin.shared.ui.label.ContentMode;
-import com.vaadin.ui.CssLayout;
-import com.vaadin.ui.Label;
 
 @SuppressWarnings("serial")
 public class TransactionsListing extends CssLayout {

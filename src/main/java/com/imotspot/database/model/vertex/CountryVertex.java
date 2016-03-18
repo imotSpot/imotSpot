@@ -1,7 +1,7 @@
 package com.imotspot.database.model.vertex;
 
-import com.imotspot.dashboard.domain.imot.Country;
 import com.imotspot.database.model.core.WithNameVertex;
+import com.imotspot.model.imot.Country;
 
 public class CountryVertex extends WithNameVertex {
 

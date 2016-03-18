@@ -1,11 +1,11 @@
 package com.imotspot.dashboard.view.reports;
 
 import com.imotspot.dashboard.component.InlineTextEditor;
+import com.imotspot.dashboard.component.TopTenMoviesTable;
 import com.imotspot.dashboard.component.TransactionsListing;
+import com.imotspot.model.Transaction;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
-import com.imotspot.dashboard.component.TopTenMoviesTable;
-import com.imotspot.dashboard.domain.Transaction;
 import com.vaadin.event.LayoutEvents.LayoutClickEvent;
 import com.vaadin.event.LayoutEvents.LayoutClickListener;
 import com.vaadin.event.Transferable;

@@ -1,6 +1,6 @@
 package com.imotspot.database.model.vertex;
 
-import com.imotspot.dashboard.domain.imot.Picture;
+import com.imotspot.model.imot.Picture;
 
 public class PictureVertex extends MediaVertex {
 

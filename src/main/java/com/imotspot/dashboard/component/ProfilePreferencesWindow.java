@@ -1,38 +1,19 @@
 package com.imotspot.dashboard.component;
 
-import com.imotspot.dashboard.domain.User;
 import com.imotspot.dashboard.event.DashboardEvent;
 import com.imotspot.dashboard.event.DashboardEventBus;
+import com.imotspot.model.User;
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.fieldgroup.FieldGroup.CommitException;
 import com.vaadin.data.fieldgroup.PropertyId;
 import com.vaadin.event.ShortcutAction.KeyCode;
-import com.vaadin.server.FontAwesome;
-import com.vaadin.server.Page;
-import com.vaadin.server.Responsive;
-import com.vaadin.server.ThemeResource;
-import com.vaadin.server.UserError;
+import com.vaadin.server.*;
 import com.vaadin.shared.Position;
 import com.vaadin.shared.ui.MarginInfo;
-import com.vaadin.ui.Alignment;
-import com.vaadin.ui.Button;
+import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
-import com.vaadin.ui.ComboBox;
-import com.vaadin.ui.Component;
-import com.vaadin.ui.FormLayout;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Image;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.Notification;
 import com.vaadin.ui.Notification.Type;
-import com.vaadin.ui.OptionGroup;
-import com.vaadin.ui.TabSheet;
-import com.vaadin.ui.TextArea;
-import com.vaadin.ui.TextField;
-import com.vaadin.ui.UI;
-import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.Window;
 import com.vaadin.ui.themes.ValoTheme;
 
 @SuppressWarnings("serial")

@@ -1,6 +1,6 @@
 package com.imotspot.database.model.core;
 
-import com.imotspot.dashboard.domain.imot.HasName;
+import com.imotspot.model.imot.HasName;
 
 import java.io.Serializable;
 

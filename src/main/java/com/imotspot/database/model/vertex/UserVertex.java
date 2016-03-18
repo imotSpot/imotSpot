@@ -1,9 +1,9 @@
 package com.imotspot.database.model.vertex;
 
-import com.imotspot.dashboard.domain.User;
-import com.imotspot.dashboard.domain.imot.Imot;
 import com.imotspot.database.model.core.ODBVertex;
 import com.imotspot.database.model.edge.ImotEdge;
+import com.imotspot.model.User;
+import com.imotspot.model.imot.Imot;
 import com.tinkerpop.blueprints.Element;
 import com.tinkerpop.blueprints.Vertex;
 import com.tinkerpop.blueprints.impls.orient.OrientGraph;
