@@ -79,6 +79,20 @@ public abstract class ODBElement {
         }
     }
 
+    protected String constructSqlWhere() {
+        return constructSqlWhere(getIdentificatorFieldNames(), getIdentificatorValues());
+    }
+
+    protected String constructSqlWhere(String[] fields, Serializable[] values) {
+        String where = "";
+        for (int i = 0; i < fields.length; i++) {
+            if (values[i] != null) {
+                where += fields[i] + "='" + values[i] + "'";
+            }
+        }
+        return where;
+    }
+
     protected String[] getIdentificatorFieldNames() {
         return new String[]{getIdentificatorFieldName()};
     }
