@@ -1,5 +1,6 @@
 package com.imotspot.database.model.core;
 
+import com.orientechnologies.orient.core.sql.OCommandSQL;
 import com.tinkerpop.blueprints.Element;
 import com.tinkerpop.blueprints.Vertex;
 import com.tinkerpop.blueprints.impls.orient.OrientGraph;
@@ -43,12 +44,21 @@ public abstract class ODBVertex<E extends Serializable> extends ODBElement {
     }
 
     public Vertex getByIdentificator(OrientGraph graph) {
-        for (Vertex vertex : graph.getVertices(NAME,
-                getIdentificatorFieldNames(),
-                getIdentificatorValues())) {
+        // Object ret = orientGraph.command(new OCommandGremlin("g.v('9:68128').both().both()")).execute();
+        String oSqlCommand = "SELECT * FROM " + NAME + " where " + constructSqlWhere();
+        Object ret = graph.command(new OCommandSQL(oSqlCommand)).execute();
+        Iterable<Vertex> vertices = (Iterable<Vertex>) ret;
 
-            return vertex;
+        if (vertices.iterator().hasNext()) {
+            return vertices.iterator().next();
         }
+
+//        for (Vertex vertex : graph.getVertices(NAME,
+//                getIdentificatorFieldNames(),
+//                getIdentificatorValues())) {
+//
+//            return vertex;
+//        }
         return null;
     }
 
