@@ -4,9 +4,7 @@ import com.google.common.eventbus.Subscribe;
 import com.imotspot.dashboard.DashboardUI;
 import com.imotspot.dashboard.component.MovieDetailsWindow;
 import com.imotspot.dashboard.event.DashboardEvent.BrowserResizeEvent;
-import com.imotspot.dashboard.event.DashboardEvent.TransactionReportEvent;
 import com.imotspot.dashboard.event.DashboardEventBus;
-import com.imotspot.dashboard.view.DashboardViewType;
 import com.imotspot.model.Transaction;
 import com.vaadin.data.Container.Filter;
 import com.vaadin.data.Container.Filterable;
@@ -75,7 +73,7 @@ public final class TransactionsView extends VerticalLayout implements View {
         header.setSpacing(true);
         Responsive.makeResponsive(header);
 
-        Label title = new Label("Latest Transactions");
+        Label title = new Label("Property list");
         title.setSizeUndefined();
         title.addStyleName(ValoTheme.LABEL_H1);
         title.addStyleName(ValoTheme.LABEL_NO_MARGIN);
@@ -92,13 +90,13 @@ public final class TransactionsView extends VerticalLayout implements View {
     }
 
     private Button buildCreateReport() {
-        final Button createReport = new Button("Create Report");
+        final Button createReport = new Button("Search property");
         createReport
-                .setDescription("Create a new report from the selected transactions");
+                .setDescription("Search by property");
         createReport.addClickListener(new ClickListener() {
             @Override
             public void buttonClick(final ClickEvent event) {
-                createNewReportFromSelection();
+//                createNewReportFromSelection();
             }
         });
         createReport.setEnabled(false);
@@ -269,10 +267,10 @@ public final class TransactionsView extends VerticalLayout implements View {
     }
 
     void createNewReportFromSelection() {
-        UI.getCurrent().getNavigator()
-                .navigateTo(DashboardViewType.REPORTS.getViewName());
-        DashboardEventBus.post(new TransactionReportEvent(
-                (Collection<Transaction>) table.getValue()));
+//        UI.getCurrent().getNavigator()
+//                .navigateTo(DashboardViewType.REPORTS.getViewName());
+//        DashboardEventBus.post(new TransactionReportEvent(
+//                (Collection<Transaction>) table.getValue()));
     }
 
     @Override
@@ -290,7 +288,7 @@ public final class TransactionsView extends VerticalLayout implements View {
         public void handleAction(final Action action, final Object sender,
                 final Object target) {
             if (action == report) {
-                createNewReportFromSelection();
+//                createNewReportFromSelection();
             } else if (action == discard) {
                 Notification.show("Not implemented in this demo");
             } else if (action == details) {

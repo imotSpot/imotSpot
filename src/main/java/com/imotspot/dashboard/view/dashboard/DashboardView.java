@@ -5,13 +5,14 @@ import com.imotspot.dashboard.DashboardUI;
 import com.imotspot.dashboard.event.DashboardEvent.CloseOpenWindowsEvent;
 import com.imotspot.dashboard.event.DashboardEvent.NotificationsCountUpdatedEvent;
 import com.imotspot.dashboard.event.DashboardEventBus;
-import com.imotspot.dashboard.view.dashboard.DashboardEdit.DashboardEditListener;
+import com.imotspot.dashboard.view.property.AddProperty;
+import com.imotspot.dashboard.view.property.AddProperty.DashboardEditListener;
 import com.imotspot.database.model.vertex.UserVertex;
 import com.imotspot.logging.Logger;
 import com.imotspot.logging.LoggerFactory;
 import com.imotspot.model.DashboardNotification;
 import com.imotspot.model.User;
-import com.imotspot.model.imot.*;
+import com.imotspot.model.imot.Imot;
 import com.vaadin.event.LayoutEvents.LayoutClickEvent;
 import com.vaadin.event.LayoutEvents.LayoutClickListener;
 import com.vaadin.event.ShortcutAction.KeyCode;
@@ -21,16 +22,16 @@ import com.vaadin.server.FontAwesome;
 import com.vaadin.server.Responsive;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.tapio.googlemaps.GoogleMap;
+import com.vaadin.tapio.googlemaps.client.GoogleMapMarker;
 import com.vaadin.tapio.googlemaps.client.LatLon;
 import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.themes.ValoTheme;
 
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.function.Consumer;
 
 @SuppressWarnings("serial")
 public final class DashboardView extends Panel implements View,
@@ -45,6 +46,7 @@ public final class DashboardView extends Panel implements View,
     private CssLayout dashboardPanels;
     private final VerticalLayout root;
     private Window notificationsWindow;
+    private GoogleMap googleMap;
 
     public DashboardView() {
         addStyleName(ValoTheme.PANEL_BORDERLESS);
@@ -129,7 +131,7 @@ public final class DashboardView extends Panel implements View,
             @Override
             public void buttonClick(final ClickEvent event) {
                 getUI().addWindow(
-                        new DashboardEdit(DashboardView.this, titleLabel
+                        new AddProperty(DashboardView.this, titleLabel
                                 .getValue()));
             }
         });
@@ -141,8 +143,8 @@ public final class DashboardView extends Panel implements View,
         dashboardPanels.addStyleName("dashboard-panels");
         Responsive.makeResponsive(dashboardPanels);
 
-
-        GoogleMap googleMap = new GoogleMap(new LatLon(42.697702770146975, 23.32174301147461), 15.0, "");
+        googleMap = new GoogleMap(new LatLon(42.697702770146975, 23.32174301147461), 15.0, "");
+        googleMap.addMarker(new GoogleMapMarker());
         googleMap.setSizeFull();
         googleMap.setImmediate(true);
         googleMap.setMinZoom(4.0);
@@ -319,45 +321,43 @@ public final class DashboardView extends Panel implements View,
     }
 
     @Override
-    public void dashboardNameEdited(final String name) {
+    public void dashboardNameEdited(final Imot imot) {
 //        titleLabel.setValue(name);
         User user = (User) VaadinSession.getCurrent().getAttribute(User.class.getName());
 
-        Location location = new Location();
-        location.setAddress("sofia address");
-        location.setCountry(new Country("Bulgaria"));
-        location.setCity(new City("Sofia"));
-        location.setDistrict(new District("Sofiiska"));
-        LocationMarker marker = new LocationMarker(42.695537f, 23.2539071f);
-        marker.setAddress("Sofia Bulgaria");
-        marker.setName("Sofia Bulgaria");
-        location.setMarker(marker);
+//        Location location = new Location();
+//        location.setAddress("sofia address");
+//        location.setCountry(new Country("Bulgaria"));
+//        location.setCity(new City("Sofia"));
+//        location.setDistrict(new District("Sofiiska"));
+//        LocationMarker marker = new LocationMarker(42.695537f, 23.2539071f);
+//        marker.setAddress("Sofia Bulgaria");
+//        marker.setName("Sofia Bulgaria");
+//        location.setMarker(marker);
 
-        Imot imot = new Imot(location);
-        imot.setOwner(user);
-        imot.setPrice(100);
-        imot.setPublished(java.util.Calendar.getInstance().getTime());
-        imot.setYear("1960");
-        imot.setDescription(name);
-        imot.setCondition(Condition.USED);
-        try {
-            imot.setFrontImage(new Picture(new URI("./pic.jpg")));
+//        Imot imot = new Imot(location);
+//        imot.setOwner(user);
+//        imot.setPrice(100);
+//        imot.setPublished(java.util.Calendar.getInstance().getTime());
+//        imot.setYear("1960");
+//        imot.setDescription(imot);
+//        imot.setCondition(Condition.USED);
+//            imot.setFrontImage(new Picture(new URI("./pic.jpg")));
+        GoogleMapMarker marker = new GoogleMapMarker("test", new LatLon(42.697702770146975, 23.32174301147461), false);
+        googleMap.addMarker(marker);
+        googleMap.setCenter(new LatLon(42.697702770146975, 23.32174301147461));
 
-            user.getImots().add(imot);
-            new UserVertex(user).saveOrUpdate();
-        } catch (URISyntaxException e) {
-            logger.error("", e);
-        }
-
+        user.getImots().add(imot);
+        new UserVertex(user).saveOrUpdate();
     }
 
     private void toggleMaximized(final Component panel, final boolean maximized) {
-        for (Iterator<Component> it = root.iterator(); it.hasNext();) {
+        for (Iterator<Component> it = root.iterator(); it.hasNext(); ) {
             it.next().setVisible(!maximized);
         }
         dashboardPanels.setVisible(true);
 
-        for (Iterator<Component> it = dashboardPanels.iterator(); it.hasNext();) {
+        for (Iterator<Component> it = dashboardPanels.iterator(); it.hasNext(); ) {
             Component c = it.next();
             c.setVisible(!maximized);
         }
@@ -368,6 +368,11 @@ public final class DashboardView extends Panel implements View,
         } else {
             panel.removeStyleName("max");
         }
+    }
+
+    @Override
+    public void forEach(Consumer<? super Component> action) {
+
     }
 
     public static final class NotificationsButton extends Button {

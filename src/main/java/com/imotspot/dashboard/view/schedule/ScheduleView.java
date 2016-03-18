@@ -13,7 +13,6 @@ import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.ExternalResource;
 import com.vaadin.server.Page;
-import com.vaadin.server.WebBrowser;
 import com.vaadin.shared.MouseEventDetails.MouseButton;
 import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
@@ -70,21 +69,21 @@ public final class ScheduleView extends CssLayout implements View {
     private void injectMovieCoverStyles() {
         // Add all movie cover images as classes to CSSInject
         String styles = "";
-        for (Movie m : DashboardUI.getDataProvider().getMovies()) {
-            WebBrowser webBrowser = Page.getCurrent().getWebBrowser();
-
-            String bg = "url(VAADIN/themes/" + UI.getCurrent().getTheme()
-                    + "/img/event-title-bg.png), url(" + m.getThumbUrl() + ")";
-
-            // IE8 doesn't support multiple background images
-            if (webBrowser.isIE() && webBrowser.getBrowserMajorVersion() == 8) {
-                bg = "url(" + m.getThumbUrl() + ")";
-            }
-
-            styles += ".v-calendar-event-" + m.getId()
-                    + " .v-calendar-event-content {background-image:" + bg
-                    + ";}";
-        }
+//        for (Movie m : DashboardUI.getDataProvider().getMovies()) {
+//            WebBrowser webBrowser = Page.getCurrent().getWebBrowser();
+//
+//            String bg = "url(VAADIN/themes/" + UI.getCurrent().getTheme()
+//                    + "/img/event-title-bg.png), url(" + m.getThumbUrl() + ")";
+//
+//            // IE8 doesn't support multiple background images
+//            if (webBrowser.isIE() && webBrowser.getBrowserMajorVersion() == 8) {
+//                bg = "url(" + m.getThumbUrl() + ")";
+//            }
+//
+//            styles += ".v-calendar-event-" + m.getId()
+//                    + " .v-calendar-event-content {background-image:" + bg
+//                    + ";}";
+//        }
 
         Page.getCurrent().getStyles().add(styles);
     }

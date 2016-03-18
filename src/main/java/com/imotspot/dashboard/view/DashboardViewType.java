@@ -1,7 +1,6 @@
 package com.imotspot.dashboard.view;
 
 import com.imotspot.dashboard.view.dashboard.DashboardView;
-import com.imotspot.dashboard.view.reports.ReportsView;
 import com.imotspot.dashboard.view.schedule.ScheduleView;
 import com.imotspot.dashboard.view.transactions.TransactionsView;
 import com.vaadin.navigator.View;
@@ -11,10 +10,10 @@ import com.vaadin.server.Resource;
 //import com.vaadin.demo.dashboard.view.sales.SalesView;
 
 public enum DashboardViewType {
-    DASHBOARD("dashboard", DashboardView.class, FontAwesome.HOME, true), TRANSACTIONS(
-            "transactions", TransactionsView.class, FontAwesome.TABLE, false), REPORTS(
-            "reports", ReportsView.class, FontAwesome.FILE_TEXT_O, true), SCHEDULE(
-            "schedule", ScheduleView.class, FontAwesome.CALENDAR_O, false);
+    DASHBOARD("dashboard", DashboardView.class, FontAwesome.HOME, true),
+    TABLE("table", TransactionsView.class, FontAwesome.TABLE, false),
+//    REPORTS("reports", ReportsView.class, FontAwesome.FILE_TEXT_O, true),
+    CALENDAR("calendar", ScheduleView.class, FontAwesome.CALENDAR_O, false);
 
     private final String viewName;
     private final Class<? extends View> viewClass;
