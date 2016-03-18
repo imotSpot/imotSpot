@@ -18,7 +18,7 @@ public class DashboardEdit extends Window {
     public DashboardEdit(final DashboardEditListener listener,
             final String currentName) {
         this.listener = listener;
-        setCaption("Edit Dashboard");
+        setCaption("Publish Imot");
         setModal(true);
         setClosable(true);
         setResizable(true);
