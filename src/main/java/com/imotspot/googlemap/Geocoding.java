@@ -1,6 +1,7 @@
 package com.imotspot.googlemap;
 
 import com.google.gson.Gson;
+import com.imotspot.googlemap.json.GeocodingAnswer;
 import com.vaadin.tapio.googlemaps.client.LatLon;
 import org.apache.commons.io.IOUtils;
 

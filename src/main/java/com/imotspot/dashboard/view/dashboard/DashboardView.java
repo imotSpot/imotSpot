@@ -9,7 +9,7 @@ import com.imotspot.dashboard.view.property.AddProperty;
 import com.imotspot.dashboard.view.property.AddProperty.DashboardEditListener;
 import com.imotspot.database.model.vertex.UserVertex;
 import com.imotspot.googlemap.Geocoding;
-import com.imotspot.googlemap.GeocodingAnswer;
+import com.imotspot.googlemap.json.GeocodingAnswer;
 import com.imotspot.logging.Logger;
 import com.imotspot.logging.LoggerFactory;
 import com.imotspot.model.DashboardNotification;
@@ -153,7 +153,7 @@ public final class DashboardView extends Panel implements View,
         googleMap.setMinZoom(4.0);
 
         try {
-            GeocodingAnswer res = Geocoding.getJSONByGoogle("Sofia, Bulgaria, Liaskovets 46");
+            GeocodingAnswer res = Geocoding.getJSONByGoogle("Sofia, Bulgaria, Edison 5");
 
             LatLon coord = new LatLon(res.results[0].geometry.location.lat, res.results[0].geometry.location.lng);
             googleMap.addMarker(new GoogleMapMarker("Home", coord, false));
