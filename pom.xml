@@ -22,6 +22,12 @@
 				<enabled>true</enabled>
 			</snapshots>
 		</repository>
+
+		<repository>
+			<id>vaadin vaadin</id>
+			<url>http://vaadin.com/nexus/content/repositories/vaadin-addons/</url>
+		</repository>
+
 		<repository>
 			<id>sonatype vaadin</id>
 			<url>https://oss.sonatype.org/content/repositories/vaadin/</url>
