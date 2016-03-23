@@ -196,7 +196,7 @@
 		<dependency>
 			<groupId>com.vaadin.tapio</groupId>
 			<artifactId>googlemaps</artifactId>
-			<version>0.6.2</version>
+			<version>1.1.2</version>
 		</dependency>
 		<dependency>
 			<groupId>com.orientechnologies</groupId>
