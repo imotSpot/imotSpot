@@ -1,13 +1,30 @@
 package com.imotspot.dashboard.view.property;
 
+
+import com.imotspot.enumerations.Condition;
+import com.imotspot.enumerations.ImotType;
+import com.imotspot.googlemap.Geocoding;
+import com.imotspot.googlemap.json.GeocodingAnswer;
+import com.imotspot.googlemap.json.LocationAnswer;
+import com.imotspot.helper.ImageUploader;
+import com.imotspot.interfaces.DashboardEditListener;
 import com.imotspot.model.User;
 import com.imotspot.model.imot.*;
+import com.vaadin.data.Property;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.server.VaadinSession;
+import com.vaadin.shared.ui.combobox.FilteringMode;
+import com.vaadin.tapio.googlemaps.GoogleMap;
+import com.vaadin.tapio.googlemaps.client.LatLon;
+import com.vaadin.tapio.googlemaps.client.events.MapClickListener;
+import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapMarker;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 
+import java.io.IOException;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 @SuppressWarnings("serial")
 public class AddProperty extends Window {
@@ -15,13 +32,14 @@ public class AddProperty extends Window {
     private final DashboardEditListener listener;
     private TextField price;
     private TextField year;
-    private TextField description;
+    private TextArea description;
     private TextField country;
     private TextField district;
     private TextField city;
     private TextField address;
-    private TextField condition;
+    private ComboBox condition;
     private TextField images;
+    private GoogleMap googleMap;
 
     public AddProperty(final DashboardEditListener listener,
                          final String currentName) {
@@ -37,27 +55,78 @@ public class AddProperty extends Window {
     }
 
     private Component buildContent(final String currentName) {
-        VerticalLayout result = new VerticalLayout();
-        result.setMargin(true);
-        result.setSpacing(true);
+        VerticalLayout verticalContent = new VerticalLayout();
+        verticalContent.setMargin(true);
+        verticalContent.setSpacing(true);
+        verticalContent.setCaption(currentName);
 
-        result.addComponent(buildAddForm());
-        result.addComponent(buildFooter());
+        HorizontalLayout content = new HorizontalLayout();
+        content.addComponent(buildAddForm());
+        content.addComponent(buildGoogleMap());
 
-        return result;
+        verticalContent.addComponent(content);
+        verticalContent.addComponent(buildFooter());
+
+        return verticalContent;
+    }
+
+    private Component buildGoogleMap() {
+        HorizontalLayout mapLayout = new HorizontalLayout();
+        mapLayout.setWidth(500f, Unit.PIXELS);
+        mapLayout.setHeight(500f, Unit.PIXELS);
+
+        googleMap = new GoogleMap(null, null, null);
+        googleMap.setSizeFull();
+        googleMap.setImmediate(true);
+        googleMap.setMinZoom(4);
+        googleMap.addMapClickListener(new MapClickListener() {
+            @Override
+            public void mapClicked(LatLon latLon) {
+                try {
+                    GeocodingAnswer answer = Geocoding.getJSONFromLatLon(latLon);
+                    String addressFromMap = answer.results[0].formatted_address;
+                    address.setValue(addressFromMap);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        mapLayout.addComponent(googleMap);
+        return mapLayout;
     }
 
     private Component buildAddForm() {
         VerticalLayout content = new VerticalLayout();
 
+        List<ImotType> enumImotTypeList = Arrays.asList(ImotType.values());
+        List<Condition> enumConditionList = Arrays.asList(Condition.values());
+        ImageUploader receiver = new ImageUploader();
+
+        ComboBox type = new ComboBox("Choose type");
+        type.setFilteringMode(FilteringMode.STARTSWITH);
+        for (ImotType t: enumImotTypeList){
+            type.addItem(t.toString());
+        }
+
         price = new TextField("price");
         year = new TextField("year");
-        description = new TextField("description");
+        description = new TextArea("description");
         country = new TextField("country");
         district = new TextField("district");
         city = new TextField("city");
         address = new TextField("address");
-        condition = new TextField("condition");
+
+        condition = new ComboBox("condition");
+        condition.setFilteringMode(FilteringMode.STARTSWITH);
+        for (Condition c: enumConditionList){
+            condition.addItem(c.toString());
+        }
+
+        Upload uploadImages = new Upload("Upload images", receiver);
+        uploadImages.setButtonCaption("Upload images");
+        uploadImages.addSucceededListener(receiver);
+//        DragAndDropWrapper drag = new DragAndDropWrapper(uploadImages);
 
         price.addStyleName("caption-on-left");
         year.addStyleName("caption-on-left");
@@ -68,7 +137,24 @@ public class AddProperty extends Window {
         address.addStyleName("caption-on-left");
         condition.addStyleName("caption-on-left");
 
-        content.addComponents(price, year, description, country, district, city, address, condition);
+        address.addValueChangeListener(new Property.ValueChangeListener() {
+            @Override
+            public void valueChange(Property.ValueChangeEvent valueChangeEvent) {
+                String text = valueChangeEvent.getProperty().getValue().toString() + city.getValue() + country.getValue();
+                try {
+                    GeocodingAnswer answer = Geocoding.getJSONfromAddress(text);
+                    LocationAnswer loc = answer.results[0].geometry.location;
+                    LatLon latLon = new LatLon(loc.lat, loc.lng);
+                    GoogleMapMarker marker = new GoogleMapMarker(text, latLon, true);
+                    googleMap.addMarker(marker);
+                    googleMap.setCenter(latLon);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        content.addComponents(type, price, year, description, country, district, city, address, condition, uploadImages);
         return content;
     }
 
@@ -100,9 +186,12 @@ public class AddProperty extends Window {
                 currentLocation.setMarker(new LocationMarker(42, 35));
 
                 Imot propertyToSave = new Imot(currentLocation);
+                // todo get type from dropdown
+                propertyToSave.setType(ImotType.PENTHOUSE);
                 propertyToSave.setPrice(Float.parseFloat(price.getValue()));
                 propertyToSave.setYear(year.getValue());
                 propertyToSave.setDescription(description.getValue());
+                // todo get type from dropdown
                 propertyToSave.setCondition(Condition.NEW);
                 propertyToSave.setOwner((User) VaadinSession.getCurrent().getAttribute(User.class.getName()));
                 propertyToSave.setPublished(new Date());
@@ -117,9 +206,5 @@ public class AddProperty extends Window {
         footer.setExpandRatio(cancel, 1);
         footer.setComponentAlignment(cancel, Alignment.TOP_RIGHT);
         return footer;
-    }
-
-    public interface DashboardEditListener {
-        void dashboardNameEdited(Imot name);
     }
 }

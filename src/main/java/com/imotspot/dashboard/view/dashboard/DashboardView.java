@@ -6,7 +6,7 @@ import com.imotspot.dashboard.event.DashboardEvent.CloseOpenWindowsEvent;
 import com.imotspot.dashboard.event.DashboardEvent.NotificationsCountUpdatedEvent;
 import com.imotspot.dashboard.event.DashboardEventBus;
 import com.imotspot.dashboard.view.property.AddProperty;
-import com.imotspot.dashboard.view.property.AddProperty.DashboardEditListener;
+import com.imotspot.interfaces.DashboardEditListener;
 import com.imotspot.database.model.vertex.UserVertex;
 import com.imotspot.googlemap.Geocoding;
 import com.imotspot.googlemap.json.GeocodingAnswer;
@@ -15,6 +15,7 @@ import com.imotspot.logging.LoggerFactory;
 import com.imotspot.model.DashboardNotification;
 import com.imotspot.model.User;
 import com.imotspot.model.imot.Imot;
+import com.imotspot.model.imot.LocationMarker;
 import com.vaadin.event.LayoutEvents.LayoutClickEvent;
 import com.vaadin.event.LayoutEvents.LayoutClickListener;
 import com.vaadin.event.ShortcutAction.KeyCode;
@@ -24,8 +25,8 @@ import com.vaadin.server.FontAwesome;
 import com.vaadin.server.Responsive;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.tapio.googlemaps.GoogleMap;
-import com.vaadin.tapio.googlemaps.client.GoogleMapMarker;
 import com.vaadin.tapio.googlemaps.client.LatLon;
+import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapMarker;
 import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
@@ -37,10 +38,9 @@ import java.util.Iterator;
 import java.util.function.Consumer;
 
 @SuppressWarnings("serial")
-public final class DashboardView extends Panel implements View,
-        DashboardEditListener {
+public final class DashboardView extends Panel implements View, DashboardEditListener{
     private static final Logger logger = LoggerFactory.getLogger(DashboardView.class);
-
+    private static final LatLon centerSofia = new LatLon(42.697702770146975, 23.32174301147461);
     public static final String EDIT_ID = "dashboard-edit";
     public static final String TITLE_ID = "dashboard-title";
 
@@ -146,14 +146,14 @@ public final class DashboardView extends Panel implements View,
         dashboardPanels.addStyleName("dashboard-panels");
         Responsive.makeResponsive(dashboardPanels);
 
-        googleMap = new GoogleMap(new LatLon(42.697702770146975, 23.32174301147461), 15.0, "");
-        googleMap.addMarker(new GoogleMapMarker());
+        googleMap = new GoogleMap(null, null, null);
+        googleMap.addMarker(new GoogleMapMarker("Sofia", centerSofia, true));
         googleMap.setSizeFull();
         googleMap.setImmediate(true);
-        googleMap.setMinZoom(4.0);
+        googleMap.setMinZoom(4);
 
         try {
-            GeocodingAnswer res = Geocoding.getJSONByGoogle("Sofia, Bulgaria, Edison 5");
+            GeocodingAnswer res = Geocoding.getJSONfromAddress("Sofia, Bulgaria, Edison 5");
 
             LatLon coord = new LatLon(res.results[0].geometry.location.lat, res.results[0].geometry.location.lng);
             googleMap.addMarker(new GoogleMapMarker("Home", coord, false));
@@ -357,9 +357,10 @@ public final class DashboardView extends Panel implements View,
 //        imot.setDescription(imot);
 //        imot.setCondition(Condition.USED);
 //            imot.setFrontImage(new Picture(new URI("./pic.jpg")));
-        GoogleMapMarker marker = new GoogleMapMarker("test", new LatLon(42.697702770146975, 23.32174301147461), false);
+        LocationMarker myMarker = imot.getLocation().getMarker();
+        GoogleMapMarker marker = new GoogleMapMarker("test", centerSofia, false);
         googleMap.addMarker(marker);
-        googleMap.setCenter(new LatLon(42.697702770146975, 23.32174301147461));
+        googleMap.setCenter(centerSofia);
 
         user.getImots().add(imot);
         new UserVertex(user).saveOrUpdate();

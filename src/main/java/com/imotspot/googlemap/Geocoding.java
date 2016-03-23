@@ -24,7 +24,7 @@ public class Geocoding {
     * Here the fullAddress String is in format like "address,city,state,zipcode". Here address means "street number + route" .
     *
     */
-    public static GeocodingAnswer getJSONByGoogle(String fullAddress) throws IOException {
+    public static GeocodingAnswer getJSONfromAddress(String fullAddress) throws IOException {
 
 /*
 * Create an java.net.URL object by passing the request URL in constructor.
@@ -50,7 +50,7 @@ public class Geocoding {
         return ans;
     }
 
-    public GeocodingAnswer getJSONFromLatLon(LatLon latLon) throws IOException {
+    public static GeocodingAnswer getJSONFromLatLon(LatLon latLon) throws IOException {
         URL url = new URL(URL + "?latlng=" + latLon.getLat() + "," + latLon.getLon());
 //        latlng=40.714224,-73.961452&location_type=ROOFTOP&result_type=street_address&key=YOUR_API_KEY
 
