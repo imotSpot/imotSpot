@@ -1,5 +1,8 @@
 package com.imotspot.model.imot;
 
+import com.imotspot.enumerations.Condition;
+import com.imotspot.enumerations.ImotType;
+import com.imotspot.interfaces.Media;
 import com.imotspot.model.User;
 import lombok.Data;
 
@@ -17,6 +20,7 @@ public class Imot implements Serializable {
     private String description;
     private Date published;
     private Location location;
+    private ImotType type;
     private Condition condition;
     private Picture frontImage;
     private List<Media> media = new ArrayList<>();
