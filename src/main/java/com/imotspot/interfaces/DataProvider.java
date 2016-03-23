@@ -1,4 +1,4 @@
-package com.imotspot.dashboard.data;
+package com.imotspot.interfaces;
 
 import com.imotspot.model.*;
 

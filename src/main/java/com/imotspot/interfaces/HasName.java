@@ -1,4 +1,4 @@
-package com.imotspot.model.imot;
+package com.imotspot.interfaces;
 
 import java.io.Serializable;
 

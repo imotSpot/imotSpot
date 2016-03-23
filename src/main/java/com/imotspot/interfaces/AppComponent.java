@@ -1,8 +1,8 @@
-package com.imotspot.dagger;
+package com.imotspot.interfaces;
 
+import com.imotspot.dagger.AppModule;
 import com.imotspot.dashboard.DashboardServlet;
 import com.imotspot.dashboard.DashboardUI;
-import com.imotspot.dashboard.data.DataProvider;
 import com.imotspot.dashboard.event.DashboardEventBus;
 import com.imotspot.database.OrientDBServer;
 import com.imotspot.database.model.core.ODBElement;
