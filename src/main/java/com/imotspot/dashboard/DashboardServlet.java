@@ -1,6 +1,6 @@
 package com.imotspot.dashboard;
 
-import com.imotspot.dagger.AppComponent;
+import com.imotspot.interfaces.AppComponent;
 import com.imotspot.database.OrientDBServer;
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.server.VaadinServlet;

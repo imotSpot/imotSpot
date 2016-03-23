@@ -5,6 +5,7 @@ import com.imotspot.dashboard.DashboardUI;
 import com.imotspot.dashboard.component.ProfilePreferencesWindow;
 import com.imotspot.dashboard.event.DashboardEvent;
 import com.imotspot.dashboard.event.DashboardEventBus;
+import com.imotspot.enumerations.DashboardViewType;
 import com.imotspot.model.User;
 import com.vaadin.server.ExternalResource;
 import com.vaadin.server.FontAwesome;

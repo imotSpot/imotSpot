@@ -1,5 +1,6 @@
 package com.imotspot.model.imot;
 
+import com.imotspot.interfaces.Media;
 import lombok.Data;
 
 import java.net.URI;

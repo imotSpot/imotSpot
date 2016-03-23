@@ -1,6 +1,6 @@
 package com.imotspot.database.model.core;
 
-import com.imotspot.model.imot.HasName;
+import com.imotspot.interfaces.HasName;
 
 import java.io.Serializable;
 

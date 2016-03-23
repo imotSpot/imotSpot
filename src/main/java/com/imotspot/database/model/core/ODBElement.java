@@ -1,6 +1,6 @@
 package com.imotspot.database.model.core;
 
-import com.imotspot.dagger.AppComponent;
+import com.imotspot.interfaces.AppComponent;
 import com.imotspot.database.DBOperation;
 import com.imotspot.database.OrientDBServer;
 import com.tinkerpop.blueprints.Element;

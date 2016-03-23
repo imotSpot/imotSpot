@@ -1,7 +1,7 @@
 package com.imotspot.database.model.vertex;
 
 import com.imotspot.database.model.core.ODBVertex;
-import com.imotspot.model.imot.Media;
+import com.imotspot.interfaces.Media;
 
 import java.io.Serializable;
 import java.util.List;

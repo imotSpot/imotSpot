@@ -1,8 +1,8 @@
 package com.imotspot.dashboard;
 
 import com.google.common.eventbus.Subscribe;
-import com.imotspot.dagger.AppComponent;
-import com.imotspot.dashboard.data.DataProvider;
+import com.imotspot.interfaces.AppComponent;
+import com.imotspot.interfaces.DataProvider;
 import com.imotspot.dashboard.event.DashboardEvent.BrowserResizeEvent;
 import com.imotspot.dashboard.event.DashboardEvent.CloseOpenWindowsEvent;
 import com.imotspot.dashboard.event.DashboardEvent.UserLoggedOutEvent;

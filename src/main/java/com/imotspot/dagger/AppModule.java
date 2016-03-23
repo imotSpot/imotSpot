@@ -1,7 +1,7 @@
 package com.imotspot.dagger;
 
 import com.imotspot.config.Configuration;
-import com.imotspot.dashboard.data.DataProvider;
+import com.imotspot.interfaces.DataProvider;
 import com.imotspot.dashboard.data.dummy.DummyDataProvider;
 import com.imotspot.dashboard.event.DashboardEventBus;
 import com.imotspot.database.OrientDBServer;

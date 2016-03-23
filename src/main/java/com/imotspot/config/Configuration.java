@@ -1,5 +1,6 @@
 package com.imotspot.config;
 
+import com.imotspot.enumerations.ConfigKey;
 import com.imotspot.logging.Logger;
 import com.imotspot.logging.LoggerFactory;
 import org.ho.yaml.Yaml;

@@ -7,7 +7,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.imotspot.dashboard.data.DataProvider;
+import com.imotspot.interfaces.DataProvider;
 import com.imotspot.database.model.vertex.UserVertex;
 import com.imotspot.model.*;
 import com.vaadin.server.VaadinRequest;
