@@ -7,14 +7,13 @@ import com.imotspot.dashboard.event.DashboardEvent.NotificationsCountUpdatedEven
 import com.imotspot.dashboard.event.DashboardEventBus;
 import com.imotspot.dashboard.view.property.AddProperty;
 import com.imotspot.database.model.vertex.UserVertex;
-import com.imotspot.googlemap.Geocoding;
-import com.imotspot.googlemap.json.GeocodingAnswer;
 import com.imotspot.interfaces.DashboardEditListener;
 import com.imotspot.logging.Logger;
 import com.imotspot.logging.LoggerFactory;
 import com.imotspot.model.DashboardNotification;
 import com.imotspot.model.User;
 import com.imotspot.model.imot.Imot;
+import com.imotspot.model.imot.Location;
 import com.vaadin.event.LayoutEvents.LayoutClickEvent;
 import com.vaadin.event.LayoutEvents.LayoutClickListener;
 import com.vaadin.event.ShortcutAction.KeyCode;
@@ -31,7 +30,6 @@ import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.themes.ValoTheme;
 
-import java.io.IOException;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.function.Consumer;
@@ -146,22 +144,10 @@ public final class DashboardView extends Panel implements View, DashboardEditLis
         Responsive.makeResponsive(dashboardPanels);
 
         googleMap = new GoogleMap(null, null, null);
-        googleMap.addMarker(new GoogleMapMarker("Sofia", centerSofia, true));
         googleMap.setCenter(centerSofia);
         googleMap.setSizeFull();
         googleMap.setImmediate(true);
-        googleMap.setMinZoom(4);
-
-        try {
-            GeocodingAnswer res = Geocoding.getJSONfromAddress("Sofia, Bulgaria, Edison 5");
-
-            LatLon coord = new LatLon(res.results[0].geometry.location.lat, res.results[0].geometry.location.lng);
-            googleMap.addMarker(new GoogleMapMarker("Home", coord, false));
-
-//            String address = Geocoding.getJSONFromLatLon(new LatLon(42.697702770146975, 23.32174301147461));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        googleMap.setZoom(13);
 
         dashboardPanels.addComponent(googleMap);
 //        dashboardPanels.addComponent(buildTopGrossingMovies());
@@ -332,6 +318,7 @@ public final class DashboardView extends Panel implements View, DashboardEditLis
     @Override
     public void enter(final ViewChangeEvent event) {
         notificationsButton.updateNotificationsCount(null);
+        addPins();
     }
 
     @Override
@@ -339,6 +326,9 @@ public final class DashboardView extends Panel implements View, DashboardEditLis
 //        titleLabel.setValue(name);
         User user = (User) VaadinSession.getCurrent().getAttribute(User.class.getName());
 
+        if (user.role().equals("guest")) {
+            return;
+        }
 //        Location location = new Location();
 //        location.setAddress("sofia address");
 //        location.setCountry(new Country("Bulgaria"));
@@ -423,4 +413,14 @@ public final class DashboardView extends Panel implements View, DashboardEditLis
         }
     }
 
+    public void addPins() {
+
+        User user = (User) VaadinSession.getCurrent().getAttribute(User.class.getName());
+        for (Imot i : user.imots()) {
+            Location loc = i.location();
+            googleMap.addMarker(new GoogleMapMarker(null,
+                    new LatLon(loc.marker().lat(), loc.marker().lng()), true));
+        }
+
+    }
 }

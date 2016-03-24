@@ -38,26 +38,17 @@ public class UserVertex extends ODBVertex implements User {
         return userV;
     }
 
-//    @Override
-//    protected void loadPropertyToModel(Vertex vertex, String key) {
-//        switch (key) {
-//            case "role": user = user.role(userVertex.getProperty(key));break;
-//            case "firstName": user = user.firstName(userVertex.getProperty(key));break;
-//            case "lastName": user = user.lastName(userVertex.getProperty(key));break;
-//            case "email": user = user.email(userVertex.getProperty(key));break;
-//            default: super.loadPropertyToModel(userVertex, key, model);
-//        }
-//    }
-
     @Override
-    protected void loadRelationsToModel() {
+    protected void loadRelationsToModel(ODocument document) {
 //        for (OIdentifiable id : new OSQLSynchQuery<ODocument>("select expand( out() ) from " + vertex.getId())) {
         try {
             for (OIdentifiable id : new OSQLSynchQuery<ODocument>("traverse out(" + ImotEdge.class.getSimpleName() +
-                    ") from " + vertex.getId() + " while $depth <= 1")) {
-                System.out.println(id);
+                    ") from " + document.getIdentity() + " while $depth <= 1")) {
+                if (ImotVertex.class.getSimpleName().equals(((ODocument) id.getRecord()).getClassName())) {
+                    ODocument doc = (ODocument) id.getRecord();
+                    user.addImot((Imot) new ImotVertex(new Imot(null)).load(doc).model());
+                }
             }
-
         } catch (Throwable t) {
             t.printStackTrace();
         }

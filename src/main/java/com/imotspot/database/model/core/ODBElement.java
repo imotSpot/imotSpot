@@ -3,6 +3,7 @@ package com.imotspot.database.model.core;
 import com.imotspot.database.DBOperation;
 import com.imotspot.database.OrientDBServer;
 import com.imotspot.interfaces.AppComponent;
+import com.orientechnologies.orient.core.record.impl.ODocument;
 import com.tinkerpop.blueprints.impls.orient.OrientGraph;
 import com.tinkerpop.blueprints.impls.orient.OrientGraphNoTx;
 
@@ -77,6 +78,8 @@ public abstract class ODBElement {
     protected abstract <E extends ODBElement> E duplicate();
 
     abstract public <E extends ODBElement> E load();
+
+    abstract public <E extends ODBElement> E load(ODocument oElement);
 
     abstract public <E extends ODBElement> E saveOrUpdate();
 
@@ -160,13 +163,26 @@ public abstract class ODBElement {
 
     public void setProperty(String property, Object val) throws InvocationTargetException, IllegalAccessException {
         String methodName = property;
-        methodName = buildMethodName("set", property);
         Method m = findSetterMethod(model(), methodName, val);
         m.invoke(model(), new Object[]{val});
     }
 
-    private String buildMethodName(String prefix, String property) {
-        return String.format("%s%c%s", prefix, Character.toUpperCase(property.charAt(0)), property.substring(1));
+    public Object getProperty(String property) throws InvocationTargetException, IllegalAccessException {
+        String methodName = property;
+        Method m = findGetterMethod(model(), methodName);
+        return m.invoke(model());
+    }
+
+    private Method findGetterMethod(Serializable serializable, String methodName) {
+        for (Method m : serializable.getClass().getMethods()) {
+            if (methodName.equals(m.getName())) {
+                Class<?>[] params = m.getParameterTypes();
+                if (params.length < 1) {
+                    return m;
+                }
+            }
+        }
+        throw new IllegalArgumentException("Could not find getter " + methodName);
     }
 
     private Method findSetterMethod(Serializable serializable, String methodName, Object val) {

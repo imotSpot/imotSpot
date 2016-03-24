@@ -4,6 +4,9 @@ import com.imotspot.database.model.core.ODBVertex;
 import com.imotspot.database.model.edge.*;
 import com.imotspot.model.imot.*;
 import com.imotspot.model.imot.interfaces.Media;
+import com.orientechnologies.orient.core.db.record.OIdentifiable;
+import com.orientechnologies.orient.core.record.impl.ODocument;
+import com.orientechnologies.orient.core.sql.query.OSQLSynchQuery;
 
 import java.io.Serializable;
 import java.util.List;
@@ -62,6 +65,20 @@ public class ImotVertex extends ODBVertex {
         }
 
         return imotVertex;
+    }
+
+    @Override
+    protected void loadRelationsToModel(ODocument document) {
+        try {
+            for (OIdentifiable id : new OSQLSynchQuery<ODocument>("traverse out(" + PictureEdge.class.getSimpleName() +
+                    ") from " + document.getIdentity() + " while $depth <= 1")) {
+//                if (ImotVertex.class.getSimpleName().equals(((ODocument)id.getRecord()).getClassName())) {
+//                    imot.me((Imot) new ImotVertex(new Imot(null)).load((OrientVertex)id.getRecord()).model());
+//                }
+            }
+        } catch (Throwable t) {
+            t.printStackTrace();
+        }
     }
 
     @Override

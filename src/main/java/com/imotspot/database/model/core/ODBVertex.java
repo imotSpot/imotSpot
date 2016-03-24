@@ -1,5 +1,6 @@
 package com.imotspot.database.model.core;
 
+import com.orientechnologies.orient.core.record.impl.ODocument;
 import com.orientechnologies.orient.core.sql.OCommandSQL;
 import com.tinkerpop.blueprints.Element;
 import com.tinkerpop.blueprints.Vertex;
@@ -34,25 +35,31 @@ public abstract class ODBVertex extends ODBElement {
 
     @Override
     public ODBVertex load() {
-        OrientVertex vertex = get();
+        OrientVertex v = get();
+        load(v.getRecord());
+        return vertex(v);
+    }
 
-        for (String key : vertex.getPropertyKeys()) {
-            loadPropertyToModel(vertex, key);
+    @Override
+    public ODBVertex load(ODocument document) {
+
+        for (String key : document.fieldNames()) {
+            loadPropertyToModel(document, key);
         }
 
-        loadRelationsToModel();
+        loadRelationsToModel(document);
         return vertex(vertex);
     }
 
-    protected void loadPropertyToModel(Vertex vertex, String key) {
+    protected void loadPropertyToModel(ODocument document, String key) {
         try {
-            setProperty(key, vertex.getProperty(key));
+            setProperty(key, document.field(key));
         } catch (Exception e) {
             return;
         }
     }
 
-    protected void loadRelationsToModel() {
+    protected void loadRelationsToModel(ODocument document) {
     }
 
     @Override

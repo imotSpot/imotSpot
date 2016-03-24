@@ -81,7 +81,8 @@ public class AddProperty extends Window {
         googleMap.setCenter(centerSofia);
         googleMap.setSizeFull();
         googleMap.setImmediate(true);
-        googleMap.setMinZoom(4);
+        googleMap.setZoom(13);
+        googleMap.setCenter(new LatLon(42.697702770146975, 23.32174301147461));
         googleMap.addMapClickListener(new MapClickListener() {
             @Override
             public void mapClicked(LatLon latLon) {
