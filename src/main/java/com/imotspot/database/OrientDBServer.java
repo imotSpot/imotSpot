@@ -54,23 +54,23 @@ public class OrientDBServer {
                 UserVertex userVertex = new UserVertex(user);
 
                 Location location = new Location();
-                location.setAddress("sofia address");
-                location.setCountry(new Country("Bulgaria"));
-                location.setCity(new City("Sofia"));
-                location.setDistrict(new District("Sofiiska"));
+                location.address("sofia address");
+                location.country(new Country("Bulgaria"));
+                location.city(new City("Sofia"));
+                location.district(new District("Sofiiska"));
                 LocationMarker marker = new LocationMarker(42.695537f, 23.2539071f);
-                marker.setAddress("Sofia Bulgaria");
-                marker.setName("Sofia Bulgaria");
-                location.setMarker(marker);
+                marker.address("Sofia Bulgaria");
+                marker.name("Sofia Bulgaria");
+                location.marker(marker);
 
                 Imot imot = new Imot(location);
-                imot.setOwner(user);
-                imot.setPrice(100);
-                imot.setPublished(Calendar.getInstance().getTime());
-                imot.setYear("1960");
-                imot.setDescription("test real estate imot");
-                imot.setCondition(Condition.USED);
-                imot.setFrontImage(new Picture(new URI("./pic.jpg")));
+                imot.owner(user);
+                imot.price(100);
+                imot.published(Calendar.getInstance().getTime());
+                imot.year("1960");
+                imot.description("test real estate imot");
+                imot.condition(Condition.USED);
+                imot.frontImage(new Picture(new URI("./pic.jpg")));
 
                 user.addImot(imot);
                 userVertex.saveOrUpdate();

@@ -179,22 +179,22 @@ public class AddProperty extends Window {
             @Override
             public void buttonClick(final Button.ClickEvent event) {
                 Location currentLocation = new Location();
-                currentLocation.setCountry(new Country(country.getValue()));
-                currentLocation.setDistrict(new District(district.getValue()));
-                currentLocation.setCity(new City(city.getValue()));
-                currentLocation.setAddress(address.getValue());
-                currentLocation.setMarker(new LocationMarker(42, 35));
+                currentLocation.country(new Country(country.getValue()));
+                currentLocation.district(new District(district.getValue()));
+                currentLocation.city(new City(city.getValue()));
+                currentLocation.address(address.getValue());
+                currentLocation.marker(new LocationMarker(42, 35));
 
                 Imot propertyToSave = new Imot(currentLocation);
                 // todo get type from dropdown
-                propertyToSave.setType(ImotType.PENTHOUSE);
-                propertyToSave.setPrice(Float.parseFloat(price.getValue()));
-                propertyToSave.setYear(year.getValue());
-                propertyToSave.setDescription(description.getValue());
+                propertyToSave.type(ImotType.PENTHOUSE);
+                propertyToSave.price(Float.parseFloat(price.getValue()));
+                propertyToSave.year(year.getValue());
+                propertyToSave.description(description.getValue());
                 // todo get type from dropdown
-                propertyToSave.setCondition(Condition.NEW);
-                propertyToSave.setOwner((User) VaadinSession.getCurrent().getAttribute(User.class.getName()));
-                propertyToSave.setPublished(new Date());
+                propertyToSave.condition(Condition.NEW);
+                propertyToSave.owner((User) VaadinSession.getCurrent().getAttribute(User.class.getName()));
+                propertyToSave.published(new Date());
 
                 listener.dashboardNameEdited(propertyToSave);
                 close();

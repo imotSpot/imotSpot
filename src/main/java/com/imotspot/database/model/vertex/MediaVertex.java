@@ -24,12 +24,12 @@ public abstract class MediaVertex extends ODBVertex {
 
     @Override
     protected Serializable getIdentificatorValue() {
-        return media.getUri();
+        return media.uri();
     }
 
     protected List<Serializable> properties() {
         List<Serializable> props = super.properties();
-        addProp(props, "name", media.getName());
+        addProp(props, "name", media.name());
         return props;
     }
 

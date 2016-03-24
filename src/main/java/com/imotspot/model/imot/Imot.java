@@ -5,6 +5,7 @@ import com.imotspot.enumerations.ImotType;
 import com.imotspot.model.User;
 import com.imotspot.model.imot.interfaces.Media;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -12,7 +13,7 @@ import java.util.Date;
 import java.util.List;
 
 @Data
-//@Accessors(fluent = true)
+@Accessors(fluent = true)
 public class Imot implements Serializable {
     private static final long serialVersionUID = 1L;
 

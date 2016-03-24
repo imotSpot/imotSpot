@@ -25,7 +25,7 @@ public class LocationMarkerVertex extends ODBVertex {
 
     @Override
     protected Serializable getIdentificatorValue() {
-        return locationMarker.getAddress();
+        return locationMarker.address();
     }
 
     @Override
@@ -35,7 +35,7 @@ public class LocationMarkerVertex extends ODBVertex {
 
     @Override
     protected Serializable[] getIdentificatorValues() {
-        return new Serializable[]{locationMarker.getLat(), locationMarker.getLng()};
+        return new Serializable[]{locationMarker.lat(), locationMarker.lng()};
     }
 
     @Override
@@ -45,8 +45,8 @@ public class LocationMarkerVertex extends ODBVertex {
 
     protected List<Serializable> properties() {
         List<Serializable> props = super.properties();
-        addProp(props, "name", locationMarker.getName());
-        addProp(props, "address", locationMarker.getAddress());
+        addProp(props, "name", locationMarker.name());
+        addProp(props, "address", locationMarker.address());
         return props;
     }
 

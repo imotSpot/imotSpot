@@ -23,25 +23,25 @@ public class ImotVertex extends ODBVertex {
     public ImotVertex update() {
         ImotVertex imotVertex = (ImotVertex) super.update();
 
-        UserVertex userVertex = (UserVertex) ((UserVertex) new UserVertex(imot.getOwner()).useGraph(graph())).load();
+        UserVertex userVertex = (UserVertex) ((UserVertex) new UserVertex(imot.owner()).useGraph(graph())).load();
         new ImotEdge(userVertex, imotVertex).useGraph(graph()).saveOrUpdate();
 
-        if (imot.getLocation() != null) {
-            LocationVertex locationVertex = (LocationVertex) new LocationVertex(imot.getLocation()).useGraph(graph()).saveOrUpdate();
+        if (imot.location() != null) {
+            LocationVertex locationVertex = (LocationVertex) new LocationVertex(imot.location()).useGraph(graph()).saveOrUpdate();
             new ImotEdge(imotVertex, locationVertex).useGraph(graph()).saveOrUpdate();
         }
 
-        if (imot.getFrontImage() != null) {
-            PictureVertex frontImageVertex = (PictureVertex) new PictureVertex(imot.getFrontImage()).useGraph(graph()).saveOrUpdate();
+        if (imot.frontImage() != null) {
+            PictureVertex frontImageVertex = (PictureVertex) new PictureVertex(imot.frontImage()).useGraph(graph()).saveOrUpdate();
             new PictureEdge(imotVertex, frontImageVertex).useGraph(graph()).saveOrUpdate();
         }
 
-        if (imot.getCondition() != null) {
-            ConditionVertex conditionVertex = (ConditionVertex) new ConditionVertex(imot.getCondition()).useGraph(graph()).saveOrUpdate();
+        if (imot.condition() != null) {
+            ConditionVertex conditionVertex = (ConditionVertex) new ConditionVertex(imot.condition()).useGraph(graph()).saveOrUpdate();
             new ConditionEdge(imotVertex, conditionVertex).useGraph(graph()).saveOrUpdate();
         }
 
-        for (Media media : imot.getMedia()) {
+        for (Media media : imot.media()) {
             if (media instanceof Picture) {
                 PictureVertex mediaVertex = (PictureVertex) new PictureVertex((Picture) media).useGraph(graph()).saveOrUpdate();
                 new PictureEdge(imotVertex, mediaVertex).useGraph(graph()).saveOrUpdate();
@@ -51,12 +51,12 @@ public class ImotVertex extends ODBVertex {
             }
         }
 
-        for (Feature feature : imot.getFeatures()) {
+        for (Feature feature : imot.features()) {
             FeatureVertex featureVertex = (FeatureVertex) new FeatureVertex(feature).useGraph(graph()).saveOrUpdate();
             new FeatureEdge(imotVertex, featureVertex).useGraph(graph()).saveOrUpdate();
         }
 
-        for (Appliance appliance : imot.getAppliances()) {
+        for (Appliance appliance : imot.appliances()) {
             ApplianceVertex applianceVertex = (ApplianceVertex) new ApplianceVertex(appliance).useGraph(graph()).saveOrUpdate();
             new ApplianceEdge(imotVertex, applianceVertex).useGraph(graph()).saveOrUpdate();
         }
@@ -76,7 +76,7 @@ public class ImotVertex extends ODBVertex {
 
     @Override
     protected Serializable getIdentificatorValue() {
-        return imot.getLocation();
+        return imot.location();
     }
 
     @Override
@@ -86,10 +86,10 @@ public class ImotVertex extends ODBVertex {
 
     protected List<Serializable> properties() {
         List<Serializable> props = super.properties();
-        addProp(props, "price", imot.getPrice());
-        addProp(props, "year", imot.getYear());
-        addProp(props, "description", imot.getDescription());
-        addProp(props, "published", imot.getPublished());
+        addProp(props, "price", imot.price());
+        addProp(props, "year", imot.year());
+        addProp(props, "description", imot.description());
+        addProp(props, "published", imot.published());
         return props;
     }
 }

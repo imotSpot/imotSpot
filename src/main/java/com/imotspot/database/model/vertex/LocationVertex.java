@@ -24,10 +24,10 @@ public class LocationVertex extends ODBVertex {
     public LocationVertex update() {
         LocationVertex locationVertex = (LocationVertex) super.update();
 
-        CountryVertex countryVertex = (CountryVertex) new CountryVertex(location.getCountry()).useGraph(graph()).saveOrUpdate();
-        DistrictVertex districtVertex = (DistrictVertex) new DistrictVertex(location.getDistrict()).useGraph(graph()).saveOrUpdate();
-        CityVertex sityVertex = (CityVertex) new CityVertex(location.getCity()).useGraph(graph()).saveOrUpdate();
-        LocationMarkerVertex locationMarkerVertex = (LocationMarkerVertex) new LocationMarkerVertex(location.getMarker()).useGraph(graph()).saveOrUpdate();
+        CountryVertex countryVertex = (CountryVertex) new CountryVertex(location.country()).useGraph(graph()).saveOrUpdate();
+        DistrictVertex districtVertex = (DistrictVertex) new DistrictVertex(location.district()).useGraph(graph()).saveOrUpdate();
+        CityVertex sityVertex = (CityVertex) new CityVertex(location.city()).useGraph(graph()).saveOrUpdate();
+        LocationMarkerVertex locationMarkerVertex = (LocationMarkerVertex) new LocationMarkerVertex(location.marker()).useGraph(graph()).saveOrUpdate();
 
         new CountryEdge(locationVertex, countryVertex).useGraph(graph()).saveOrUpdate();
         new DistrictEdge(locationVertex, districtVertex).useGraph(graph()).saveOrUpdate();
@@ -54,6 +54,6 @@ public class LocationVertex extends ODBVertex {
 
     @Override
     protected Serializable getIdentificatorValue() {
-        return location.getAddress();
+        return location.address();
     }
 }

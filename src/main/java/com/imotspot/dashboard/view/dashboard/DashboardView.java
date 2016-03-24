@@ -357,13 +357,13 @@ public final class DashboardView extends Panel implements View, DashboardEditLis
 //        imot.setDescription(imot);
 //        imot.setCondition(Condition.USED);
 //            imot.setFrontImage(new Picture(new URI("./pic.jpg")));
-        LocationMarker myMarker = imot.getLocation().getMarker();
+        LocationMarker myMarker = imot.location().marker();
         GoogleMapMarker marker = new GoogleMapMarker("test", centerSofia, false);
         googleMap.addMarker(marker);
         googleMap.setCenter(centerSofia);
 
         user.addImot(imot);
-        new UserVertex(user).saveOrUpdate();
+        new UserVertex(user).saveOrUpdateInNewTX();
     }
 
     private void toggleMaximized(final Component panel, final boolean maximized) {

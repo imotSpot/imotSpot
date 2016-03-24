@@ -1,11 +1,12 @@
 package com.imotspot.model.imot;
 
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 
 @Data
-//@Accessors(fluent = true)
+@Accessors(fluent = true)
 public class Location implements Serializable {
     private static final long serialVersionUID = 1L;
 

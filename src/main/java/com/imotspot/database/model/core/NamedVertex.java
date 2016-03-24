@@ -33,7 +33,7 @@ public abstract class NamedVertex extends ODBVertex {
 
     @Override
     protected Serializable getIdentificatorValue() {
-        return named.getName();
+        return named.name();
     }
 
     @Override
