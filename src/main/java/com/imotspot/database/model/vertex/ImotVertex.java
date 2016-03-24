@@ -26,14 +26,20 @@ public class ImotVertex extends ODBVertex {
         UserVertex userVertex = (UserVertex) ((UserVertex) new UserVertex(imot.getOwner()).useGraph(graph())).load();
         new ImotEdge(userVertex, imotVertex).useGraph(graph()).saveOrUpdate();
 
-        LocationVertex locationVertex = (LocationVertex) new LocationVertex(imot.getLocation()).useGraph(graph()).saveOrUpdate();
-        new ImotEdge(imotVertex, locationVertex).useGraph(graph()).saveOrUpdate();
+        if (imot.getLocation() != null) {
+            LocationVertex locationVertex = (LocationVertex) new LocationVertex(imot.getLocation()).useGraph(graph()).saveOrUpdate();
+            new ImotEdge(imotVertex, locationVertex).useGraph(graph()).saveOrUpdate();
+        }
 
-        PictureVertex frontImageVertex = (PictureVertex) new PictureVertex(imot.getFrontImage()).useGraph(graph()).saveOrUpdate();
-        new PictureEdge(imotVertex, frontImageVertex).useGraph(graph()).saveOrUpdate();
+        if (imot.getFrontImage() != null) {
+            PictureVertex frontImageVertex = (PictureVertex) new PictureVertex(imot.getFrontImage()).useGraph(graph()).saveOrUpdate();
+            new PictureEdge(imotVertex, frontImageVertex).useGraph(graph()).saveOrUpdate();
+        }
 
-        ConditionVertex conditionVertex = (ConditionVertex) new ConditionVertex(imot.getCondition()).useGraph(graph()).saveOrUpdate();
-        new ConditionEdge(imotVertex, conditionVertex).useGraph(graph()).saveOrUpdate();
+        if (imot.getCondition() != null) {
+            ConditionVertex conditionVertex = (ConditionVertex) new ConditionVertex(imot.getCondition()).useGraph(graph()).saveOrUpdate();
+            new ConditionEdge(imotVertex, conditionVertex).useGraph(graph()).saveOrUpdate();
+        }
 
         for (Media media : imot.getMedia()) {
             if (media instanceof Picture) {

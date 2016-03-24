@@ -7,7 +7,6 @@ import com.imotspot.model.imot.Imot;
 import com.orientechnologies.orient.core.db.record.OIdentifiable;
 import com.orientechnologies.orient.core.record.impl.ODocument;
 import com.orientechnologies.orient.core.sql.query.OSQLSynchQuery;
-import com.tinkerpop.blueprints.Vertex;
 import lombok.Value;
 import lombok.experimental.Accessors;
 import lombok.experimental.Delegate;
@@ -39,8 +38,8 @@ public class UserVertex extends ODBVertex implements User {
         return userV;
     }
 
-    @Override
-    protected void loadPropertyToModel(Vertex vertex, String key) {
+//    @Override
+//    protected void loadPropertyToModel(Vertex vertex, String key) {
 //        switch (key) {
 //            case "role": user = user.role(userVertex.getProperty(key));break;
 //            case "firstName": user = user.firstName(userVertex.getProperty(key));break;
@@ -48,7 +47,7 @@ public class UserVertex extends ODBVertex implements User {
 //            case "email": user = user.email(userVertex.getProperty(key));break;
 //            default: super.loadPropertyToModel(userVertex, key, model);
 //        }
-    }
+//    }
 
     @Override
     protected void loadRelationsToModel() {
