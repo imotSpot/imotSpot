@@ -38,10 +38,20 @@ public class LocationMarkerVertex extends ODBVertex {
         return new Serializable[]{locationMarker.getLat(), locationMarker.getLng()};
     }
 
+    @Override
+    protected LocationMarkerVertex duplicate() {
+        return new LocationMarkerVertex(locationMarker);
+    }
+
     protected List<Serializable> properties() {
         List<Serializable> props = super.properties();
         addProp(props, "name", locationMarker.getName());
         addProp(props, "address", locationMarker.getAddress());
         return props;
+    }
+
+    @Override
+    public LocationMarker model() {
+        return locationMarker;
     }
 }

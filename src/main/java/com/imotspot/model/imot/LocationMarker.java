@@ -1,10 +1,13 @@
 package com.imotspot.model.imot;
 
-import com.imotspot.interfaces.HasName;
+import com.imotspot.model.imot.interfaces.Named;
 import lombok.Data;
 
 @Data
-public class LocationMarker implements HasName {
+//@Accessors(fluent = true)
+public class LocationMarker implements Named {
+    private static final long serialVersionUID = 1L;
+
     private float lat;
     private float lng;
     private String name;

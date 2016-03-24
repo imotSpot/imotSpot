@@ -1,13 +1,14 @@
 package com.imotspot.database;
 
-import com.imotspot.enumerations.ConfigKey;
 import com.imotspot.config.Configuration;
-import com.imotspot.interfaces.AppComponent;
 import com.imotspot.database.model.vertex.UserVertex;
 import com.imotspot.enumerations.Condition;
+import com.imotspot.enumerations.ConfigKey;
+import com.imotspot.interfaces.AppComponent;
 import com.imotspot.logging.Logger;
 import com.imotspot.logging.LoggerFactory;
 import com.imotspot.model.User;
+import com.imotspot.model.UserBean;
 import com.imotspot.model.imot.*;
 import com.imotspot.template.FileDocument;
 import com.imotspot.template.FileTemplate;
@@ -46,8 +47,10 @@ public class OrientDBServer {
             @Override
             public OrientElement execute(OrientGraph graph) throws Exception {
 
-                User user = new User("test");
-                user.setFirstName("test");
+                User user = UserBean.builder()
+                        .oauthIdentifier("test")
+                        .firstName("test")
+                        .build();
                 UserVertex userVertex = new UserVertex(user);
 
                 Location location = new Location();
@@ -69,7 +72,7 @@ public class OrientDBServer {
                 imot.setCondition(Condition.USED);
                 imot.setFrontImage(new Picture(new URI("./pic.jpg")));
 
-                user.getImots().add(imot);
+                user.addImot(imot);
                 userVertex.saveOrUpdate();
 
 //                Vertex marko = graph.addVertex("class:Imot", "name", "app in sofia", "price", 290);
@@ -116,7 +119,7 @@ public class OrientDBServer {
         factory = null;
     }
 
-    public OrientGraph getGraph() {
+    public OrientGraph graph() {
         if (factory == null) {
             getGraphFactory();
         }
@@ -135,7 +138,7 @@ public class OrientDBServer {
     }
 
     public void doInTXWithRetry(DBOperation operation, int maxRetries) throws Exception {
-        OrientGraph graph = getGraph();
+        OrientGraph graph = graph();
         for (int retry = 0; retry < maxRetries; ++retry) {
             try {
                 operation.execute(graph);
@@ -148,7 +151,7 @@ public class OrientDBServer {
     }
 
     public <E extends Object> E doInTX(DBOperation<E> operation) {
-        OrientGraph graph = getGraph();
+        OrientGraph graph = graph();
         E element = null;
         try {
             element = operation.execute(graph);

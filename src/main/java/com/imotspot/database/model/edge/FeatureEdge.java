@@ -1,12 +1,11 @@
 package com.imotspot.database.model.edge;
 
 import com.imotspot.database.model.core.ODBEdge;
-import com.tinkerpop.blueprints.Vertex;
+import com.imotspot.database.model.core.ODBVertex;
 
 public class FeatureEdge extends ODBEdge {
 
-    public FeatureEdge(Vertex outVertex, Vertex inVertex) {
+    public FeatureEdge(ODBVertex outVertex, ODBVertex inVertex) {
         super(outVertex, inVertex);
     }
-
 }

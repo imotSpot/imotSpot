@@ -2,12 +2,8 @@ package com.imotspot.database.model.vertex;
 
 import com.imotspot.database.model.core.ODBVertex;
 import com.imotspot.database.model.edge.*;
-import com.imotspot.interfaces.Media;
 import com.imotspot.model.imot.*;
-import com.tinkerpop.blueprints.Element;
-import com.tinkerpop.blueprints.Vertex;
-import com.tinkerpop.blueprints.impls.orient.OrientGraph;
-import com.tinkerpop.blueprints.impls.orient.OrientVertex;
+import com.imotspot.model.imot.interfaces.Media;
 
 import java.io.Serializable;
 import java.util.List;
@@ -24,42 +20,47 @@ public class ImotVertex extends ODBVertex {
     }
 
     @Override
-    public OrientVertex update(OrientGraph graph, Element vertex) {
-        OrientVertex imotVertex = super.update(graph, vertex);
+    public ImotVertex update() {
+        ImotVertex imotVertex = (ImotVertex) super.update();
 
-//        Vertex userVertex = (Vertex) new UserVertex(imot.getOwner());
-//        new ImotEdge(userVertex, imotVertex).saveOrUpdate();
+        UserVertex userVertex = (UserVertex) ((UserVertex) new UserVertex(imot.getOwner()).useGraph(graph())).load();
+        new ImotEdge(userVertex, imotVertex).useGraph(graph()).saveOrUpdate();
 
-        Vertex locationVertex = (Vertex) new LocationVertex(imot.getLocation()).saveOrUpdate();
-        new ImotEdge(imotVertex, locationVertex).saveOrUpdate();
+        LocationVertex locationVertex = (LocationVertex) new LocationVertex(imot.getLocation()).useGraph(graph()).saveOrUpdate();
+        new ImotEdge(imotVertex, locationVertex).useGraph(graph()).saveOrUpdate();
 
-        Vertex frontImageVertex = (Vertex) new PictureVertex(imot.getFrontImage()).saveOrUpdate();
-        new PictureEdge(imotVertex, frontImageVertex).saveOrUpdate();
+        PictureVertex frontImageVertex = (PictureVertex) new PictureVertex(imot.getFrontImage()).useGraph(graph()).saveOrUpdate();
+        new PictureEdge(imotVertex, frontImageVertex).useGraph(graph()).saveOrUpdate();
 
-        Vertex conditionVertex = (Vertex) new ConditionVertex(imot.getCondition()).saveOrUpdate();
-        new PictureEdge(imotVertex, conditionVertex).saveOrUpdate();
+        ConditionVertex conditionVertex = (ConditionVertex) new ConditionVertex(imot.getCondition()).useGraph(graph()).saveOrUpdate();
+        new ConditionEdge(imotVertex, conditionVertex).useGraph(graph()).saveOrUpdate();
 
         for (Media media : imot.getMedia()) {
             if (media instanceof Picture) {
-                Vertex mediaVertex = (Vertex) new PictureVertex((Picture) media).saveOrUpdate();
-                new PictureEdge(imotVertex, mediaVertex).saveOrUpdate();
+                PictureVertex mediaVertex = (PictureVertex) new PictureVertex((Picture) media).useGraph(graph()).saveOrUpdate();
+                new PictureEdge(imotVertex, mediaVertex).useGraph(graph()).saveOrUpdate();
             } else {
-                Vertex mediaVertex = (Vertex) new VideoVertex((Video) media).saveOrUpdate();
-                new VideoEdge(imotVertex, mediaVertex).saveOrUpdate();
+                VideoVertex mediaVertex = (VideoVertex) new VideoVertex((Video) media).useGraph(graph()).saveOrUpdate();
+                new VideoEdge(imotVertex, mediaVertex).useGraph(graph()).saveOrUpdate();
             }
         }
 
         for (Feature feature : imot.getFeatures()) {
-            Vertex featureVertex = (Vertex) new FeatureVertex(feature).saveOrUpdate();
-            new FeatureEdge(imotVertex, featureVertex).saveOrUpdate();
+            FeatureVertex featureVertex = (FeatureVertex) new FeatureVertex(feature).useGraph(graph()).saveOrUpdate();
+            new FeatureEdge(imotVertex, featureVertex).useGraph(graph()).saveOrUpdate();
         }
 
         for (Appliance appliance : imot.getAppliances()) {
-            Vertex applianceVertex = (Vertex) new ApplianceVertex(appliance).saveOrUpdate();
-            new ApplianceEdge(imotVertex, applianceVertex).saveOrUpdate();
+            ApplianceVertex applianceVertex = (ApplianceVertex) new ApplianceVertex(appliance).useGraph(graph()).saveOrUpdate();
+            new ApplianceEdge(imotVertex, applianceVertex).useGraph(graph()).saveOrUpdate();
         }
 
         return imotVertex;
+    }
+
+    @Override
+    public Imot model() {
+        return imot;
     }
 
     @Override
@@ -70,6 +71,11 @@ public class ImotVertex extends ODBVertex {
     @Override
     protected Serializable getIdentificatorValue() {
         return imot.getLocation();
+    }
+
+    @Override
+    protected ImotVertex duplicate() {
+        return new ImotVertex(imot);
     }
 
     protected List<Serializable> properties() {

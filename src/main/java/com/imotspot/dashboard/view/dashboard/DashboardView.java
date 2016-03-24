@@ -6,10 +6,10 @@ import com.imotspot.dashboard.event.DashboardEvent.CloseOpenWindowsEvent;
 import com.imotspot.dashboard.event.DashboardEvent.NotificationsCountUpdatedEvent;
 import com.imotspot.dashboard.event.DashboardEventBus;
 import com.imotspot.dashboard.view.property.AddProperty;
-import com.imotspot.interfaces.DashboardEditListener;
 import com.imotspot.database.model.vertex.UserVertex;
 import com.imotspot.googlemap.Geocoding;
 import com.imotspot.googlemap.json.GeocodingAnswer;
+import com.imotspot.interfaces.DashboardEditListener;
 import com.imotspot.logging.Logger;
 import com.imotspot.logging.LoggerFactory;
 import com.imotspot.model.DashboardNotification;
@@ -362,7 +362,7 @@ public final class DashboardView extends Panel implements View, DashboardEditLis
         googleMap.addMarker(marker);
         googleMap.setCenter(centerSofia);
 
-        user.getImots().add(imot);
+        user.addImot(imot);
         new UserVertex(user).saveOrUpdate();
     }
 

@@ -1,10 +1,13 @@
 package com.imotspot.model.imot;
 
-import com.imotspot.interfaces.HasName;
+import com.imotspot.model.imot.interfaces.Named;
 import lombok.Data;
 
 @Data
-public class City implements HasName {
+//@Accessors(fluent = true)
+public class City implements Named {
+    private static final long serialVersionUID = 1L;
+
     private String name;
 
     public City(String city) {

@@ -17,6 +17,11 @@ public class ConditionVertex extends ODBVertex {
     }
 
     @Override
+    protected ConditionVertex duplicate() {
+        return new ConditionVertex(condition);
+    }
+
+    @Override
     protected String getIdentificatorFieldName() {
         return IdentifierFieldName;
     }
@@ -26,4 +31,8 @@ public class ConditionVertex extends ODBVertex {
         return condition.name();
     }
 
+    @Override
+    public Serializable model() {
+        return condition;
+    }
 }

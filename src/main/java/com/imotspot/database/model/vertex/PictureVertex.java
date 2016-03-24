@@ -8,4 +8,8 @@ public class PictureVertex extends MediaVertex {
         super(picture);
     }
 
+    @Override
+    protected PictureVertex duplicate() {
+        return new PictureVertex((Picture) model());
+    }
 }

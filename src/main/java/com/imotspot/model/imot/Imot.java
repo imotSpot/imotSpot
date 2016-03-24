@@ -2,8 +2,8 @@ package com.imotspot.model.imot;
 
 import com.imotspot.enumerations.Condition;
 import com.imotspot.enumerations.ImotType;
-import com.imotspot.interfaces.Media;
 import com.imotspot.model.User;
+import com.imotspot.model.imot.interfaces.Media;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -12,7 +12,9 @@ import java.util.Date;
 import java.util.List;
 
 @Data
+//@Accessors(fluent = true)
 public class Imot implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     private User owner;
     private float price;

@@ -1,12 +1,12 @@
 package com.imotspot.database.model.vertex;
 
 import com.imotspot.database.model.core.ODBVertex;
-import com.imotspot.interfaces.Media;
+import com.imotspot.model.imot.interfaces.Media;
 
 import java.io.Serializable;
 import java.util.List;
 
-public class MediaVertex extends ODBVertex {
+public abstract class MediaVertex extends ODBVertex {
 
     private final static String IdentifierFieldName = "uri";
 
@@ -31,5 +31,10 @@ public class MediaVertex extends ODBVertex {
         List<Serializable> props = super.properties();
         addProp(props, "name", media.getName());
         return props;
+    }
+
+    @Override
+    public Media model() {
+        return media;
     }
 }

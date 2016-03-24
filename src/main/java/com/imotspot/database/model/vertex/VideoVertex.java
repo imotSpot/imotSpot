@@ -8,4 +8,8 @@ public class VideoVertex extends MediaVertex {
         super(video);
     }
 
+    @Override
+    protected VideoVertex duplicate() {
+        return new VideoVertex((Video) model());
+    }
 }

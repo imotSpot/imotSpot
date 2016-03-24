@@ -8,7 +8,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.imotspot.interfaces.DataProvider;
-import com.imotspot.database.model.vertex.UserVertex;
 import com.imotspot.model.*;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.util.CurrentInstance;
@@ -362,19 +361,19 @@ public class DummyDataProvider implements DataProvider {
 
     @Override
     public User authenticate(String userName, String password) {
-        User user = new User("");
-        user.setFirstName(DummyDataGenerator.randomFirstName());
-        user.setLastName(DummyDataGenerator.randomLastName());
-        user.setRole("admin");
-        String email = user.getFirstName().toLowerCase() + "."
-                + user.getLastName().toLowerCase() + "@"
-                + DummyDataGenerator.randomCompanyName().toLowerCase() + ".com";
-        user.setEmail(email.replaceAll(" ", ""));
-        user.setLocation(DummyDataGenerator.randomWord(5, true));
-        user.setBio("Quis aute iure reprehenderit in voluptate velit esse."
-                + "Cras mattis iudicium purus sit amet fermentum.");
-        new UserVertex(user).saveOrUpdate();
-        return user;
+//        User user = new User("");
+//        user.setFirstName(DummyDataGenerator.randomFirstName());
+//        user.setLastName(DummyDataGenerator.randomLastName());
+//        user.setRole("admin");
+//        String email = user.getFirstName().toLowerCase() + "."
+//                + user.getLastName().toLowerCase() + "@"
+//                + DummyDataGenerator.randomCompanyName().toLowerCase() + ".com";
+//        user.setEmail(email.replaceAll(" ", ""));
+//        user.setLocation(DummyDataGenerator.randomWord(5, true));
+//        user.setBio("Quis aute iure reprehenderit in voluptate velit esse."
+//                + "Cras mattis iudicium purus sit amet fermentum.");
+//        new UserVertex(user).saveOrUpdate();
+        return UserBean.builder().build();
     }
 
     @Override

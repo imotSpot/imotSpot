@@ -82,7 +82,7 @@ public final class DashboardMenu extends CustomComponent {
         final MenuBar settings = new MenuBar();
         settings.addStyleName("user-menu");
         final User user = getCurrentUser();
-        String pic = user.getPicUrl();
+        String pic = user.picUrl();
         if (pic != null) {
             settingsItem = settings.addItem("", new ExternalResource(
                     pic), null);
@@ -91,7 +91,7 @@ public final class DashboardMenu extends CustomComponent {
                     "img/profile-pic-300px.jpg"), null);
         }
         updateUserName(null);
-        if (user.getRole().equals("guest")) {
+        if (user.role().equals("guest")) {
 
             settingsItem.addItem("Sign In", new Command() {
                 @Override
@@ -239,7 +239,7 @@ public final class DashboardMenu extends CustomComponent {
     @Subscribe
     public void updateUserName(final DashboardEvent.ProfileUpdatedEvent event) {
         User user = getCurrentUser();
-        settingsItem.setText(user.getFirstName() + " " + user.getLastName());
+        settingsItem.setText(user.firstName() + " " + user.lastName());
     }
 
     public final class ValoMenuItemButton extends Button {

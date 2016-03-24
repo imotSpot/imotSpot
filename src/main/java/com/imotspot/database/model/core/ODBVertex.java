@@ -3,84 +3,99 @@ package com.imotspot.database.model.core;
 import com.orientechnologies.orient.core.sql.OCommandSQL;
 import com.tinkerpop.blueprints.Element;
 import com.tinkerpop.blueprints.Vertex;
-import com.tinkerpop.blueprints.impls.orient.OrientGraph;
-import com.tinkerpop.blueprints.impls.orient.OrientGraphNoTx;
 import com.tinkerpop.blueprints.impls.orient.OrientVertex;
+import lombok.Value;
+import lombok.experimental.Accessors;
+import lombok.experimental.NonFinal;
 
-import java.io.Serializable;
+@Value
+@NonFinal
+@Accessors(fluent = true)
+public abstract class ODBVertex extends ODBElement {
 
-public abstract class ODBVertex<E extends Serializable> extends ODBElement {
+    @NonFinal
+    protected OrientVertex vertex;
 
     public ODBVertex() {
+//        this(null);
+//    }
+//
+//    public ODBVertex(OrientVertex vertex) {
         super();
-
-        OrientGraphNoTx graphNoTx = dbServer.getGraphNoTx();
-        if (!graphNoTx.getRawGraph().getMetadata().getSchema().existsClass(NAME)) {
-
-            if (PARENT_NAME != ODBVertex.class.getSimpleName()) {
-                if (!graphNoTx.getRawGraph().getMetadata().getSchema().existsClass(PARENT_NAME)) {
-                    graphNoTx.createVertexType(PARENT_NAME);
-                }
-                graphNoTx.createVertexType(NAME, PARENT_NAME);
-            } else {
-                graphNoTx.createVertexType(NAME);
-            }
-        }
+//        this.vertex = vertex;
+        createVertexType();
     }
 
-//    @Override
-//    protected Vertex load(OrientGraph graph) {
-//        return getByIdentificator(graph);
-//    }
+    public <V extends ODBVertex> V vertex(OrientVertex vertex) {
+        ODBVertex copy = duplicate();
+        copy.vertex = vertex;
+        return (V) copy;
+    }
 
     @Override
-    protected Element saveOrUpdate(OrientGraph graph) {
-        Element element = getByIdentificator(graph);
-        if (element != null) {
-            return update(graph, element);
+    public ODBVertex load() {
+        OrientVertex vertex = get();
+
+        for (String key : vertex.getPropertyKeys()) {
+            loadPropertyToModel(vertex, key);
         }
 
-        return save(graph);
+        loadRelationsToModel();
+        return vertex(vertex);
     }
 
-    public Vertex getByIdentificator(OrientGraph graph) {
+    protected void loadPropertyToModel(Vertex vertex, String key) {
+        try {
+            setProperty(key, vertex.getProperty(key));
+        } catch (Exception e) {
+            return;
+        }
+    }
+
+    protected void loadRelationsToModel() {
+    }
+
+    @Override
+    public ODBVertex saveOrUpdate() {
+        Element element = get();
+        if (element != null) {
+            return update().load();
+        }
+
+        return save();
+    }
+
+    @Override
+    public ODBVertex save() {
+        return vertex(graph().addVertex("class:" + NAME, propertiesArray())).update();
+    }
+
+    protected OrientVertex get() {
         // Object ret = orientGraph.command(new OCommandGremlin("g.v('9:68128').both().both()")).execute();
         String oSqlCommand = "SELECT * FROM " + NAME + " where " + constructSqlWhere();
-        Object ret = graph.command(new OCommandSQL(oSqlCommand)).execute();
-        Iterable<Vertex> vertices = (Iterable<Vertex>) ret;
+        Object ret = graph().command(new OCommandSQL(oSqlCommand)).execute();
+        Iterable<OrientVertex> vertices = (Iterable<OrientVertex>) ret;
 
         if (vertices.iterator().hasNext()) {
-            return vertices.iterator().next();
+            vertex = vertices.iterator().next();
         }
-
-//        for (Vertex vertex : graph.getVertices(NAME,
-//                getIdentificatorFieldNames(),
-//                getIdentificatorValues())) {
-//
-//            return vertex;
-//        }
-        return null;
+        return vertex;
     }
 
     @Override
-    public OrientVertex update(OrientGraph graph, Element vertex) {
-        OrientVertex oVertex = graph.getVertex(vertex.getId());
+    public ODBVertex update() {
+        OrientVertex oVertex = graph().getVertex(vertex.getId());
         oVertex.setProperties(propertiesArray());
 
         oVertex.save();
-        return oVertex;
+        return vertex(oVertex);
     }
 
     @Override
-    public OrientVertex save(OrientGraph graph) {
-        OrientVertex locationVertex = graph.addVertex("class:" + NAME, propertiesArray());
-        update(graph, locationVertex);
-        return locationVertex;
+    public void remove() {
+        Vertex v = get();
+        if (v != null) {
+            graph().removeVertex(v);
+        }
     }
-
-    @Override
-    public void remove(OrientGraph graph, Element vertex) {
-        graph.removeVertex((Vertex) vertex);
-    }
-
 }

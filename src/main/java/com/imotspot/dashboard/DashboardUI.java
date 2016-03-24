@@ -1,15 +1,16 @@
 package com.imotspot.dashboard;
 
 import com.google.common.eventbus.Subscribe;
-import com.imotspot.interfaces.AppComponent;
-import com.imotspot.interfaces.DataProvider;
 import com.imotspot.dashboard.event.DashboardEvent.BrowserResizeEvent;
 import com.imotspot.dashboard.event.DashboardEvent.CloseOpenWindowsEvent;
 import com.imotspot.dashboard.event.DashboardEvent.UserLoggedOutEvent;
 import com.imotspot.dashboard.event.DashboardEvent.UserLoginRequestedEvent;
 import com.imotspot.dashboard.event.DashboardEventBus;
 import com.imotspot.dashboard.view.MainView;
+import com.imotspot.interfaces.AppComponent;
+import com.imotspot.interfaces.DataProvider;
 import com.imotspot.model.User;
+import com.imotspot.model.UserBean;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
 import com.vaadin.server.Page;
@@ -81,10 +82,12 @@ public final class DashboardUI extends UI {
         User user = (User) VaadinSession.getCurrent().getAttribute(
                 User.class.getName());
         if (user == null) {
-            user = new User("");
-            user.setFirstName("guest");
-            user.setLastName("");
-            user.setRole("guest");
+            user = UserBean.builder()
+                    .oauthIdentifier("")
+                    .firstName("guest")
+                    .lastName("")
+                    .role("guest")
+                    .build();
             VaadinSession.getCurrent().setAttribute(User.class.getName(), user);
         }
             setContent(new MainView());
