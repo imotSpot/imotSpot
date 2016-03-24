@@ -15,7 +15,6 @@ import com.imotspot.logging.LoggerFactory;
 import com.imotspot.model.DashboardNotification;
 import com.imotspot.model.User;
 import com.imotspot.model.imot.Imot;
-import com.imotspot.model.imot.LocationMarker;
 import com.vaadin.event.LayoutEvents.LayoutClickEvent;
 import com.vaadin.event.LayoutEvents.LayoutClickListener;
 import com.vaadin.event.ShortcutAction.KeyCode;
@@ -148,6 +147,7 @@ public final class DashboardView extends Panel implements View, DashboardEditLis
 
         googleMap = new GoogleMap(null, null, null);
         googleMap.addMarker(new GoogleMapMarker("Sofia", centerSofia, true));
+        googleMap.setCenter(centerSofia);
         googleMap.setSizeFull();
         googleMap.setImmediate(true);
         googleMap.setMinZoom(4);
@@ -357,8 +357,8 @@ public final class DashboardView extends Panel implements View, DashboardEditLis
 //        imot.setDescription(imot);
 //        imot.setCondition(Condition.USED);
 //            imot.setFrontImage(new Picture(new URI("./pic.jpg")));
-        LocationMarker myMarker = imot.location().marker();
-        GoogleMapMarker marker = new GoogleMapMarker("test", centerSofia, false);
+//        LocationMarker myMarker = imot.getLocation().getMarker();
+        GoogleMapMarker marker = imot.location().marker().googleMarker();
         googleMap.addMarker(marker);
         googleMap.setCenter(centerSofia);
 

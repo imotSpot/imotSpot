@@ -1,10 +1,10 @@
 package com.imotspot.database;
 
+import com.imotspot.enumerations.ConfigKey;
 import com.imotspot.config.Configuration;
+import com.imotspot.interfaces.AppComponent;
 import com.imotspot.database.model.vertex.UserVertex;
 import com.imotspot.enumerations.Condition;
-import com.imotspot.enumerations.ConfigKey;
-import com.imotspot.interfaces.AppComponent;
 import com.imotspot.logging.Logger;
 import com.imotspot.logging.LoggerFactory;
 import com.imotspot.model.User;
@@ -19,6 +19,8 @@ import com.tinkerpop.blueprints.impls.orient.OrientElement;
 import com.tinkerpop.blueprints.impls.orient.OrientGraph;
 import com.tinkerpop.blueprints.impls.orient.OrientGraphFactory;
 import com.tinkerpop.blueprints.impls.orient.OrientGraphNoTx;
+import com.vaadin.tapio.googlemaps.client.LatLon;
+import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapMarker;
 
 import javax.inject.Inject;
 import java.net.URI;
@@ -58,9 +60,9 @@ public class OrientDBServer {
                 location.country(new Country("Bulgaria"));
                 location.city(new City("Sofia"));
                 location.district(new District("Sofiiska"));
-                LocationMarker marker = new LocationMarker(42.695537f, 23.2539071f);
-                marker.address("Sofia Bulgaria");
-                marker.name("Sofia Bulgaria");
+                LocationMarker marker = new LocationMarker(new GoogleMapMarker("test", new LatLon(42.695537, 23.2539071), false));
+//                marker.address("Sofia Bulgaria");
+//                marker.name("Sofia Bulgaria");
                 location.marker(marker);
 
                 Imot imot = new Imot(location);

@@ -30,6 +30,7 @@ import java.util.List;
 public class AddProperty extends Window {
 
     private final DashboardEditListener listener;
+    private static final LatLon centerSofia = new LatLon(42.697702770146975, 23.32174301147461);
     private TextField price;
     private TextField year;
     private TextArea description;
@@ -38,6 +39,7 @@ public class AddProperty extends Window {
     private TextField city;
     private TextField address;
     private ComboBox condition;
+    private ComboBox type;
     private TextField images;
     private GoogleMap googleMap;
 
@@ -76,6 +78,7 @@ public class AddProperty extends Window {
         mapLayout.setHeight(500f, Unit.PIXELS);
 
         googleMap = new GoogleMap(null, null, null);
+        googleMap.setCenter(centerSofia);
         googleMap.setSizeFull();
         googleMap.setImmediate(true);
         googleMap.setMinZoom(4);
@@ -103,7 +106,7 @@ public class AddProperty extends Window {
         List<Condition> enumConditionList = Arrays.asList(Condition.values());
         ImageUploader receiver = new ImageUploader();
 
-        ComboBox type = new ComboBox("Choose type");
+        type = new ComboBox("Choose type");
         type.setFilteringMode(FilteringMode.STARTSWITH);
         for (ImotType t: enumImotTypeList){
             type.addItem(t.toString());
@@ -140,14 +143,17 @@ public class AddProperty extends Window {
         address.addValueChangeListener(new Property.ValueChangeListener() {
             @Override
             public void valueChange(Property.ValueChangeEvent valueChangeEvent) {
-                String text = valueChangeEvent.getProperty().getValue().toString() + city.getValue() + country.getValue();
+                String text = valueChangeEvent.getProperty().getValue().toString();
                 try {
                     GeocodingAnswer answer = Geocoding.getJSONfromAddress(text);
-                    LocationAnswer loc = answer.results[0].geometry.location;
-                    LatLon latLon = new LatLon(loc.lat, loc.lng);
-                    GoogleMapMarker marker = new GoogleMapMarker(text, latLon, true);
-                    googleMap.addMarker(marker);
-                    googleMap.setCenter(latLon);
+                    LocationAnswer loc = null;
+                    if (answer.results.length != 0) {
+                        loc = answer.results[0].geometry.location;
+                        LatLon latLon = new LatLon(loc.lat, loc.lng);
+                        GoogleMapMarker marker = new GoogleMapMarker(text, latLon, true);
+                        googleMap.addMarker(marker);
+                        googleMap.setCenter(latLon);
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -183,20 +189,18 @@ public class AddProperty extends Window {
                 currentLocation.district(new District(district.getValue()));
                 currentLocation.city(new City(city.getValue()));
                 currentLocation.address(address.getValue());
-                currentLocation.marker(new LocationMarker(42, 35));
+                currentLocation.marker(new LocationMarker(googleMap.getMarkers().iterator().next()));
 
-                Imot propertyToSave = new Imot(currentLocation);
-                // todo get type from dropdown
-                propertyToSave.type(ImotType.PENTHOUSE);
-                propertyToSave.price(Float.parseFloat(price.getValue()));
-                propertyToSave.year(year.getValue());
-                propertyToSave.description(description.getValue());
-                // todo get type from dropdown
-                propertyToSave.condition(Condition.NEW);
-                propertyToSave.owner((User) VaadinSession.getCurrent().getAttribute(User.class.getName()));
-                propertyToSave.published(new Date());
+                Imot imotToSave = new Imot(currentLocation);
+                imotToSave.type(ImotType.valueOf(type.getValue().toString()));
+                imotToSave.price(Float.parseFloat(price.getValue()));
+                imotToSave.year(year.getValue());
+                imotToSave.description(description.getValue());
+                imotToSave.condition(Condition.valueOf(condition.getValue().toString()));
+                imotToSave.owner((User) VaadinSession.getCurrent().getAttribute(User.class.getName()));
+                imotToSave.published(new Date());
 
-                listener.dashboardNameEdited(propertyToSave);
+                listener.dashboardNameEdited(imotToSave);
                 close();
             }
         });
