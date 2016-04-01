@@ -5,7 +5,7 @@ import com.imotspot.dashboard.DashboardServlet;
 import com.imotspot.dashboard.DashboardUI;
 import com.imotspot.dashboard.event.DashboardEventBus;
 import com.imotspot.database.OrientDBServer;
-import com.imotspot.database.model.core.ODBElement;
+import com.imotspot.database.model.core.ODBAbstract;
 import dagger.Component;
 
 import javax.inject.Singleton;
@@ -29,5 +29,5 @@ public interface AppComponent {
 
     void inject(DashboardServlet dashboardServlet);
 
-    void inject(ODBElement odbElement);
+    void inject(ODBAbstract odbAbstract);
 }

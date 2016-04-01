@@ -348,7 +348,7 @@ public final class DashboardView extends Panel implements View, DashboardEditLis
 //        imot.setCondition(Condition.USED);
 //            imot.setFrontImage(new Picture(new URI("./pic.jpg")));
 //        LocationMarker myMarker = imot.getLocation().getMarker();
-        GoogleMapMarker marker = imot.location().marker().googleMarker();
+        GoogleMapMarker marker = imot.getLocation().marker().googleMarker();
         googleMap.addMarker(marker);
         googleMap.setCenter(centerSofia);
 
@@ -417,7 +417,7 @@ public final class DashboardView extends Panel implements View, DashboardEditLis
 
         User user = (User) VaadinSession.getCurrent().getAttribute(User.class.getName());
         for (Imot i : user.imots()) {
-            Location loc = i.location();
+            Location loc = i.getLocation();
             googleMap.addMarker(new GoogleMapMarker(null,
                     new LatLon(loc.marker().lat(), loc.marker().lng()), true));
         }

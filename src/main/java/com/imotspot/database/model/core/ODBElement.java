@@ -1,31 +1,26 @@
 package com.imotspot.database.model.core;
 
 import com.imotspot.database.DBOperation;
-import com.imotspot.database.OrientDBServer;
-import com.imotspot.interfaces.AppComponent;
 import com.orientechnologies.orient.core.record.impl.ODocument;
 import com.tinkerpop.blueprints.impls.orient.OrientGraph;
 import com.tinkerpop.blueprints.impls.orient.OrientGraphNoTx;
 
-import javax.inject.Inject;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class ODBElement {
+public abstract class ODBElement<T extends Serializable> extends ODBAbstract {
 
+    public static Class modelClass;
     public static String NAME;
     public static String PARENT_NAME;
 
-    @Inject
-    public OrientDBServer dbServer;
-    private OrientGraph graph;
-
     public ODBElement() {
-        AppComponent.daggerInjector().inject(this);
+        super();
 
+        this.modelClass = getClass();
         NAME = getClass().getSimpleName();
         PARENT_NAME = getClass().getSuperclass().getSimpleName();
     }
@@ -34,11 +29,11 @@ public abstract class ODBElement {
         return dbServer.doInTX(new DBOperation<E>() {
             @Override
             public <E> E execute(OrientGraph graph) {
-                ODBElement.this.graph = graph;
+                useGraph(graph);
                 try {
                     return (E) saveOrUpdate();
                 } finally {
-                    ODBElement.this.graph = null;
+                    useGraph(null);
                 }
             }
         });
@@ -48,31 +43,14 @@ public abstract class ODBElement {
         return dbServer.doInTX(new DBOperation<E>() {
             @Override
             public <E> E execute(OrientGraph graph) {
-                ODBElement.this.graph = graph;
+                useGraph(graph);
                 try {
                     return (E) load();
                 } finally {
-                    ODBElement.this.graph = null;
+                    useGraph(null);
                 }
             }
         });
-    }
-
-    public OrientGraph graph() {
-        if (graph == null) {
-            graph = dbServer.graph();
-        }
-        return graph;
-    }
-
-    public ODBElement useGraph(OrientGraph graph) {
-        this.graph = graph;
-        return this;
-    }
-
-    public void closeGraph() {
-        graph.shutdown();
-        graph = null;
     }
 
     protected abstract <E extends ODBElement> E duplicate();
@@ -148,29 +126,22 @@ public abstract class ODBElement {
         return constructSqlWhere(getIdentificatorFieldNames(), getIdentificatorValues());
     }
 
-    protected String constructSqlWhere(String[] fields, Serializable[] values) {
-        String where = "";
-        for (int i = 0; i < fields.length; i++) {
-            if (values[i] != null) {
-                if (where.length() > 0) {
-                    where += " and ";
-                }
-                where += fields[i] + "='" + values[i] + "' ";
-            }
-        }
-        return where;
-    }
-
     public void setProperty(String property, Object val) throws InvocationTargetException, IllegalAccessException {
         String methodName = property;
+        methodName = buildMethodName("set", property);
         Method m = findSetterMethod(model(), methodName, val);
         m.invoke(model(), new Object[]{val});
     }
 
     public Object getProperty(String property) throws InvocationTargetException, IllegalAccessException {
         String methodName = property;
+        methodName = buildMethodName("get", property);
         Method m = findGetterMethod(model(), methodName);
         return m.invoke(model());
+    }
+
+    private String buildMethodName(String prefix, String property) {
+        return String.format("%s%c%s", prefix, Character.toUpperCase(property.charAt(0)), property.substring(1));
     }
 
     private Method findGetterMethod(Serializable serializable, String methodName) {

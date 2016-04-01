@@ -1,6 +1,7 @@
 package com.imotspot.interfaces;
 
 import com.imotspot.model.*;
+import com.imotspot.model.imot.Imot;
 
 import java.util.Collection;
 import java.util.Date;
@@ -14,6 +15,7 @@ public interface DataProvider {
      *            Number of transactions to fetch.
      * @return A Collection of most recent transactions.
      */
+    Collection<Imot> getRecentImots(int count);
     Collection<Transaction> getRecentTransactions(int count);
 
     /**

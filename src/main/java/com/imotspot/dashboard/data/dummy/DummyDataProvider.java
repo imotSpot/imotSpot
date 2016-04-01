@@ -7,8 +7,11 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.imotspot.database.model.core.ODBVertices;
+import com.imotspot.database.model.vertex.ImotVertex;
 import com.imotspot.interfaces.DataProvider;
 import com.imotspot.model.*;
+import com.imotspot.model.imot.Imot;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.util.CurrentInstance;
 
@@ -374,6 +377,12 @@ public class DummyDataProvider implements DataProvider {
 //                + "Cras mattis iudicium purus sit amet fermentum.");
 //        new UserVertex(user).saveOrUpdate();
         return UserBean.builder().build();
+    }
+
+    @Override
+    public Collection<Imot> getRecentImots(int count) {
+        ODBVertices<Imot> imots = new ODBVertices<Imot>(ImotVertex.class);
+        return (Collection<Imot>) imots.get();
     }
 
     @Override

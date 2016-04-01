@@ -5,7 +5,7 @@ import com.imotspot.dashboard.DashboardUI;
 import com.imotspot.dashboard.component.MovieDetailsWindow;
 import com.imotspot.dashboard.event.DashboardEvent.BrowserResizeEvent;
 import com.imotspot.dashboard.event.DashboardEventBus;
-import com.imotspot.model.Transaction;
+import com.imotspot.model.imot.Imot;
 import com.vaadin.data.Container.Filter;
 import com.vaadin.data.Container.Filterable;
 import com.vaadin.data.Item;
@@ -34,7 +34,9 @@ import org.vaadin.maddon.FilterableListContainer;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Collection;
+import java.util.Date;
+import java.util.Set;
 
 @SuppressWarnings({ "serial", "unchecked" })
 public final class TransactionsView extends VerticalLayout implements View {
@@ -44,8 +46,7 @@ public final class TransactionsView extends VerticalLayout implements View {
     private static final DateFormat DATEFORMAT = new SimpleDateFormat(
             "MM/dd/yyyy hh:mm:ss a");
     private static final DecimalFormat DECIMALFORMAT = new DecimalFormat("#.##");
-    private static final String[] DEFAULT_COLLAPSIBLE = { "country", "city",
-            "theater", "room", "title", "seats" };
+    private static final String[] DEFAULT_COLLAPSIBLE = {"description"};
 
     public TransactionsView() {
         setSizeFull();
@@ -120,20 +121,19 @@ public final class TransactionsView extends VerticalLayout implements View {
                             return true;
                         }
 
-                        return filterByProperty("country", item,
+                        return filterByProperty("price", item,
                                 event.getText())
-                                || filterByProperty("city", item,
+                                || filterByProperty("description", item,
                                         event.getText())
-                                || filterByProperty("title", item,
+                                || filterByProperty("year", item,
                                         event.getText());
 
                     }
 
                     @Override
                     public boolean appliesToProperty(final Object propertyId) {
-                        if (propertyId.equals("country")
-                                || propertyId.equals("city")
-                                || propertyId.equals("title")) {
+                        if (propertyId.equals("description")
+                                || propertyId.equals("year")) {
                             return true;
                         }
                         return false;
@@ -183,25 +183,23 @@ public final class TransactionsView extends VerticalLayout implements View {
         table.setSelectable(true);
 
         table.setColumnCollapsingAllowed(true);
-        table.setColumnCollapsible("time", false);
-        table.setColumnCollapsible("price", false);
+//        table.setColumnCollapsible("time", false);
+//        table.setColumnCollapsible("price", false);
 
         table.setColumnReorderingAllowed(true);
         table.setContainerDataSource(new TempTransactionsContainer(DashboardUI
-                .getDataProvider().getRecentTransactions(200)));
+                .getDataProvider().getRecentImots(200)));
         table.setSortContainerPropertyId("time");
         table.setSortAscending(false);
 
-        table.setColumnAlignment("seats", Align.RIGHT);
+//        table.setColumnAlignment("seats", Align.RIGHT);
         table.setColumnAlignment("price", Align.RIGHT);
 
-        table.setVisibleColumns("time", "country", "city", "theater", "room",
-                "title", "seats", "price");
-        table.setColumnHeaders("Time", "Country", "City", "Theater", "Room",
-                "Title", "Seats", "Price");
+        table.setVisibleColumns("price", "year", "description");
+        table.setColumnHeaders("Price", "Year", "Description");
 
         table.setFooterVisible(true);
-        table.setColumnFooter("time", "Total");
+        table.setColumnFooter("price", "Total");
 
         table.setColumnFooter(
                 "price",
@@ -309,10 +307,10 @@ public final class TransactionsView extends VerticalLayout implements View {
     }
 
     private class TempTransactionsContainer extends
-            FilterableListContainer<Transaction> {
+            FilterableListContainer<Imot> {
 
         public TempTransactionsContainer(
-                final Collection<Transaction> collection) {
+                final Collection<Imot> collection) {
             super(collection);
         }
 
@@ -322,36 +320,36 @@ public final class TransactionsView extends VerticalLayout implements View {
         public void sort(final Object[] propertyId, final boolean[] ascending) {
             final boolean sortAscending = ascending[0];
             final Object sortContainerPropertyId = propertyId[0];
-            Collections.sort(getBackingList(), new Comparator<Transaction>() {
-                @Override
-                public int compare(final Transaction o1, final Transaction o2) {
-                    int result = 0;
-                    if ("time".equals(sortContainerPropertyId)) {
-                        result = o1.getTime().compareTo(o2.getTime());
-                    } else if ("country".equals(sortContainerPropertyId)) {
-                        result = o1.getCountry().compareTo(o2.getCountry());
-                    } else if ("city".equals(sortContainerPropertyId)) {
-                        result = o1.getCity().compareTo(o2.getCity());
-                    } else if ("theater".equals(sortContainerPropertyId)) {
-                        result = o1.getTheater().compareTo(o2.getTheater());
-                    } else if ("room".equals(sortContainerPropertyId)) {
-                        result = o1.getRoom().compareTo(o2.getRoom());
-                    } else if ("title".equals(sortContainerPropertyId)) {
-                        result = o1.getTitle().compareTo(o2.getTitle());
-                    } else if ("seats".equals(sortContainerPropertyId)) {
-                        result = new Integer(o1.getSeats()).compareTo(o2
-                                .getSeats());
-                    } else if ("price".equals(sortContainerPropertyId)) {
-                        result = new Double(o1.getPrice()).compareTo(o2
-                                .getPrice());
-                    }
-
-                    if (!sortAscending) {
-                        result *= -1;
-                    }
-                    return result;
-                }
-            });
+//            Collections.sort(getBackingList(), new Comparator<Transaction>() {
+//                @Override
+//                public int compare(final Transaction o1, final Transaction o2) {
+//                    int result = 0;
+//                    if ("time".equals(sortContainerPropertyId)) {
+//                        result = o1.getTime().compareTo(o2.getTime());
+//                    } else if ("country".equals(sortContainerPropertyId)) {
+//                        result = o1.getCountry().compareTo(o2.getCountry());
+//                    } else if ("city".equals(sortContainerPropertyId)) {
+//                        result = o1.getCity().compareTo(o2.getCity());
+//                    } else if ("theater".equals(sortContainerPropertyId)) {
+//                        result = o1.getTheater().compareTo(o2.getTheater());
+//                    } else if ("room".equals(sortContainerPropertyId)) {
+//                        result = o1.getRoom().compareTo(o2.getRoom());
+//                    } else if ("title".equals(sortContainerPropertyId)) {
+//                        result = o1.getTitle().compareTo(o2.getTitle());
+//                    } else if ("seats".equals(sortContainerPropertyId)) {
+//                        result = new Integer(o1.getSeats()).compareTo(o2
+//                                .getSeats());
+//                    } else if ("price".equals(sortContainerPropertyId)) {
+//                        result = new Double(o1.getPrice()).compareTo(o2
+//                                .getPrice());
+//                    }
+//
+//                    if (!sortAscending) {
+//                        result *= -1;
+//                    }
+//                    return result;
+//                }
+//            });
         }
 
     }

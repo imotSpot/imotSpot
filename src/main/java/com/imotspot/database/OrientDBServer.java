@@ -1,10 +1,10 @@
 package com.imotspot.database;
 
-import com.imotspot.enumerations.ConfigKey;
 import com.imotspot.config.Configuration;
-import com.imotspot.interfaces.AppComponent;
 import com.imotspot.database.model.vertex.UserVertex;
 import com.imotspot.enumerations.Condition;
+import com.imotspot.enumerations.ConfigKey;
+import com.imotspot.interfaces.AppComponent;
 import com.imotspot.logging.Logger;
 import com.imotspot.logging.LoggerFactory;
 import com.imotspot.model.User;
@@ -66,13 +66,13 @@ public class OrientDBServer {
                 location.marker(marker);
 
                 Imot imot = new Imot(location);
-                imot.owner(user);
-                imot.price(100);
-                imot.published(Calendar.getInstance().getTime());
-                imot.year("1960");
-                imot.description("test real estate imot");
-                imot.condition(Condition.USED);
-                imot.frontImage(new Picture(new URI("./pic.jpg")));
+                imot.setOwner(user);
+                imot.setPrice(100);
+                imot.setPublished(Calendar.getInstance().getTime());
+                imot.setYear("1960");
+                imot.setDescription("test real estate imot");
+                imot.setCondition(Condition.USED);
+                imot.setFrontImage(new Picture(new URI("./pic.jpg")));
 
                 user.addImot(imot);
                 userVertex.saveOrUpdate();
@@ -125,7 +125,8 @@ public class OrientDBServer {
         if (factory == null) {
             getGraphFactory();
         }
-        return factory.getTx();
+        OrientGraph graph = factory.getTx();
+        return graph;
     }
 
     public OrientGraphNoTx getGraphNoTx() {

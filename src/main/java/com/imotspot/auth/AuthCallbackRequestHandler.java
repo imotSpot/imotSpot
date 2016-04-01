@@ -111,7 +111,7 @@ public class AuthCallbackRequestHandler implements RequestHandler {
             GooglePlusAnswer answer = new Gson().fromJson(resp.getBody(),
                     GooglePlusAnswer.class);
 
-            String name = answer.displayName != null ? answer.displayName : answer.emails[0].value.substring(0, answer.emails[0].value.indexOf("@"));
+            String name = (answer.displayName != null && !answer.displayName.equals("")) ? answer.displayName : answer.emails[0].value.substring(0, answer.emails[0].value.indexOf("@"));
             String picUrl = answer.image.url;
             String oauthId = "google" + answer.id;
             saveUser(oauthId, name, answer.emails[0].value, picUrl);
@@ -133,7 +133,7 @@ public class AuthCallbackRequestHandler implements RequestHandler {
                 .email(email)
                 .role("user")
                 .build();
-        UserVertex userVertex = new UserVertex(user).saveOrUpdateInNewTX();
+        UserVertex userVertex = (UserVertex) new UserVertex(user).saveOrUpdateInNewTX();
         user = userVertex.model();
         VaadinSession.getCurrent().setAttribute(User.class.getName(), user);
     }

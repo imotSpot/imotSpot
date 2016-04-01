@@ -1,7 +1,9 @@
 package com.imotspot.database.model.core;
 
+import com.orientechnologies.orient.core.record.impl.ODocument;
 import com.orientechnologies.orient.core.sql.OCommandSQL;
 import com.tinkerpop.blueprints.impls.orient.OrientEdge;
+import com.tinkerpop.blueprints.impls.orient.OrientGraph;
 import lombok.Value;
 import lombok.experimental.Accessors;
 import lombok.experimental.NonFinal;
@@ -72,9 +74,18 @@ public abstract class ODBEdge extends ODBElement {
         return (V) duplicated;
     }
 
+    public ODBEdge useGraph(OrientGraph graph) {
+        return (ODBEdge) super.useGraph(graph);
+    }
+
     @Override
     public ODBEdge load() {
         return edge(get());
+    }
+
+    @Override
+    public ODBEdge load(ODocument oElement) {
+        return this;
     }
 
     @Override

@@ -4,33 +4,35 @@ import com.orientechnologies.orient.core.record.impl.ODocument;
 import com.orientechnologies.orient.core.sql.OCommandSQL;
 import com.tinkerpop.blueprints.Element;
 import com.tinkerpop.blueprints.Vertex;
+import com.tinkerpop.blueprints.impls.orient.OrientGraph;
 import com.tinkerpop.blueprints.impls.orient.OrientVertex;
 import lombok.Value;
 import lombok.experimental.Accessors;
 import lombok.experimental.NonFinal;
 
+import java.io.Serializable;
+
 @Value
 @NonFinal
 @Accessors(fluent = true)
-public abstract class ODBVertex extends ODBElement {
+public abstract class ODBVertex<T extends Serializable> extends ODBElement {
 
     @NonFinal
     protected OrientVertex vertex;
 
     public ODBVertex() {
-//        this(null);
-//    }
-//
-//    public ODBVertex(OrientVertex vertex) {
         super();
-//        this.vertex = vertex;
         createVertexType();
     }
 
+    public ODBVertex useGraph(OrientGraph graph) {
+        return (ODBVertex) super.useGraph(graph);
+    }
+
     public <V extends ODBVertex> V vertex(OrientVertex vertex) {
-        ODBVertex copy = duplicate();
+        V copy = (V) duplicate();
         copy.vertex = vertex;
-        return (V) copy;
+        return copy;
     }
 
     @Override

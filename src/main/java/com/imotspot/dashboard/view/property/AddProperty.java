@@ -193,13 +193,13 @@ public class AddProperty extends Window {
                 currentLocation.marker(new LocationMarker(googleMap.getMarkers().iterator().next()));
 
                 Imot imotToSave = new Imot(currentLocation);
-                imotToSave.type(ImotType.valueOf(type.getValue().toString()));
-                imotToSave.price(Float.parseFloat(price.getValue()));
-                imotToSave.year(year.getValue());
-                imotToSave.description(description.getValue());
-                imotToSave.condition(Condition.valueOf(condition.getValue().toString()));
-                imotToSave.owner((User) VaadinSession.getCurrent().getAttribute(User.class.getName()));
-                imotToSave.published(new Date());
+                imotToSave.setType(ImotType.valueOf(type.getValue().toString()));
+                imotToSave.setPrice(Float.parseFloat(price.getValue()));
+                imotToSave.setYear(year.getValue());
+                imotToSave.setDescription(description.getValue());
+                imotToSave.setCondition(Condition.valueOf(condition.getValue().toString()));
+                imotToSave.setOwner((User) VaadinSession.getCurrent().getAttribute(User.class.getName()));
+                imotToSave.setPublished(new Date());
 
                 listener.dashboardNameEdited(imotToSave);
                 close();
