@@ -10,6 +10,9 @@ import java.io.StringWriter;
 import java.net.URISyntaxException;
 import java.util.Map;
 
+/**
+ * Freemaker implementation to transform {@link FileTemplate}
+ */
 public class FileTemplate {
     FileDocument fileDocument;
 
@@ -17,6 +20,15 @@ public class FileTemplate {
         this.fileDocument = fileDocument;
     }
 
+    /**
+     * Fills the template with the data and returns the result.
+     *
+     * @param data key of the map is the template string to search in file.
+     * @return the replaced template.
+     * @throws IOException
+     * @throws TemplateException
+     * @throws URISyntaxException
+     */
     public String transform(Map<String, Object> data) throws IOException, TemplateException, URISyntaxException {
         Configuration cfg = new Configuration();
         cfg.setTemplateLoader(new FileTemplateLoader(fileDocument.loadFile().file().getParentFile()));

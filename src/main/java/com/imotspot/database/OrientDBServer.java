@@ -1,9 +1,9 @@
 package com.imotspot.database;
 
+import com.imotspot.config.ConfigKey;
 import com.imotspot.config.Configuration;
 import com.imotspot.database.model.vertex.UserVertex;
 import com.imotspot.enumerations.Condition;
-import com.imotspot.enumerations.ConfigKey;
 import com.imotspot.interfaces.AppComponent;
 import com.imotspot.logging.Logger;
 import com.imotspot.logging.LoggerFactory;
@@ -26,6 +26,9 @@ import javax.inject.Inject;
 import java.net.URI;
 import java.util.Calendar;
 
+/**
+ * Orient Database Server controller.
+ */
 public class OrientDBServer {
     private static final Logger logger = LoggerFactory.getLogger(OrientDBServer.class);
 

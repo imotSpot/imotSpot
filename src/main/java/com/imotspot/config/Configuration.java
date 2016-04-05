@@ -1,6 +1,5 @@
 package com.imotspot.config;
 
-import com.imotspot.enumerations.ConfigKey;
 import com.imotspot.logging.Logger;
 import com.imotspot.logging.LoggerFactory;
 import org.ho.yaml.Yaml;
@@ -11,6 +10,17 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+/**
+ * <p>
+ * Configuration file reader and writer.
+ * <p>
+ * <p>
+ * Creating Configuration instance with the default constructor will link to the default config.yml file.
+ * If a name is given to the constructor, it will be used as the name of the config file.
+ * <p>
+ * <p>
+ * Missing default config file will be created with data based on {@link ConfigKey} enum.
+ */
 public class Configuration {
 
     private final static Logger logger = LoggerFactory.getLogger(Configuration.class);
@@ -107,6 +117,9 @@ public class Configuration {
         return new HashMap<>(config);
     }
 
+    /**
+     * Dump in-memory configuration to the config file
+     */
     public void saveConfig() {
         try {
             Yaml.dump(config, file);

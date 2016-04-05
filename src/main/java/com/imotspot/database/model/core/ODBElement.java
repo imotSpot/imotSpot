@@ -11,6 +11,11 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Base abstract class for Vertex and Edge, adding basic functionality for talking to the database.
+ *
+ * @param <T> The project model that this element is proxy for.
+ */
 public abstract class ODBElement<T extends Serializable> extends ODBAbstract {
 
     public static Class modelClass;

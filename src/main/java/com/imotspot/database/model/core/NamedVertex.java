@@ -4,6 +4,9 @@ import com.imotspot.model.imot.interfaces.Named;
 
 import java.io.Serializable;
 
+/**
+ * Vertex proxy for project model, which has name.
+ */
 public abstract class NamedVertex extends ODBVertex {
 
     private final static String IdentifierFieldName = "name";

@@ -1,4 +1,4 @@
-package com.imotspot.enumerations;
+package com.imotspot.config;
 
 public enum ConfigKey {
     embeddedDB(true),

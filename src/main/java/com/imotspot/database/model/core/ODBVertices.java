@@ -12,6 +12,11 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Group of Vertices responsible for searching among models saved in database of type {@link S}.
+ *
+ * @param <S> The project model that this element is proxy for.
+ */
 @Value
 @NonFinal
 @Accessors(fluent = true)

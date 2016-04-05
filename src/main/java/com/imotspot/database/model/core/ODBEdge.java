@@ -11,6 +11,9 @@ import org.apache.commons.lang.NotImplementedException;
 
 import java.io.Serializable;
 
+/**
+ * Graph edge representing the relations between project models.
+ */
 @Value
 @NonFinal
 @Accessors(fluent = true)

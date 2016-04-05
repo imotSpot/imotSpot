@@ -6,6 +6,9 @@ import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
 
+/**
+ * File representation responsible to load itself from the classpath or filesystem.
+ */
 public class FileDocument {
     private final String filename;
     private File file;

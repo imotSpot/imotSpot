@@ -12,6 +12,11 @@ import lombok.experimental.NonFinal;
 
 import java.io.Serializable;
 
+/**
+ * Graph vertex proxy to project models, capable to communicate with the database.
+ *
+ * @param <T> The project model that this element is proxy for.
+ */
 @Value
 @NonFinal
 @Accessors(fluent = true)

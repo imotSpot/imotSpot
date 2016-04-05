@@ -10,6 +10,9 @@ import org.slf4j.event.LoggingEvent;
 import java.io.File;
 import java.util.Iterator;
 
+/**
+ * Wrapper for some specific logging implementation.
+ */
 public class Logger implements org.slf4j.Logger {
 
     ch.qos.logback.classic.Logger wrappedLogger = null;

@@ -7,6 +7,9 @@ import com.tinkerpop.blueprints.impls.orient.OrientGraph;
 import javax.inject.Inject;
 import java.io.Serializable;
 
+/**
+ * Base abstract class for models linked to the database.
+ */
 public abstract class ODBAbstract {
 
     @Inject
