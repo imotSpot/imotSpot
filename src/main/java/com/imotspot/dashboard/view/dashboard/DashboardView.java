@@ -150,6 +150,15 @@ public final class DashboardView extends Panel implements View, DashboardEditLis
         googleMap.setZoom(13);
 
         dashboardPanels.addComponent(googleMap);
+        // zopim chat
+        String script = "window.$zopim||(function(d,s){var z=$zopim=function(c){\n" +
+                "z._.push(c)},$=z.s=\n" +
+                "d.createElement(s),e=d.getElementsByTagName(s)[0];z.set=function(o){z.set.\n" +
+                "_.push(o)};z._=[];z.set._=[];$.async=!0;$.setAttribute('charset','utf-8');\n" +
+                "$.src='//v2.zopim.com/?3pEeNjxc1QHeNdL8pg6BPqFOTO6wReIb';z.t=+new Date;$.\n" +
+                "type='text/javascript';e.parentNode.insertBefore($,e)})(document,'script');\n";
+        JavaScript.getCurrent().execute(script);
+
 //        dashboardPanels.addComponent(buildTopGrossingMovies());
 //        dashboardPanels.addComponent(buildNotes());
 //        dashboardPanels.addComponent(buildTop10TitlesByRevenue());
