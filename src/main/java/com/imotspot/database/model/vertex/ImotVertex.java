@@ -3,6 +3,7 @@ package com.imotspot.database.model.vertex;
 import com.imotspot.database.model.core.ODBVertex;
 import com.imotspot.database.model.edge.*;
 import com.imotspot.model.imot.*;
+import com.imotspot.model.imot.enumerations.ImotType;
 import com.imotspot.model.imot.interfaces.Media;
 import com.orientechnologies.orient.core.db.record.OIdentifiable;
 import com.orientechnologies.orient.core.record.impl.ODocument;
@@ -30,12 +31,17 @@ public class ImotVertex extends ODBVertex {
     public ImotVertex update() {
         ImotVertex imotVertex = (ImotVertex) super.update();
 
-        UserVertex userVertex = (UserVertex) ((UserVertex) new UserVertex(imot.getOwner()).useGraph(graph())).load();
-        new ImotEdge(userVertex, imotVertex).useGraph(graph()).saveOrUpdate();
+//        UserVertex userVertex = (UserVertex) new UserVertex(imot.getOwner()).useGraph(graph()).load();
+//        new ImotEdge(userVertex, imotVertex).useGraph(graph()).saveOrUpdate();
 
         if (imot.getLocation() != null) {
             LocationVertex locationVertex = (LocationVertex) new LocationVertex(imot.getLocation()).useGraph(graph()).saveOrUpdate();
             new ImotEdge(imotVertex, locationVertex).useGraph(graph()).saveOrUpdate();
+        }
+
+        if (imot.getType() != null) {
+            TypeVertex typeVertex = (TypeVertex) new TypeVertex(imot.getType()).useGraph(graph()).saveOrUpdate();
+            new TypeEdge(imotVertex, typeVertex).useGraph(graph()).saveOrUpdate();
         }
 
         if (imot.getFrontImage() != null) {
@@ -74,11 +80,18 @@ public class ImotVertex extends ODBVertex {
     @Override
     protected void loadRelationsToModel(ODocument document) {
         try {
-            for (OIdentifiable id : new OSQLSynchQuery<ODocument>("traverse out(" + PictureEdge.class.getSimpleName() +
-                    ") from " + document.getIdentity() + " while $depth <= 1")) {
-//                if (ImotVertex.class.getSimpleName().equals(((ODocument)id.getRecord()).getClassName())) {
-//                    imot.me((Imot) new ImotVertex(new Imot(null)).load((OrientVertex)id.getRecord()).model());
-//                }
+            for (OIdentifiable id : new OSQLSynchQuery<ODocument>("traverse out() from " + document.getIdentity() + " while $depth <= 1")) {
+                if (LocationVertex.class.getSimpleName().equals(((ODocument) id.getRecord()).getClassName())) {
+                    ODocument doc = id.getRecord();
+                    imot.setLocation((Location) new LocationVertex(new Location()).load(doc).model());
+                }
+
+                if (TypeVertex.class.getSimpleName().equals(((ODocument) id.getRecord()).getClassName())) {
+                    ODocument doc = id.getRecord();
+                    imot.setType(ImotType.get(doc.field("type")));
+                }
+
+                // todo need to implement and other relations
             }
         } catch (Throwable t) {
             t.printStackTrace();

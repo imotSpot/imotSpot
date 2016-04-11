@@ -1,8 +1,8 @@
 package com.imotspot.dashboard.view.property;
 
 
-import com.imotspot.enumerations.Condition;
-import com.imotspot.enumerations.ImotType;
+import com.imotspot.model.imot.enumerations.Condition;
+import com.imotspot.model.imot.enumerations.ImotType;
 import com.imotspot.googlemap.Geocoding;
 import com.imotspot.googlemap.json.GeocodingAnswer;
 import com.imotspot.googlemap.json.LocationAnswer;
@@ -27,7 +27,7 @@ import java.util.Date;
 import java.util.List;
 
 @SuppressWarnings("serial")
-public class AddProperty extends Window {
+public class AddingImot extends Window {
 
     private final DashboardEditListener listener;
     private static final LatLon centerSofia = new LatLon(42.697702770146975, 23.32174301147461);
@@ -43,10 +43,10 @@ public class AddProperty extends Window {
     private TextField images;
     private GoogleMap googleMap;
 
-    public AddProperty(final DashboardEditListener listener,
-                         final String currentName) {
+    public AddingImot(final DashboardEditListener listener,
+                      final String currentName) {
         this.listener = listener;
-        setCaption("Add Property");
+        setCaption("Add Imot");
         setModal(true);
         setClosable(true);
         setResizable(true);

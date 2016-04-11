@@ -5,7 +5,7 @@ import com.imotspot.dashboard.DashboardUI;
 import com.imotspot.dashboard.event.DashboardEvent.CloseOpenWindowsEvent;
 import com.imotspot.dashboard.event.DashboardEvent.NotificationsCountUpdatedEvent;
 import com.imotspot.dashboard.event.DashboardEventBus;
-import com.imotspot.dashboard.view.property.AddProperty;
+import com.imotspot.dashboard.view.property.AddingImot;
 import com.imotspot.database.model.vertex.UserVertex;
 import com.imotspot.interfaces.DashboardEditListener;
 import com.imotspot.logging.Logger;
@@ -131,7 +131,7 @@ public final class DashboardView extends Panel implements View, DashboardEditLis
             @Override
             public void buttonClick(final ClickEvent event) {
                 getUI().addWindow(
-                        new AddProperty(DashboardView.this, titleLabel
+                        new AddingImot(DashboardView.this, titleLabel
                                 .getValue()));
             }
         });
@@ -327,7 +327,7 @@ public final class DashboardView extends Panel implements View, DashboardEditLis
     @Override
     public void enter(final ViewChangeEvent event) {
         notificationsButton.updateNotificationsCount(null);
-        addPins();
+//        addPins();
     }
 
     @Override
@@ -338,25 +338,18 @@ public final class DashboardView extends Panel implements View, DashboardEditLis
         if (user.role().equals("guest")) {
             return;
         }
-//        Location location = new Location();
-//        location.setAddress("sofia address");
-//        location.setCountry(new Country("Bulgaria"));
-//        location.setCity(new City("Sofia"));
-//        location.setDistrict(new District("Sofiiska"));
-//        LocationMarker marker = new LocationMarker(42.695537f, 23.2539071f);
-//        marker.setAddress("Sofia Bulgaria");
-//        marker.setName("Sofia Bulgaria");
-//        location.setMarker(marker);
 
-//        Imot imot = new Imot(location);
-//        imot.setOwner(user);
-//        imot.setPrice(100);
-//        imot.setPublished(java.util.Calendar.getInstance().getTime());
-//        imot.setYear("1960");
-//        imot.setDescription(imot);
-//        imot.setCondition(Condition.USED);
-//            imot.setFrontImage(new Picture(new URI("./pic.jpg")));
-//        LocationMarker myMarker = imot.getLocation().getMarker();
+//        for (int i = 1; i <= 5; i ++){
+//            Imot cur = new Imot(new Location());
+//            cur.setPrice(55000.0f * i);
+//            cur.setOwner(user);
+//            cur.setType(ImotType.FOUR_BEDS);
+//            cur.setCondition(Condition.USED);
+//            cur.setPublished(new Date());
+//            cur.setYear("2005");
+//            user.addImot(cur);
+//        }
+
         GoogleMapMarker marker = imot.getLocation().marker().googleMarker();
         googleMap.addMarker(marker);
         googleMap.setCenter(centerSofia);
@@ -422,8 +415,7 @@ public final class DashboardView extends Panel implements View, DashboardEditLis
         }
     }
 
-    public void addPins() {
-
+    private void addPins() {
         User user = (User) VaadinSession.getCurrent().getAttribute(User.class.getName());
         for (Imot i : user.imots()) {
             Location loc = i.getLocation();

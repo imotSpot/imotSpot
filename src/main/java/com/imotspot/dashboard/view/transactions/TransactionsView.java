@@ -74,7 +74,7 @@ public final class TransactionsView extends VerticalLayout implements View {
         header.setSpacing(true);
         Responsive.makeResponsive(header);
 
-        Label title = new Label("Property list");
+        Label title = new Label("Imot list");
         title.setSizeUndefined();
         title.addStyleName(ValoTheme.LABEL_H1);
         title.addStyleName(ValoTheme.LABEL_NO_MARGIN);
@@ -172,6 +172,13 @@ public final class TransactionsView extends VerticalLayout implements View {
                     } else {
                         return "";
                     }
+                } else if(colId.equals("type")){
+                    Object val = property.getValue();
+                    if (val == null) {
+                        result = "";
+                    } else {
+                        result = val.toString();
+                    }
                 }
                 return result;
             }
@@ -195,8 +202,8 @@ public final class TransactionsView extends VerticalLayout implements View {
 //        table.setColumnAlignment("seats", Align.RIGHT);
         table.setColumnAlignment("price", Align.RIGHT);
 
-        table.setVisibleColumns("price", "year", "description");
-        table.setColumnHeaders("Price", "Year", "Description");
+        table.setVisibleColumns("frontImage", "type", "price", "year", "description", "published");
+        table.setColumnHeaders("Image", "Type", "Price", "Year", "Description", "Published");
 
         table.setFooterVisible(true);
         table.setColumnFooter("price", "Total");
@@ -280,7 +287,7 @@ public final class TransactionsView extends VerticalLayout implements View {
 
         private final Action discard = new Action("Discard");
 
-        private final Action details = new Action("Movie details");
+        private final Action details = new Action("Imot details");
 
         @Override
         public void handleAction(final Action action, final Object sender,

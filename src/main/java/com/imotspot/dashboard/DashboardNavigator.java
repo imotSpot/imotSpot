@@ -1,6 +1,5 @@
 package com.imotspot.dashboard;
 
-import com.imotspot.enumerations.DashboardViewType;
 import org.vaadin.googleanalytics.tracking.GoogleAnalyticsTracker;
 
 import com.imotspot.dashboard.event.DashboardEvent.BrowserResizeEvent;

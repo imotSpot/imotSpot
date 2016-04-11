@@ -1,6 +1,6 @@
 package com.imotspot.dashboard.event;
 
-import com.imotspot.enumerations.DashboardViewType;
+import com.imotspot.dashboard.DashboardViewType;
 import com.imotspot.model.Transaction;
 
 import java.util.Collection;

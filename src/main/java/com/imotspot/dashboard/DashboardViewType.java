@@ -1,4 +1,4 @@
-package com.imotspot.enumerations;
+package com.imotspot.dashboard;
 
 import com.imotspot.dashboard.view.dashboard.DashboardView;
 import com.imotspot.dashboard.view.schedule.ScheduleView;

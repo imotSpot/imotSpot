@@ -344,10 +344,6 @@
 					<!-- Prevents an endPosTable exception during compilation -->
 					<useIncrementalCompilation>false</useIncrementalCompilation>
 				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
 				<dependencies>
 					<dependency>
 						<groupId>com.google.dagger</groupId>

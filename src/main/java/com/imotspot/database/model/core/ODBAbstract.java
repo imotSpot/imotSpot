@@ -1,7 +1,7 @@
 package com.imotspot.database.model.core;
 
 import com.imotspot.database.OrientDBServer;
-import com.imotspot.interfaces.AppComponent;
+import com.imotspot.dagger.AppComponent;
 import com.tinkerpop.blueprints.impls.orient.OrientGraph;
 
 import javax.inject.Inject;

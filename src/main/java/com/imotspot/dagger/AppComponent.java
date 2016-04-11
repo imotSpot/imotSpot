@@ -1,11 +1,11 @@
-package com.imotspot.interfaces;
+package com.imotspot.dagger;
 
-import com.imotspot.dagger.AppModule;
 import com.imotspot.dashboard.DashboardServlet;
 import com.imotspot.dashboard.DashboardUI;
 import com.imotspot.dashboard.event.DashboardEventBus;
 import com.imotspot.database.OrientDBServer;
 import com.imotspot.database.model.core.ODBAbstract;
+import com.imotspot.interfaces.DataProvider;
 import dagger.Component;
 
 import javax.inject.Singleton;

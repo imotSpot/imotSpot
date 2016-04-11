@@ -3,8 +3,8 @@ package com.imotspot.database;
 import com.imotspot.config.ConfigKey;
 import com.imotspot.config.Configuration;
 import com.imotspot.database.model.vertex.UserVertex;
-import com.imotspot.enumerations.Condition;
-import com.imotspot.interfaces.AppComponent;
+import com.imotspot.model.imot.enumerations.Condition;
+import com.imotspot.dagger.AppComponent;
 import com.imotspot.logging.Logger;
 import com.imotspot.logging.LoggerFactory;
 import com.imotspot.model.User;
@@ -163,7 +163,7 @@ public class OrientDBServer {
             element = operation.execute(graph);
             graph.commit();
         } catch (Exception e) {
-            logger.error("", e);
+            logger.error("Rollback", e);
             graph.rollback();
         }
         return element;

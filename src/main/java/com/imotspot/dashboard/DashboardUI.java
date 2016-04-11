@@ -7,7 +7,7 @@ import com.imotspot.dashboard.event.DashboardEvent.UserLoggedOutEvent;
 import com.imotspot.dashboard.event.DashboardEvent.UserLoginRequestedEvent;
 import com.imotspot.dashboard.event.DashboardEventBus;
 import com.imotspot.dashboard.view.MainView;
-import com.imotspot.interfaces.AppComponent;
+import com.imotspot.dagger.AppComponent;
 import com.imotspot.interfaces.DataProvider;
 import com.imotspot.model.User;
 import com.imotspot.model.UserBean;

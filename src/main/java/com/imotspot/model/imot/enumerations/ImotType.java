@@ -1,4 +1,4 @@
-package com.imotspot.enumerations;
+package com.imotspot.model.imot.enumerations;
 
 import java.io.Serializable;
 
@@ -21,5 +21,14 @@ public enum ImotType implements Serializable {
     PART_OF_HOUSE(),
     PARCEL(),
     GARAGE(),
-    AGRICULTURAL_LAND
+    AGRICULTURAL_LAND;
+
+    public static ImotType get(String name) {
+        for (ImotType type : ImotType.values()) {
+            if (type.name().equals(name)) {
+                return type;
+            }
+        }
+        return ONE_BED;
+    }
 }
