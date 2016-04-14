@@ -1,8 +1,6 @@
 package com.imotspot.dashboard.view.property;
 
 
-import com.imotspot.model.imot.enumerations.Condition;
-import com.imotspot.model.imot.enumerations.ImotType;
 import com.imotspot.googlemap.Geocoding;
 import com.imotspot.googlemap.json.GeocodingAnswer;
 import com.imotspot.googlemap.json.LocationAnswer;
@@ -10,6 +8,8 @@ import com.imotspot.helper.ImageUploader;
 import com.imotspot.interfaces.DashboardEditListener;
 import com.imotspot.model.User;
 import com.imotspot.model.imot.*;
+import com.imotspot.model.imot.enumerations.Condition;
+import com.imotspot.model.imot.enumerations.ImotType;
 import com.vaadin.data.Property;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.server.VaadinSession;
@@ -201,7 +201,11 @@ public class AddingImot extends Window {
                 imotToSave.setOwner((User) VaadinSession.getCurrent().getAttribute(User.class.getName()));
                 imotToSave.setPublished(new Date());
 
-                listener.dashboardNameEdited(imotToSave);
+                try {
+                    listener.dashboardNameEdited(imotToSave);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
                 close();
             }
         });

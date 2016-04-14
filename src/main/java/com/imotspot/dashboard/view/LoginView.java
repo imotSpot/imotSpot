@@ -66,8 +66,8 @@ public class LoginView extends Window {
         loginInnerPanel.addStyleName("login-panel");
 
         Responsive.makeResponsive(loginInnerPanel);
-        loginInnerPanel.addComponent(buildLabels());
-        loginInnerPanel.addComponent(buildFields());
+//        loginInnerPanel.addComponent(buildLabels());
+//        loginInnerPanel.addComponent(buildFields());
         loginInnerPanel.addComponent(buildThirdPartyButtons());
         loginInnerPanel.addComponent(new CheckBox("Remember me", true));
         return loginInnerPanel;

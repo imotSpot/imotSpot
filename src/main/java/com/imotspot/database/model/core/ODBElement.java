@@ -18,9 +18,9 @@ import java.util.List;
  */
 public abstract class ODBElement<T extends Serializable> extends ODBAbstract {
 
-    public static Class modelClass;
-    public static String NAME;
-    public static String PARENT_NAME;
+    public Class modelClass;
+    public String NAME;
+    public String PARENT_NAME;
 
     public ODBElement() {
         super();
@@ -30,13 +30,15 @@ public abstract class ODBElement<T extends Serializable> extends ODBAbstract {
         PARENT_NAME = getClass().getSuperclass().getSimpleName();
     }
 
-    public <E extends ODBElement> E saveOrUpdateInNewTX() {
+    public <E extends ODBElement> E saveOrUpdateInNewTX() throws Exception {
         return dbServer.doInTX(new DBOperation<E>() {
             @Override
             public <E> E execute(OrientGraph graph) {
                 useGraph(graph);
                 try {
                     return (E) saveOrUpdate();
+                } catch (Exception e) {
+                    throw e;
                 } finally {
                     useGraph(null);
                 }
@@ -44,13 +46,15 @@ public abstract class ODBElement<T extends Serializable> extends ODBAbstract {
         });
     }
 
-    public <E extends ODBElement> E loadInNewTX() {
+    public <E extends ODBElement> E loadInNewTX() throws Exception {
         return dbServer.doInTX(new DBOperation<E>() {
             @Override
             public <E> E execute(OrientGraph graph) {
                 useGraph(graph);
                 try {
                     return (E) load();
+                } catch (Exception e) {
+                    throw e;
                 } finally {
                     useGraph(null);
                 }
@@ -114,7 +118,7 @@ public abstract class ODBElement<T extends Serializable> extends ODBAbstract {
     }
 
     protected void addProp(List<Serializable> props, String field, Serializable value) {
-        if (value != null) {
+        if (value != null || "".equals(value)) {
             props.add(field);
             props.add(value);
         }
@@ -122,8 +126,7 @@ public abstract class ODBElement<T extends Serializable> extends ODBAbstract {
 
     protected void addProps(List<Serializable> props, String[] fields, Serializable[] values) {
         for (int i = 0; i < fields.length; i++) {
-            props.add(fields[i]);
-            props.add(values[i]);
+            addProp(props, fields[i], values[i]);
         }
     }
 

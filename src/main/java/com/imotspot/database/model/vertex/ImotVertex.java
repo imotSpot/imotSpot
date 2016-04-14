@@ -3,6 +3,7 @@ package com.imotspot.database.model.vertex;
 import com.imotspot.database.model.core.ODBVertex;
 import com.imotspot.database.model.edge.*;
 import com.imotspot.model.imot.*;
+import com.imotspot.model.imot.enumerations.Condition;
 import com.imotspot.model.imot.enumerations.ImotType;
 import com.imotspot.model.imot.interfaces.Media;
 import com.orientechnologies.orient.core.db.record.OIdentifiable;
@@ -91,6 +92,15 @@ public class ImotVertex extends ODBVertex {
                     imot.setType(ImotType.get(doc.field("type")));
                 }
 
+                if (ConditionVertex.class.getSimpleName().equals(((ODocument) id.getRecord()).getClassName())) {
+                    ODocument doc = id.getRecord();
+                    imot.setCondition(Condition.get(doc.field("condition")));
+                }
+
+                if (PictureVertex.class.getSimpleName().equals(((ODocument) id.getRecord()).getClassName())) {
+                    ODocument doc = id.getRecord();
+                    imot.setFrontImage((Picture) new PictureVertex(new Picture(doc.field("uri"))).load(doc).model());
+                }
                 // todo need to implement and other relations
             }
         } catch (Throwable t) {

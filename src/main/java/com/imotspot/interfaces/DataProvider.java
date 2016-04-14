@@ -15,7 +15,7 @@ public interface DataProvider {
      *            Number of transactions to fetch.
      * @return A Collection of most recent transactions.
      */
-    Collection<Imot> getRecentImots(int count);
+    Collection<Imot> getRecentImots(int count) throws Exception;
     Collection<Transaction> getRecentTransactions(int count);
 
     /**

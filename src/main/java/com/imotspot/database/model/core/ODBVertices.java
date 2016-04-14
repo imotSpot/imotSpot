@@ -29,7 +29,7 @@ public class ODBVertices<S extends Serializable> extends ODBElements {
         this.vertexType = (Class<ODBVertex>) vertexType;
     }
 
-    public Iterable<S> get() {
+    public Iterable<S> get() throws Exception {
         return dbServer.doInTX(new DBOperation<Iterable<S>>() {
             @Override
             public Iterable<S> execute(OrientGraph graph) {

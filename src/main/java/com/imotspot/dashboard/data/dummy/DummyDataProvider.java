@@ -380,7 +380,7 @@ public class DummyDataProvider implements DataProvider {
     }
 
     @Override
-    public Collection<Imot> getRecentImots(int count) {
+    public Collection<Imot> getRecentImots(int count) throws Exception {
         ODBVertices<Imot> imots = new ODBVertices<Imot>(ImotVertex.class);
         return (Collection<Imot>) imots.get();
     }

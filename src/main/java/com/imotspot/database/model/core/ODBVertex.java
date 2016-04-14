@@ -86,7 +86,7 @@ public abstract class ODBVertex<T extends Serializable> extends ODBElement {
 
     protected OrientVertex get() {
         // Object ret = orientGraph.command(new OCommandGremlin("g.v('9:68128').both().both()")).execute();
-        String oSqlCommand = "SELECT * FROM " + NAME + " where " + constructSqlWhere();
+        String oSqlCommand = "SELECT * FROM " + NAME + constructSqlWhere();
         Object ret = graph().command(new OCommandSQL(oSqlCommand)).execute();
         Iterable<OrientVertex> vertices = (Iterable<OrientVertex>) ret;
 

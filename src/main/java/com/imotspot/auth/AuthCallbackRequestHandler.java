@@ -133,9 +133,13 @@ public class AuthCallbackRequestHandler implements RequestHandler {
                 .email(email)
                 .role("user")
                 .build();
-        UserVertex userVertex = (UserVertex) new UserVertex(user).saveOrUpdateInNewTX();
-        user = userVertex.model();
-        VaadinSession.getCurrent().setAttribute(User.class.getName(), user);
+        try {
+            UserVertex userVertex = (UserVertex) new UserVertex(user).saveOrUpdateInNewTX();
+            user = userVertex.model();
+            VaadinSession.getCurrent().setAttribute(User.class.getName(), user);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void finish(VaadinSession session, VaadinResponse response) throws IOException {

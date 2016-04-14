@@ -327,11 +327,11 @@ public final class DashboardView extends Panel implements View, DashboardEditLis
     @Override
     public void enter(final ViewChangeEvent event) {
         notificationsButton.updateNotificationsCount(null);
-//        addPins();
+        addPins();
     }
 
     @Override
-    public void dashboardNameEdited(final Imot imot) {
+    public void dashboardNameEdited(final Imot imot) throws Exception {
 //        titleLabel.setValue(name);
         User user = (User) VaadinSession.getCurrent().getAttribute(User.class.getName());
 
@@ -419,8 +419,10 @@ public final class DashboardView extends Panel implements View, DashboardEditLis
         User user = (User) VaadinSession.getCurrent().getAttribute(User.class.getName());
         for (Imot i : user.imots()) {
             Location loc = i.getLocation();
-            googleMap.addMarker(new GoogleMapMarker(null,
-                    new LatLon(loc.marker().lat(), loc.marker().lng()), true));
+            if (loc.marker() != null) {
+                googleMap.addMarker(new GoogleMapMarker(null,
+                        new LatLon(loc.marker().lat(), loc.marker().lng()), true));
+            }
         }
 
     }

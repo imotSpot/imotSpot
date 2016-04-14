@@ -1,6 +1,7 @@
 package com.imotspot.model.imot;
 
 import com.imotspot.model.imot.interfaces.Named;
+import com.vaadin.tapio.googlemaps.client.LatLon;
 import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapMarker;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -13,6 +14,11 @@ public class LocationMarker implements Named {
     private Double lat;
     private Double lng;
     private String name;
+
+    public LocationMarker(Double lat, Double lng) {
+        this(new GoogleMapMarker("", new LatLon(lat, lng), false));
+
+    }
 
     public LocationMarker(GoogleMapMarker marker) {
         this.lat = marker.getPosition().getLat();

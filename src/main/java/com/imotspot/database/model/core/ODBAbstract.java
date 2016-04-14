@@ -1,7 +1,7 @@
 package com.imotspot.database.model.core;
 
-import com.imotspot.database.OrientDBServer;
 import com.imotspot.dagger.AppComponent;
+import com.imotspot.database.OrientDBServer;
 import com.tinkerpop.blueprints.impls.orient.OrientGraph;
 
 import javax.inject.Inject;
@@ -41,7 +41,9 @@ public abstract class ODBAbstract {
         String where = "";
         for (int i = 0; i < fields.length; i++) {
             if (values[i] != null) {
-                if (where.length() > 0) {
+                if (where.length() == 0) {
+                    where += " where ";
+                } else if (where.length() > 0) {
                     where += " and ";
                 }
                 where += fields[i] + "='" + values[i] + "' ";

@@ -2,14 +2,14 @@ package com.imotspot.database;
 
 import com.imotspot.config.ConfigKey;
 import com.imotspot.config.Configuration;
-import com.imotspot.database.model.vertex.UserVertex;
-import com.imotspot.model.imot.enumerations.Condition;
 import com.imotspot.dagger.AppComponent;
+import com.imotspot.database.model.vertex.UserVertex;
 import com.imotspot.logging.Logger;
 import com.imotspot.logging.LoggerFactory;
 import com.imotspot.model.User;
 import com.imotspot.model.UserBean;
 import com.imotspot.model.imot.*;
+import com.imotspot.model.imot.enumerations.Condition;
 import com.imotspot.template.FileDocument;
 import com.imotspot.template.FileTemplate;
 import com.orientechnologies.common.concur.ONeedRetryException;
@@ -156,7 +156,7 @@ public class OrientDBServer {
         }
     }
 
-    public <E extends Object> E doInTX(DBOperation<E> operation) {
+    public <E extends Object> E doInTX(DBOperation<E> operation) throws Exception {
         OrientGraph graph = graph();
         E element = null;
         try {
@@ -165,6 +165,7 @@ public class OrientDBServer {
         } catch (Exception e) {
             logger.error("Rollback", e);
             graph.rollback();
+            throw e;
         }
         return element;
     }

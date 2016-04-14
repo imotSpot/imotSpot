@@ -48,7 +48,7 @@ public final class TransactionsView extends VerticalLayout implements View {
     private static final DecimalFormat DECIMALFORMAT = new DecimalFormat("#.##");
     private static final String[] DEFAULT_COLLAPSIBLE = {"description"};
 
-    public TransactionsView() {
+    public TransactionsView() throws Exception {
         setSizeFull();
         addStyleName("transactions");
         DashboardEventBus.register(this);
@@ -157,7 +157,7 @@ public final class TransactionsView extends VerticalLayout implements View {
         return filter;
     }
 
-    private Table buildTable() {
+    private Table buildTable() throws Exception {
         final Table table = new Table() {
             @Override
             protected String formatPropertyValue(final Object rowId,
