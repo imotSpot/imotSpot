@@ -339,17 +339,6 @@ public final class DashboardView extends Panel implements View, DashboardEditLis
             return;
         }
 
-//        for (int i = 1; i <= 5; i ++){
-//            Imot cur = new Imot(new Location());
-//            cur.setPrice(55000.0f * i);
-//            cur.setOwner(user);
-//            cur.setType(ImotType.FOUR_BEDS);
-//            cur.setCondition(Condition.USED);
-//            cur.setPublished(new Date());
-//            cur.setYear("2005");
-//            user.addImot(cur);
-//        }
-
         GoogleMapMarker marker = imot.getLocation().marker().googleMarker();
         googleMap.addMarker(marker);
         googleMap.setCenter(centerSofia);

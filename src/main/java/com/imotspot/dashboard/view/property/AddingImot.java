@@ -4,14 +4,17 @@ package com.imotspot.dashboard.view.property;
 import com.imotspot.googlemap.Geocoding;
 import com.imotspot.googlemap.json.GeocodingAnswer;
 import com.imotspot.googlemap.json.LocationAnswer;
-import com.imotspot.helper.ImageUploader;
 import com.imotspot.interfaces.DashboardEditListener;
 import com.imotspot.model.User;
 import com.imotspot.model.imot.*;
 import com.imotspot.model.imot.enumerations.Condition;
 import com.imotspot.model.imot.enumerations.ImotType;
+import com.imotspot.model.imot.interfaces.Media;
 import com.vaadin.data.Property;
 import com.vaadin.event.ShortcutAction;
+import com.vaadin.server.ClassResource;
+import com.vaadin.server.FileResource;
+import com.vaadin.server.Page;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.shared.ui.combobox.FilteringMode;
 import com.vaadin.tapio.googlemaps.GoogleMap;
@@ -21,16 +24,24 @@ import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapMarker;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
 @SuppressWarnings("serial")
-public class AddingImot extends Window {
+public class AddingImot extends Window implements Upload.Receiver, Upload.SucceededListener {
 
     private final DashboardEditListener listener;
     private static final LatLon centerSofia = new LatLon(42.697702770146975, 23.32174301147461);
+    private static final ClassResource noImage = new ClassResource("/com/imotspot/img/no_image.png");
+    private HorizontalLayout horLayout;
     private TextField price;
     private TextField year;
     private TextArea description;
@@ -40,8 +51,15 @@ public class AddingImot extends Window {
     private TextField address;
     private ComboBox condition;
     private ComboBox type;
-    private TextField images;
     private GoogleMap googleMap;
+    private Image imageView;
+    private File file;
+    private String savePath;
+    private String imageName = "";
+    private String imageWidth = "90px";
+    private String imageHeight = "90px";
+    private List<Media> listOfImages = new ArrayList<>();
+    private Integer imageCounter = 0;
 
     public AddingImot(final DashboardEditListener listener,
                       final String currentName) {
@@ -105,7 +123,6 @@ public class AddingImot extends Window {
 
         List<ImotType> enumImotTypeList = Arrays.asList(ImotType.values());
         List<Condition> enumConditionList = Arrays.asList(Condition.values());
-        ImageUploader receiver = new ImageUploader();
 
         type = new ComboBox("Choose type");
         type.setFilteringMode(FilteringMode.STARTSWITH);
@@ -121,16 +138,22 @@ public class AddingImot extends Window {
         city = new TextField("city");
         address = new TextField("address");
 
+        horLayout = new HorizontalLayout();
+        horLayout.setWidth("350px");
+        horLayout.setHeight("150px");
+        horLayout.setSpacing(true);
+
         condition = new ComboBox("condition");
         condition.setFilteringMode(FilteringMode.STARTSWITH);
         for (Condition c: enumConditionList){
             condition.addItem(c.toString());
         }
 
-        Upload uploadImages = new Upload("Upload images", receiver);
+        Upload uploadImages = new Upload("Upload up to 3 images", this);
         uploadImages.setButtonCaption("Upload images");
-        uploadImages.addSucceededListener(receiver);
+        uploadImages.addSucceededListener(this);
 //        DragAndDropWrapper drag = new DragAndDropWrapper(uploadImages);
+//        drag.setEnabled(true);
 
         price.addStyleName("caption-on-left");
         year.addStyleName("caption-on-left");
@@ -161,8 +184,20 @@ public class AddingImot extends Window {
             }
         });
 
-        content.addComponents(type, price, year, description, country, district, city, address, condition, uploadImages);
+        content.addComponents(type, price, year, description, country, district, city, address, condition, horLayout, uploadImages);
         return content;
+    }
+
+    private void addImageToLayout(HorizontalLayout layout, FileResource resource){
+
+        imageView = new Image();
+        imageView.setWidth(imageWidth);
+        imageView.setHeight(imageHeight);
+        imageView.setSource(resource);
+        imageView.setCaption(imageName);
+
+        layout.addComponent(imageView);
+        layout.setComponentAlignment(imageView, Alignment.MIDDLE_CENTER);
     }
 
     private Component buildFooter() {
@@ -197,6 +232,7 @@ public class AddingImot extends Window {
                 imotToSave.setPrice(Float.parseFloat(price.getValue()));
                 imotToSave.setYear(year.getValue());
                 imotToSave.setDescription(description.getValue());
+                imotToSave.setMedia(listOfImages);
                 imotToSave.setCondition(Condition.valueOf(condition.getValue().toString()));
                 imotToSave.setOwner((User) VaadinSession.getCurrent().getAttribute(User.class.getName()));
                 imotToSave.setPublished(new Date());
@@ -215,5 +251,48 @@ public class AddingImot extends Window {
         footer.setExpandRatio(cancel, 1);
         footer.setComponentAlignment(cancel, Alignment.TOP_RIGHT);
         return footer;
+    }
+
+    @Override
+    public OutputStream receiveUpload(String filename, String mimeType) {
+        imageCounter++;
+        savePath = "../uploads/" + filename;
+        imageName = filename;
+        FileOutputStream fos = null; // Stream to write to
+        try {
+            // Open the file for writing.
+            file = new File(savePath);
+            fos = new FileOutputStream(file);
+
+        } catch (final java.io.FileNotFoundException e) {
+            new Notification("Could not open file",
+                    e.getMessage(),
+                    Notification.Type.ERROR_MESSAGE).show(Page.getCurrent());
+            return null;
+        }
+
+        return fos; // Return the output stream to write to
+    }
+
+    @Override
+    public void uploadSucceeded(Upload.SucceededEvent succeededEvent) {
+
+        if (imageCounter <= 3) {
+            FileResource resource = new FileResource(new File(savePath));
+
+            addImageToLayout(horLayout, resource);
+
+            Picture image = null;
+            try {
+                image = new Picture(new URI(savePath));
+                listOfImages.add(image);
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+            }
+
+            new Notification("File " + succeededEvent.getFilename() + " uploaded successfull", Notification.Type.HUMANIZED_MESSAGE).show(Page.getCurrent());
+        } else {
+            new Notification("Maximum of 3 images to upload is exceeded!!!", Notification.Type.HUMANIZED_MESSAGE).show(Page.getCurrent());
+        }
     }
 }
