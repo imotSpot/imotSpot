@@ -11,6 +11,7 @@ import java.net.URI;
 public class Picture implements Media {
     private static final long serialVersionUID = 1L;
 
+    private byte[] imageAsArray;
     private URI uri;
     private String name;
 

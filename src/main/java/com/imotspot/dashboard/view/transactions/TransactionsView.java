@@ -6,6 +6,7 @@ import com.imotspot.dashboard.component.MovieDetailsWindow;
 import com.imotspot.dashboard.event.DashboardEvent.BrowserResizeEvent;
 import com.imotspot.dashboard.event.DashboardEventBus;
 import com.imotspot.model.imot.Imot;
+import com.imotspot.model.imot.Picture;
 import com.vaadin.data.Container.Filter;
 import com.vaadin.data.Container.Filterable;
 import com.vaadin.data.Item;
@@ -23,6 +24,7 @@ import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.server.Page;
 import com.vaadin.server.Responsive;
+import com.vaadin.server.StreamResource;
 import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
@@ -31,6 +33,8 @@ import com.vaadin.ui.Table.TableDragMode;
 import com.vaadin.ui.themes.ValoTheme;
 import org.vaadin.maddon.FilterableListContainer;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -132,7 +136,8 @@ public final class TransactionsView extends VerticalLayout implements View {
 
                     @Override
                     public boolean appliesToProperty(final Object propertyId) {
-                        if (propertyId.equals("description")
+                        if (propertyId.equals("price")
+                                || propertyId.equals("description")
                                 || propertyId.equals("year")) {
                             return true;
                         }
@@ -162,8 +167,7 @@ public final class TransactionsView extends VerticalLayout implements View {
             @Override
             protected String formatPropertyValue(final Object rowId,
                     final Object colId, final Property<?> property) {
-                String result = super.formatPropertyValue(rowId, colId,
-                        property);
+                String result = super.formatPropertyValue(rowId, colId, property);
                 if (colId.equals("time")) {
                     result = DATEFORMAT.format(((Date) property.getValue()));
                 } else if (colId.equals("price")) {
@@ -179,6 +183,28 @@ public final class TransactionsView extends VerticalLayout implements View {
                     } else {
                         result = val.toString();
                     }
+                } else if(colId.equals("frontImage")){
+                    Object val = property.getValue();
+                    if (val == null) {
+                        result = "";
+                    } else {
+                        StreamResource.StreamSource imageSource = new StreamResource.StreamSource() {
+                            @Override
+                            public InputStream getStream() {
+                                return new ByteArrayInputStream(((Picture) val).imageAsArray());
+                            }
+                        };
+
+                        StreamResource imageResource = new StreamResource(imageSource, "");
+                        Embedded image = new Embedded("", imageResource);
+                        result = image.toString();
+
+                        Image imageView = new Image();
+                        imageView.setWidth("90px");
+                        imageView.setHeight("90px");
+                        imageView.setSource(imageResource);
+                    }
+
                 }
                 return result;
             }
@@ -199,7 +225,6 @@ public final class TransactionsView extends VerticalLayout implements View {
         table.setSortContainerPropertyId("time");
         table.setSortAscending(false);
 
-//        table.setColumnAlignment("seats", Align.RIGHT);
         table.setColumnAlignment("price", Align.RIGHT);
 
         table.setVisibleColumns("frontImage", "type", "price", "year", "description", "published");
@@ -358,7 +383,5 @@ public final class TransactionsView extends VerticalLayout implements View {
 //                }
 //            });
         }
-
     }
-
 }

@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -285,8 +286,12 @@ public class AddingImot extends Window implements Upload.Receiver, Upload.Succee
             Picture image = null;
             try {
                 image = new Picture(new URI(savePath));
+                byte[] data = Files.readAllBytes(new File(savePath).toPath());
+                image.imageAsArray(data);
                 listOfImages.add(image);
             } catch (URISyntaxException e) {
+                e.printStackTrace();
+            } catch (IOException e){
                 e.printStackTrace();
             }
 
